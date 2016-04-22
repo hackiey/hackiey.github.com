@@ -5,84 +5,46 @@
     <description>To be a hacker</description>
     <link>http://words.hackiey.com/</link>
     <atom:link href="http://words.hackiey.com/feed.xml" rel="self" type="application/rss+xml" />
-    <pubDate>Tue, 19 Apr 2016 23:23:21 +0800</pubDate>
-    <lastBuildDate>Tue, 19 Apr 2016 23:23:21 +0800</lastBuildDate>
+    <pubDate>Fri, 22 Apr 2016 23:17:02 +0800</pubDate>
+    <lastBuildDate>Fri, 22 Apr 2016 23:17:02 +0800</lastBuildDate>
     <generator>Jekyll v3.1.3</generator>
     
       <item>
-        <title>Welcome to Hux Blog</title>
-        <description>&lt;blockquote&gt;
-  &lt;p&gt;“Yeah It’s on. ”&lt;/p&gt;
-&lt;/blockquote&gt;
+        <title>蜂窝网格最短距离问题</title>
+        <description>&lt;p&gt;大概半年前在写蜂窝网格的A*寻路算法时，遇到了如何选择启发式的问题。传统的曼哈顿距离虽然可以正常运行找到正确的最短路径，但是在蜂窝网格地图中，两点间的最短路径不止一条，曼哈顿距离会使路径的选择总是偏向某一方向。根本原因是启发式中的曼哈顿距离并不是两点间真正的最短距离。&lt;/p&gt;
 
-&lt;h2 id=&quot;section&quot;&gt;前言&lt;/h2&gt;
+&lt;p&gt;在网上搜索了很多，但是一直没有搜到合适的方法，于是在炎热的某一天，自己动笔寻找这种方法。没想到的是答案竟然十分简单。&lt;/p&gt;
 
-&lt;p&gt;Hux 的 Blog 就这么开通了。&lt;/p&gt;
+&lt;p&gt;下图采用二维坐标表示了一个蜂窝网格地图，关于二维坐标系的选择，可以参考这一篇文章&lt;a href=&quot;http://www.cnblogs.com/alamiye010/archive/2011/10/17/2214477.html&quot;&gt;《蜂窝拓扑结构在SLG地图布局中的应用》&lt;/a&gt;。&lt;/p&gt;
 
-&lt;p&gt;&lt;a href=&quot;#build&quot;&gt;跳过废话，直接看技术实现 &lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&quot;/img/in-post/honeycomb-mesh-shortest-path/honeycomb-mesh-2d.png&quot; alt=&quot;蜂窝网格地图二维坐标系&quot; /&gt;&lt;/p&gt;
 
-&lt;p&gt;2015 年，Hux 总算有个地方可以好好写点东西了。&lt;/p&gt;
+&lt;p&gt;在二维坐标系中，横坐标为x，纵坐标为y，可以得出结论，p1(x1,y1)和p2(x2,y2)之间的最短距离为：&lt;/p&gt;
 
-&lt;p&gt;作为一个程序员， Blog 这种轮子要是挂在大众博客程序上就太没意思了。一是觉得大部分 Blog 服务都太丑，二是觉得不能随便定制不好玩。之前因为太懒没有折腾，结果就一直连个写 Blog 的地儿都没有。&lt;/p&gt;
+&lt;p&gt;&lt;img src=&quot;/img/in-post/honeycomb-mesh-shortest-path/formula1.png&quot; alt=&quot;蜂窝网格二维坐标最短距离公式&quot; /&gt;&lt;/p&gt;
 
-&lt;p&gt;在玩了一段时间知乎之后，答题的快感又激起了我开博客的冲动。之前的&lt;a href=&quot;http://huangxuan.me/portfolio&quot;&gt;个人网站&lt;/a&gt;是作品集形式的（现在集成进来了），并不适合用来写博文，一不做二不休，花一天搞一个吧！&lt;/p&gt;
+&lt;p&gt;注: 公式中的除法是求整数商，比如 3/2=1.&lt;/p&gt;
 
-&lt;p id=&quot;build&quot;&gt;&lt;/p&gt;
-&lt;hr /&gt;
+&lt;p&gt;用这个公式可以计算出(1,1)到(4,4)的最短距离为&lt;/p&gt;
 
-&lt;h2 id=&quot;section-1&quot;&gt;正文&lt;/h2&gt;
+&lt;p&gt;&lt;code&gt;(|1/2-4/2+1-4|+|1-4x|+|(1-4)+(4/2-1/2)+4-1|)/2=5&lt;/code&gt;&lt;/p&gt;
 
-&lt;p&gt;接下来说说搭建这个博客的技术细节。&lt;/p&gt;
+&lt;p&gt;看上去是有一些复杂，所以之前在用二维坐标寻找这个规律时费了很多工夫都没有找到，但是改成使用3个坐标来确定一个点的位置就会方便很多，如下图所示。坐标表示为(x,y,z)，出于对称的美观原因，我将Z轴按照负方向增长。在平面上，只需2个坐标即可表示一个点，所以第三个坐标必然可以通过前两个坐标推导出来，在这幅图中，z=y-x。这其中的数学原因不去深究，总之通过一些计算肯定可以得出其中的关系。&lt;/p&gt;
 
-&lt;p&gt;正好之前就有关注过 &lt;a href=&quot;https://pages.github.com/&quot;&gt;GitHub Pages&lt;/a&gt; + &lt;a href=&quot;http://jekyllrb.com/&quot;&gt;Jekyll&lt;/a&gt; 快速 Building Blog 的技术方案，非常轻松时尚。&lt;/p&gt;
+&lt;p&gt;&lt;img src=&quot;/img/in-post/honeycomb-mesh-shortest-path/honeycomb-mesh-3d.png&quot; alt=&quot;蜂窝网格地图三维坐标系&quot; /&gt;&lt;/p&gt;
 
-&lt;p&gt;其优点非常明显：&lt;/p&gt;
+&lt;p&gt;三维坐标中最引人注目的一个性质是，从任意一个点向相邻方向移动1格距离，一定会恰好使两个坐标都发生一次改变，改变的数值均为1。通过这个性质，可以得出两点之间的最短距离为：&lt;/p&gt;
 
-&lt;ul&gt;
-  &lt;li&gt;&lt;strong&gt;Markdown&lt;/strong&gt; 带来的优雅写作体验&lt;/li&gt;
-  &lt;li&gt;非常熟悉的 Git workflow ，&lt;strong&gt;Git Commit 即 Blog Post&lt;/strong&gt;&lt;/li&gt;
-  &lt;li&gt;利用 GitHub Pages 的域名和免费无限空间，不用自己折腾主机
-    &lt;ul&gt;
-      &lt;li&gt;如果需要自定义域名，也只需要简单改改 DNS 加个 CNAME 就好了&lt;/li&gt;
-    &lt;/ul&gt;
-  &lt;/li&gt;
-  &lt;li&gt;Jekyll 的自定制非常容易，基本就是个模版引擎&lt;/li&gt;
-&lt;/ul&gt;
+&lt;p&gt;&lt;img src=&quot;/img/in-post/honeycomb-mesh-shortest-path/formula2.png&quot; alt=&quot;蜂窝网格三维坐标最短距离公式&quot; /&gt;&lt;/p&gt;
 
-&lt;p&gt;本来觉得最大的缺点可能是 GitHub 在国内访问起来太慢，所以第二天一起床就到 GitCafe(Chinese GitHub Copy) 迁移了一个&lt;a href=&quot;http://huxpro.gitcafe.io&quot;&gt;镜像&lt;/a&gt;出来，结果还是巨慢。&lt;/p&gt;
+&lt;p&gt;最后，将三维坐标改为(x,y,y-x)代入上式，可得出二维坐标的最短距离公式，同时需要对二维坐标进行一些变换以适应蜂窝网格，最终就是第二张图中的公式。&lt;/p&gt;
 
-&lt;p&gt;哥哥可是个前端好嘛！ 果断开 Chrome DevTool 查了下网络请求，原来是 &lt;strong&gt;pending 在了 Google Fonts&lt;/strong&gt; 上，页面渲染一直被阻塞到请求超时为止，难怪这么慢。&lt;br /&gt;
-忍痛割爱，只好把 Web Fonts 去了（反正超时看到的也只能是 fallback ），果然一下就正常了，而且 GitHub 和 GitCafe 对比并没有感受到明显的速度差异，虽然 github 的 ping 值明显要高一些，达到了 300ms，于是用 DNSPOD 优化了一下速度。&lt;/p&gt;
-
-&lt;hr /&gt;
-
-&lt;p&gt;配置的过程中也没遇到什么坑，基本就是 Git 的流程，相当顺手&lt;/p&gt;
-
-&lt;p&gt;大的 Jekyll 主题上直接 fork 了 Clean Blog（这个主题也相当有名，就不多赘述了。唯一的缺点大概就是没有标签支持，于是我给它补上了。）&lt;/p&gt;
-
-&lt;p&gt;本地调试环境需要 &lt;code class=&quot;highlighter-rouge&quot;&gt;gem install jekyll&lt;/code&gt;，结果 rubygem 的源居然被墙了……后来手动改成了我大淘宝的镜像源才成功&lt;/p&gt;
-
-&lt;p&gt;Theme 的 CSS 是基于 Bootstrap 定制的，看得不爽的地方直接在 Less 里改就好了（平时更习惯 SCSS 些），&lt;strong&gt;不过其实我一直觉得 Bootstrap 在移动端的体验做得相当一般，比我在淘宝参与的团队 CSS 框架差多了……&lt;/strong&gt;所以为了体验，也补了不少 CSS 进去&lt;/p&gt;
-
-&lt;p&gt;最后就进入了耗时反而最长的&lt;strong&gt;做图、写字&lt;/strong&gt;阶段，也算是进入了&lt;strong&gt;写博客&lt;/strong&gt;的正轨，因为是类似 Hack Day 的方式去搭这个站的，所以折腾折腾着大半夜就过去了。&lt;/p&gt;
-
-&lt;p&gt;第二天考虑中文字体的渲染，fork 了 &lt;a href=&quot;http://www.typeisbeautiful.com/&quot;&gt;Type is Beautiful&lt;/a&gt; 的 &lt;code class=&quot;highlighter-rouge&quot;&gt;font&lt;/code&gt; CSS，调整了字号，适配了 Win 的渣渲染，中英文混排效果好多了。&lt;/p&gt;
-
-&lt;h2 id=&quot;section-2&quot;&gt;后记&lt;/h2&gt;
-
-&lt;p&gt;回顾这个博客的诞生，纯粹是出于个人兴趣。在知乎相关问题上回答并获得一定的 star 后，我决定把这个博客主题当作一个小小的开源项目来维护。&lt;/p&gt;
-
-&lt;p&gt;在经历 v1.0 - v1.5 的蜕变后，这个博客主题愈发完整，不但增加了诸多 UI 层的优化（opinionated）；在代码层面，更加丰富的配置项也使得这个主题拥有了更好的灵活性与可拓展性。而作为一个开源项目，我也积极的为其完善文档与解决 issue。&lt;/p&gt;
-
-&lt;p&gt;如果你恰好逛到了这里，希望你也能喜欢这个博客主题。&lt;/p&gt;
-
-&lt;p&gt;—— Hux 后记于 2015.10&lt;/p&gt;
 </description>
-        <pubDate>Thu, 29 Jan 2015 20:00:00 +0800</pubDate>
-        <link>http://words.hackiey.com/2015/01/29/hello-2015/</link>
-        <guid isPermaLink="true">http://words.hackiey.com/2015/01/29/hello-2015/</guid>
+        <pubDate>Wed, 21 Jan 2015 20:00:00 +0800</pubDate>
+        <link>http://words.hackiey.com/2015/01/21/honeycomb-mesh-shortest-path/</link>
+        <guid isPermaLink="true">http://words.hackiey.com/2015/01/21/honeycomb-mesh-shortest-path/</guid>
         
-        <category>生活</category>
+        <category>算法</category>
         
         
       </item>
