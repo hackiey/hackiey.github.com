@@ -125,12 +125,12 @@
 
     <!-- Image to hack wechat -->
 <!-- <img src="/img/icon_wechat.png" width="0" height="0"> -->
-<!-- <img src="/img/home-bg(1).jpg" width="0" height="0"> -->
+<!-- <img src="/img/in-post/ann/ann2.jpg" width="0" height="0"> -->
 
 <!-- Post Header -->
 <style type="text/css">
     header.intro-header{
-        background-image: url('/img/home-bg(1).jpg')
+        background-image: url('/img/in-post/ann/ann2.jpg')
     }
 </style>
 <header class="intro-header" >
@@ -182,7 +182,7 @@ o(x_1,...,x_n)=\begin{cases}
 
 <p>其中<script type="math/tex">w_i</script>叫做权值(weight)，是一个<strong>实数常量</strong>，用来决定输入<script type="math/tex">x_i</script>对感知器输出的贡献率。需要注意的是(<script type="math/tex">-w_0</script>)是一个阈值，如果想要使感知器输出1，其余的<script type="math/tex">w_1x_1+...+w_nx_n</script>必须要大于(<script type="math/tex">-w_0</script>)。从这里可以看出，<code class="highlighter-rouge">感知器可以做一个二叉分类器，因为它对所有的输入做出1或-1的输出，是线性分类器(linear classifier)的一种。</code></p>
 
-<p><img src="/img/in-post/ann-perceptron/perceptron.png" alt="感知器" /></p>
+<p><img src="/img/in-post/ann/perceptron/perceptron.png" alt="感知器" /></p>
 
 <p>为了简化，可以将<script type="math/tex">x_0</script>设置为1，不等式可写为<script type="math/tex">{\sum_{i=0}^nw_ix_i}>0</script>，这样可以表示为<strong>向量</strong><script type="math/tex">\vec w\cdot\vec x>0</script>，因此感知器函数可以写为:</p>
 
@@ -230,7 +230,7 @@ o(x_1,...,x_n)=\begin{cases}
 
 <p>感知器所实现的AND函数的权值是可以被理解的，这是一张包含了错误与正确的训练结果图，可以发现，正确的权值中|<script type="math/tex">w_0</script>|始终大于<script type="math/tex">w_1和w_2</script>。</p>
 
-<p><img src="/img/in-post/ann-perceptron/perceptron-result.png" alt="感知器训练法则结果" /></p>
+<p><img src="/img/in-post/ann/perceptron/perceptron-result.png" alt="感知器训练法则结果" /></p>
 
 <p>如果训练样例不是线性可分时，感知器训练法则将无法收敛，下一节会介绍适用于样例不是线性可分时的训练方法——delta法则。</p>
 

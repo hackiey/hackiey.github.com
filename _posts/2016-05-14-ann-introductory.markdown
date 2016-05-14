@@ -3,6 +3,7 @@ layout:     post
 title:      "人工神经网络（序）"
 subtitle:   ""
 date:       2016-05-14 00:00:00
+header-img: img/in-post/ann/ann2.jpg
 author:     "Harry"
 tags:
     - 机器学习

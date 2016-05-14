@@ -3,6 +3,7 @@ layout:     post
 title:      "人工神经网络（感知器）（一）"
 subtitle:   ""
 date:       2016-05-14 00:00:00
+header-img: img/in-post/ann/ann2.jpg
 author:     "Harry"
 tags:
     - 机器学习
@@ -24,7 +25,7 @@ $$
 
 其中$$w_i$$叫做权值(weight)，是一个**实数常量**，用来决定输入$$x_i$$对感知器输出的贡献率。需要注意的是($$-w_0$$)是一个阈值，如果想要使感知器输出1，其余的$$w_1x_1+...+w_nx_n$$必须要大于($$-w_0$$)。从这里可以看出，`感知器可以做一个二叉分类器，因为它对所有的输入做出1或-1的输出，是线性分类器(linear classifier)的一种。`
 
-![感知器](/img/in-post/ann-perceptron/perceptron.png)
+![感知器](/img/in-post/ann/perceptron/perceptron.png)
 
 为了简化，可以将$$x_0$$设置为1，不等式可写为$${\sum_{i=0}^nw_ix_i}>0$$，这样可以表示为**向量**$$\vec w\cdot\vec x>0$$，因此感知器函数可以写为:
 
@@ -72,6 +73,6 @@ $$
 
 感知器所实现的AND函数的权值是可以被理解的，这是一张包含了错误与正确的训练结果图，可以发现，正确的权值中\|$$w_0$$\|始终大于$$w_1和w_2$$。
 
-![感知器训练法则结果](/img/in-post/ann-perceptron/perceptron-result.png)
+![感知器训练法则结果](/img/in-post/ann/perceptron/perceptron-result.png)
 
 如果训练样例不是线性可分时，感知器训练法则将无法收敛，下一节会介绍适用于样例不是线性可分时的训练方法——delta法则。
