@@ -35,4 +35,3 @@ tags:
 ![蜂窝网格三维坐标最短距离公式](/img/in-post/honeycomb-mesh-shortest-path/formula2.png)
 
 最后，将三维坐标改为(x,y,y-x)代入上式，可得出二维坐标的最短距离公式，同时需要对二维坐标进行一些变换以适应蜂窝网格，最终就是第二张图中的公式。
-
