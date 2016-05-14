@@ -5,9 +5,144 @@
     <description>To be a hacker</description>
     <link>http://words.hackiey.com/</link>
     <atom:link href="http://words.hackiey.com/feed.xml" rel="self" type="application/rss+xml" />
-    <pubDate>Sat, 14 May 2016 22:51:38 +0800</pubDate>
-    <lastBuildDate>Sat, 14 May 2016 22:51:38 +0800</lastBuildDate>
+    <pubDate>Sat, 14 May 2016 22:55:47 +0800</pubDate>
+    <lastBuildDate>Sat, 14 May 2016 22:55:47 +0800</lastBuildDate>
     <generator>Jekyll v3.1.3</generator>
+    
+      <item>
+        <title>人工神经网络（感知器）（一）</title>
+        <description>&lt;p&gt;我曾经一度以为所有的ANN就是由感知器(pecrceptron)组成的，但实际上，感知器只是一种ANN的基础单元。&lt;/p&gt;
+
+&lt;h3 id=&quot;section&quot;&gt;感知器&lt;/h3&gt;
+
+&lt;p&gt;感知器以一个实数值向量作为输入，计算这些输入的线性组合，如果结果大于某个&lt;strong&gt;阈值&lt;/strong&gt;，就输出1，否则输出-1。如果输入为&lt;script type=&quot;math/tex&quot;&gt;x_1&lt;/script&gt;到&lt;script type=&quot;math/tex&quot;&gt;x_n&lt;/script&gt;，那么感知器计算的输出为:&lt;/p&gt;
+
+&lt;script type=&quot;math/tex; mode=display&quot;&gt;% &lt;![CDATA[
+o(x_1,...,x_n)=\begin{cases} 
+						1,  &amp; \text{if $w_0+w_1x_1+w_2x_2+...+w_nx_n&gt;0$}\\ 
+						-1, &amp; \text{otherwise} \\ 
+					\end{cases} %]]&gt;&lt;/script&gt;
+
+&lt;p&gt;其中&lt;script type=&quot;math/tex&quot;&gt;w_i&lt;/script&gt;叫做权值(weight)，是一个&lt;strong&gt;实数常量&lt;/strong&gt;，用来决定输入&lt;script type=&quot;math/tex&quot;&gt;x_i&lt;/script&gt;对感知器输出的贡献率。需要注意的是(&lt;script type=&quot;math/tex&quot;&gt;-w_0&lt;/script&gt;)是一个阈值，如果想要使感知器输出1，其余的&lt;script type=&quot;math/tex&quot;&gt;w_1x_1+...+w_nx_n&lt;/script&gt;必须要大于(&lt;script type=&quot;math/tex&quot;&gt;-w_0&lt;/script&gt;)。从这里可以看出，&lt;code class=&quot;highlighter-rouge&quot;&gt;感知器可以做一个二叉分类器，因为它对所有的输入做出1或-1的输出，是线性分类器(linear classifier)的一种。&lt;/code&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;/img/in-post/ann-perceptron/perceptron.png&quot; alt=&quot;感知器&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;为了简化，可以将&lt;script type=&quot;math/tex&quot;&gt;x_0&lt;/script&gt;设置为1，不等式可写为&lt;script type=&quot;math/tex&quot;&gt;{\sum_{i=0}^nw_ix_i}&gt;0&lt;/script&gt;，这样可以表示为&lt;strong&gt;向量&lt;/strong&gt;&lt;script type=&quot;math/tex&quot;&gt;\vec w\cdot\vec x&gt;0&lt;/script&gt;，因此感知器函数可以写为:&lt;/p&gt;
+
+&lt;script type=&quot;math/tex; mode=display&quot;&gt;o(\vec x)=sgn(\vec w\cdot\vec x)&lt;/script&gt;
+
+&lt;h3 id=&quot;section-1&quot;&gt;感知器的表征能力&lt;/h3&gt;
+
+&lt;p&gt;从上面的几个式子中可以看出来感知器可以做分类，而这个类别只有两种，要么是，要么不是。&lt;/p&gt;
+
+&lt;blockquote&gt;
+  &lt;p&gt;我们可以把感知器看作是n维实例空间(即点空间)中的超平面决策面。对于超平面一侧的实例，感知器输出1，对于另一侧输出-1。&lt;/p&gt;
+&lt;/blockquote&gt;
+
+&lt;p&gt;什么是超平面？在N维空间中，任何N-1维的次空间都是超平面，在二维平面中，超平面是一条&lt;strong&gt;直线&lt;/strong&gt;，在三维空间中，超平面就是我们日常所理解的平面。&lt;/p&gt;
+
+&lt;p&gt;不是所有的正反样例集合都可以恰好被分成两份，可以被分割的称为线性可分(linearly separable)样例集合。&lt;/p&gt;
+
+&lt;p&gt;单独的感知器可以表示一些布尔函数。例如在一个有两个输入的感知器中，实现AND函数可以设&lt;script type=&quot;math/tex&quot;&gt;w_0&lt;/script&gt;为-0.8，&lt;script type=&quot;math/tex&quot;&gt;w_1=w_2=0.5&lt;/script&gt;，实现OR函数可以设&lt;script type=&quot;math/tex&quot;&gt;w_0&lt;/script&gt;为-0.3，&lt;script type=&quot;math/tex&quot;&gt;w_1=w_2=0.5&lt;/script&gt;，还可以实现与非(NAND)和或非(NOR)等函数，使用两层深度的感知器网络就可以实现所有的布尔函数。&lt;/p&gt;
+
+&lt;blockquote&gt;
+  &lt;p&gt;因为阈值单元的网络可以表示大量的函数，而单独的单元不能做到这一点，所以通常我们感兴趣的事学习阈值单元组成的多层网络。&lt;/p&gt;
+&lt;/blockquote&gt;
+
+&lt;p&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;阈值是一个很重要的概念，它就像y=ax+b中的b，是一个必不可少的常量。&lt;/code&gt;&lt;/p&gt;
+
+&lt;p&gt;如何训练一个感知器，这里主要考虑两种训练法则，感知器训练法则(perceptron training rule)和delta法则(delta rule)。这两种算法&lt;strong&gt;保证&lt;/strong&gt;收敛到可接受的假设。&lt;/p&gt;
+
+&lt;h3 id=&quot;section-2&quot;&gt;感知器训练法则&lt;/h3&gt;
+
+&lt;p&gt;感知器训练法则的过程是，首先生成随机的权值，然后反复地应用感知器到每一个训练样例，如果感知器分类&lt;strong&gt;错误&lt;/strong&gt;，那么就根据训练样例来修改权值。&lt;strong&gt;重复这个过程直到感知器能够正确分类所有样例&lt;/strong&gt;。&lt;/p&gt;
+
+&lt;script type=&quot;math/tex; mode=display&quot;&gt;w_i\leftarrow w_i+\Delta w_i&lt;/script&gt;
+
+&lt;script type=&quot;math/tex; mode=display&quot;&gt;\Delta w_i=\eta (t-o)x_i&lt;/script&gt;
+
+&lt;p&gt;其中t是训练样例的目标输出，o是感知器的输出，&lt;script type=&quot;math/tex&quot;&gt;\eta&lt;/script&gt;是学习速率(learning rate)，它是一个很小的数值，并且它有时会随着权调整次数的增加而衰减(&lt;code class=&quot;highlighter-rouge&quot;&gt;并不是一直不变的&lt;/code&gt;)。&lt;/p&gt;
+
+&lt;p&gt;如果训练样例线性可分，且&lt;script type=&quot;math/tex&quot;&gt;\eta&lt;/script&gt;足够小，那么感知器训练法则可以在&lt;strong&gt;有限次&lt;/strong&gt;内收敛到一个能正确分类所有训练样例的权向量。&lt;/p&gt;
+
+&lt;h3 id=&quot;section-3&quot;&gt;实验&lt;/h3&gt;
+
+&lt;p&gt;这一节的代码实现了AND函数的学习，在多次实验中，发现使用200个以上的训练数据便可以学习到一个完全正确的AND函数。&lt;/p&gt;
+
+&lt;p&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;有人说神经网络的缺点之一是不理解权值，以及难以调试，在多个单元组成的网络中有时甚至要靠经验去判断使用多少层和多少个基本单元，我同意这样的说法，但对于这样的结果我会更兴奋，因为这就像我正在理解我自己的大脑。&lt;/code&gt;&lt;/p&gt;
+
+&lt;p&gt;感知器所实现的AND函数的权值是可以被理解的，这是一张包含了错误与正确的训练结果图，可以发现，正确的权值中|&lt;script type=&quot;math/tex&quot;&gt;w_0&lt;/script&gt;|始终大于&lt;script type=&quot;math/tex&quot;&gt;w_1和w_2&lt;/script&gt;。&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;/img/in-post/ann-perceptron/perceptron-result.png&quot; alt=&quot;感知器训练法则结果&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;如果训练样例不是线性可分时，感知器训练法则将无法收敛，下一节会介绍适用于样例不是线性可分时的训练方法——delta法则。&lt;/p&gt;
+</description>
+        <pubDate>Sat, 14 May 2016 08:00:00 +0800</pubDate>
+        <link>http://words.hackiey.com/2016/05/14/ann-perceptron-1/</link>
+        <guid isPermaLink="true">http://words.hackiey.com/2016/05/14/ann-perceptron-1/</guid>
+        
+        <category>机器学习</category>
+        
+        <category>人工神经网络</category>
+        
+        
+      </item>
+    
+      <item>
+        <title>人工神经网络（序）</title>
+        <description>&lt;p&gt;ICLR2016的最佳论文是《Neural Programmer-Interpreters》(神经程序解释器),Google DeepMind的Scot Reed和Nando de Freitas提出了一种神经程序解释器，它是一种递归性的合成神经网络，能学习对程序进行表征和执行。(新智元公众号在对这一文章宣传时用了“有望取代初级程序员”，足以说明这篇论文的重要性，在此强烈推荐这个公众号，它每天都会有很多介绍国内外人工智能技术的文章)&lt;/p&gt;
+
+&lt;p&gt;自从接触了人工智能，就一直梦想着可以实现能够写程序的程序，本想从这篇论文中得到一些灵感，但是读完相关工作后就读不懂了，我觉得肯定是因为基础不牢固的原因，NPI的基础是深度学习，深度学习的基础是神经网络，所以我从头开始学习人工神经网络。有人说学习的最好方法是教别人，我越来越赞成这一点了，因为等我足够有名了，肯定会有大神来指出我的错误(doge脸)，不过我一定会努力少犯错误，避免误导初学的小朋友。&lt;/p&gt;
+
+&lt;p&gt;这一系列文章主要参考Tom M. Mitchell的《机器学习》，除非特别说明，所有的引用均来自这本书。为避免教坏小朋友，我自己理解的部分会使用&lt;code class=&quot;highlighter-rouge&quot;&gt;code标签&lt;/code&gt;包裹起来。&lt;/p&gt;
+
+&lt;h3 id=&quot;ann&quot;&gt;人工神经网络(ANN)&lt;/h3&gt;
+
+&lt;blockquote&gt;
+  &lt;p&gt;技术来源于生活，又高于生活 ——Hackiey&lt;/p&gt;
+&lt;/blockquote&gt;
+
+&lt;p&gt;飞机的发明已经是老掉牙的故事了，现在我们说说怎么造一个大脑。&lt;/p&gt;
+
+&lt;p&gt;尽管到目前为止，人类还无法理解人类是如何理解东西的，但是生物神经元(neuron)为生物和计算机领域提供了一个学习模型。生物学中，人类的大脑由&lt;script type=&quot;math/tex&quot;&gt;10^{11}&lt;/script&gt;个神经元构成，每个神经元与其他&lt;script type=&quot;math/tex&quot;&gt;10^{4}&lt;/script&gt;个神经元相连，这是一个惊人的数字！因此，即使生物神经元在传递信息时要比计算机慢几乎无数倍，但由于大量的并行计算仍然使得人类可以在极短的时间内做出很多复杂的决策。在计算机向生物学求教时，这几乎是最难迈的坎了，现有的计算能力根本无法达到这个要求，不过这并不是什么大问题，虽然摩尔定律最近不怎么灵了，但是早晚有一天我们会造出一个大脑来。&lt;/p&gt;
+
+&lt;p&gt;在具体的介绍之前，要先明确目前ANN的优势和缺陷。ANN适合解决以下特征的问题：&lt;/p&gt;
+
+&lt;blockquote&gt;
+  &lt;ol&gt;
+    &lt;li&gt;实例是用很多“属性-值”对表示的&lt;/li&gt;
+    &lt;li&gt;目标函数的输出可能是离散值、实数值或者由若干实数属性或离散属性组成的向量&lt;/li&gt;
+    &lt;li&gt;训练数据可能包含错误&lt;/li&gt;
+    &lt;li&gt;可容忍长时间的训练&lt;/li&gt;
+    &lt;li&gt;可能需要快速求出目标函数值&lt;/li&gt;
+    &lt;li&gt;人类能否理解学到的目标函数是不重要的&lt;/li&gt;
+  &lt;/ol&gt;
+&lt;/blockquote&gt;
+
+&lt;p&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;第一条中的实例指的是每一个训练实例，在训练过程中，要根据每一个实例的输入和输出来不断调整所学到的目标函数(所学到的权值)，缺一不可。&lt;/code&gt;&lt;/p&gt;
+
+&lt;p&gt;ANN的训练过程是缓慢的，但是当训练完成投入使用时，对所学到的网络与输入进行求值时是非常快速的。&lt;/p&gt;
+
+&lt;p&gt;最令人激动的是最后一条，当你训练完一个ANN，你可能无法理解其中的权值代表着什么，但是它们凑在一起却可以获得正确的的答案！正如你无法理解自己的大脑，但是你的大脑却不会欺骗你。&lt;/p&gt;
+
+&lt;p&gt;简介之后进入正文，我会尽量实现每一个介绍到的算法(其实主要是为了练习刚学到的python，如果遇到错误请用力指正)，接下来会按照《机器学习》第四章中的内容逐个介绍ANN的几种主要单元：感知器(perceptron)、线性单元(linear unit)和sigmoid单元(sigmoid unit)。然后介绍训练这些单元组成的多层网络的反向传播算法，并考虑几个一般性问题，比如ANN的 表征能力、假设空间搜索的本质特征、过度拟合问题等。最终会逐步过滤到深度学习，并介绍本文开始提到的NPI(这才是终极目标啊！)。&lt;/p&gt;
+
+&lt;p&gt;实验所涉及的代码可以在&lt;a href=&quot;http://github.com/hackiey/machine-learning&quot;&gt;github&lt;/a&gt;上找到，主要是为了练习一下python，如果时间充裕的话会补上js版和lisp(作为初学者，这个同样是为了做练习)。&lt;/p&gt;
+
+&lt;h3 id=&quot;section&quot;&gt;目录&lt;/h3&gt;
+
+&lt;p&gt;1.1 &lt;a href=&quot;/2016/05/14/ann-perceptron-1/&quot;&gt;感知器（一）&lt;/a&gt;(描述了感知器以及感知器训练法则)&lt;/p&gt;
+</description>
+        <pubDate>Sat, 14 May 2016 08:00:00 +0800</pubDate>
+        <link>http://words.hackiey.com/2016/05/14/ann-introductory/</link>
+        <guid isPermaLink="true">http://words.hackiey.com/2016/05/14/ann-introductory/</guid>
+        
+        <category>机器学习</category>
+        
+        <category>人工神经网络</category>
+        
+        
+      </item>
     
       <item>
         <title>蜂窝网格最短距离问题</title>
