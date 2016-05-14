@@ -2,7 +2,7 @@
 layout:     post
 title:      "人工神经网络（序）"
 subtitle:   ""
-date:       2016-05-13 19:20:00
+date:       2016-05-14 19:20:00
 author:     "Harry"
 tags:
     - 机器学习

@@ -2,7 +2,7 @@
 layout:     post
 title:      "人工神经网络（感知器）（一）"
 subtitle:   ""
-date:       2016-05-13 20:00:00
+date:       2016-05-14 20:00:00
 author:     "Harry"
 tags:
     - 机器学习
