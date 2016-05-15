@@ -10,9 +10,9 @@
     <meta name="keyword"  content="">
     <link rel="shortcut icon" href="/img/favicon.ico">
 
-    <title>人工神经网络（感知器）（一） - Harry的博客 | Harry's Blog</title>
+    <title>人工神经网络（感知器）（二）（delta法则） - Harry的博客 | Harry's Blog</title>
 
-    <link rel="canonical" href="http://words.hackiey.com/2016/05/14/ann-perceptron-1/">
+    <link rel="canonical" href="http://words.hackiey.com/2016/05/15/ann-perceptron-2/">
 
     <!-- Bootstrap Core CSS -->
     <link rel="stylesheet" href="/css/bootstrap.min.css">
@@ -145,12 +145,12 @@
                         <a class="tag" href="/tags/#人工神经网络" title="人工神经网络">人工神经网络</a>
                         
                     </div>
-                    <h1>人工神经网络（感知器）（一）</h1>
+                    <h1>人工神经网络（感知器）（二）（delta法则）</h1>
                     
                     
                     <h2 class="subheading"></h2>
                     
-                    <span class="meta">Posted by Harry on May 14, 2016</span>
+                    <span class="meta">Posted by Harry on May 15, 2016</span>
                 </div>
             </div>
         </div>
@@ -168,71 +168,109 @@
                 col-md-10 col-md-offset-1
                 post-container">
 
-				<p>我曾经一度以为所有的ANN就是由感知器(pecrceptron)组成的，但实际上，感知器只是一种ANN的基础单元。</p>
+				<p>感知器训练法则所能解决的问题是非常有限的，大部分的问题都是线性不可分的，所以为了保证在线性不可分时仍能够使训练过程收敛，要引入delta法则。它同时也是学习多个单元的互联网络的基础。</p>
 
-<h3 id="section">感知器</h3>
+<h3 id="delta">delta法则</h3>
 
-<p>感知器以一个实数值向量作为输入，计算这些输入的线性组合，如果结果大于某个<strong>阈值</strong>，就输出1，否则输出-1。如果输入为<script type="math/tex">x_1</script>到<script type="math/tex">x_n</script>，那么感知器计算的输出为:</p>
+<p>delta法则的关键思想是使用梯度下降(gradient descent)搜索“所有“（由于程序在训练时不可能完全平滑，所以设置一个足够小的<script type="math/tex">\eta</script>来尽可能的在误差最小值附近逼近这个值）可能的权值假设空间，从中找出能够最佳拟合训练样例的权向量。</p>
+
+<blockquote>
+  <p>最好把delta训练法则理解为训练一个无阈值的感知器，也就是一个线性单元(linear unit)，它的输出o如下:</p>
+</blockquote>
+
+<script type="math/tex; mode=display">o(\vec x) = \vec w \cdot \vec x \tag{1}</script>
+
+<p>为了理解梯度下降，首先先定义训练误差:</p>
+
+<script type="math/tex; mode=display">E(\vec w)={1\over 2}\sum_{d\epsilon D}(t_d-o_d)^2 \tag{2}</script>
+
+<p>这是最常用的用来度量误差的定义，其中D是训练样例集合，<script type="math/tex">t_d</script>是训练样例d的目标输出，<script type="math/tex">o_d</script>是线性单元对训练样例d的输出，<code class="highlighter-rouge">形式上如同方差，至于为什么要乘1/2，可能是为了推导出最后的公式后有一个简洁的运算。</code>一个有两个输入的线性单元对应的误差平面图如下，从这里可以直观的看出，当随机初始化权值后，误差有可能在误差平面上任何一个点，为了到达<script type="math/tex">E(\vec w)</script>的最小值，要不断去寻找当前点在这个平面上<strong>最陡</strong>的方向并朝着这个方向进行移动。这里可以看出为什么delta法则总能收敛。<code class="highlighter-rouge">如果训练数据不能线性可分，那么这个误差平面与$$w_1和w_2$$组成的平面不会相交，即使收敛也无法学习到最正确的目标函数(考虑异或函数，你无论如和也无法找出两个权值来拟合这个目标函数)。</code></p>
+
+<p><img src="/img/in-post/ann/perceptron/error.png" alt="不同假设的误差" /></p>
+
+<h3 id="section">梯度下降法则的推导</h3>
+
+<p>推导过程的关键是找出沿误差曲面最陡峭下降的方向。可以通过计算E相对向量<script type="math/tex">\vec w</script>的<strong>每个分量的导数</strong>来得到这个<strong>方向</strong>。这个向量导数被称为E对于<script type="math/tex">\vec w</script>的梯度(gradient)，记作<script type="math/tex">\nabla E(\vec w)</script>。</p>
+
+<script type="math/tex; mode=display">\nabla E(\vec w)\equiv \left [
+		{\partial E\over \partial w_0} ,
+		{\partial E\over \partial w_1} ,
+		... ,
+		{\partial E\over \partial w_n} ,
+	\right ]\tag{3}</script>
+
+<p>梯度本身是一个向量，没有具体的距离量度，因此梯度下降的训练法则是:</p>
+
+<script type="math/tex; mode=display">\vec w\leftarrow \vec w+ \Delta \vec w</script>
+
+<p>其中:</p>
+
+<script type="math/tex; mode=display">\Delta \vec w=- \eta \nabla E(\vec w) \tag {4}</script>
+
+<p><script type="math/tex">\eta</script>是学习速率，它决定了在梯度下降中向误差最小值移动的速度。为了获取最终的权值更新公式(<script type="math/tex">w_i</script>的更新公式)，可以写出其分量形式:</p>
+
+<script type="math/tex; mode=display">w_i\leftarrow w_i +\Delta w_i</script>
+
+<p>其中:</p>
+
+<script type="math/tex; mode=display">\Delta w_i=-\eta {\partial E\over\partial w_i} \tag{5}</script>
+
+<p>现在来推导一下<script type="math/tex">\partial E \over \partial w_i</script>,根据(2)式可以得出第一步，然后根据求导法则逐步推导，需要注意的是，<script type="math/tex">t_d</script><code class="highlighter-rouge">是训练数据的目标输出，它与</code><script type="math/tex">w_i</script><code class="highlighter-rouge">无关，而</code><script type="math/tex">o_d</script><code class="highlighter-rouge">包含了在公式中充当未知数的</code><script type="math/tex">w_i</script><code class="highlighter-rouge">，因此最后一步求导时</code><script type="math/tex">t_d</script><code class="highlighter-rouge">被视为一个常数最终成为0。这个推导过程十分重要，它是梯度下降算法的核心过程。</code></p>
 
 <script type="math/tex; mode=display">% <![CDATA[
-o(x_1,...,x_n)=\begin{cases} 
-						1,  & \text{if $w_0+w_1x_1+w_2x_2+...+w_nx_n>0$}\\ 
-						-1, & \text{otherwise} \\ 
-					\end{cases} %]]></script>
+\begin{align}
+{\partial E\over \partial w_i} & = {\partial \over \partial w_i}{1\over 2}\sum_{d\epsilon D}(t_d-o_d)^2 = {1\over 2}\sum_{d\epsilon D}{\partial \over \partial w_i}(t_d-o_d)^2\\
+& = {1\over 2}\sum_{d\epsilon D}2(t_d-o_d){\partial \over \partial w_i}(t_d-o_d) \\
+& = \sum_{d\epsilon D}(t_d-o_d){\partial \over \partial w_i}(t_d-\vec w \cdot \vec x_d) \\
+{\partial E\over \partial w_i} & = \sum_{d\epsilon D}(t_d-o_d)(-x_{id}) \tag{6}\\
+\end{align} %]]></script>
 
-<p>其中<script type="math/tex">w_i</script>叫做权值(weight)，是一个<strong>实数常量</strong>，用来决定输入<script type="math/tex">x_i</script>对感知器输出的贡献率。需要注意的是(<script type="math/tex">-w_0</script>)是一个阈值，如果想要使感知器输出1，其余的<script type="math/tex">w_1x_1+...+w_nx_n</script>必须要大于(<script type="math/tex">-w_0</script>)。从这里可以看出，<code class="highlighter-rouge">感知器可以做一个二叉分类器，因为它对所有的输入做出1或-1的输出，是线性分类器(linear classifier)的一种。</code></p>
+<p>其中<script type="math/tex">x_{id}</script>是训练样例d的一个输入分量<script type="math/tex">x_i</script>。将(6)代入(5)中可以得出最终的梯度下降权值更新法则:</p>
 
-<p><img src="/img/in-post/ann/perceptron/perceptron.png" alt="感知器" /></p>
+<script type="math/tex; mode=display">\nabla w_i=\eta \sum_{d\epsilon D}(t_d-o_d)x_{id} \tag{7}</script>
 
-<p>为了简化，可以将<script type="math/tex">x_0</script>设置为1，不等式可写为<script type="math/tex">{\sum_{i=0}^nw_ix_i}>0</script>，这样可以表示为<strong>向量</strong><script type="math/tex">\vec w\cdot\vec x>0</script>，因此感知器函数可以写为:</p>
+<h3 id="section-1">训练线性单元的梯度下降算法</h3>
 
-<script type="math/tex; mode=display">o(\vec x)=sgn(\vec w\cdot\vec x)</script>
+<hr />
+<p><strong>GRADIENT-DESCENT(training_examples, <script type="math/tex">\eta</script>)</strong></p>
 
-<h3 id="section-1">感知器的表征能力</h3>
+<p>training_examples中每一个训练样例形式为序偶&lt;<script type="math/tex">\vec x</script>, t&gt;，其中<script type="math/tex">\vec x</script>是输入值向量，t是目标输出值，<script type="math/tex">\eta</script>是学习速率(例如0.05)</p>
 
-<p>从上面的几个式子中可以看出来感知器可以做分类，而这个类别只有两种，要么是，要么不是。</p>
+<ul>
+  <li>初始化每个<script type="math/tex">w_i</script>为某个小的随机值</li>
+  <li>遇到终止条件之前，做以下操作:
+    <ul>
+      <li>初始化每个<script type="math/tex">\nabla w_i</script>为0</li>
+      <li>对于训练样例training_examples中的每个&lt;<script type="math/tex">\vec x</script>, t&gt;，做:
+        <ul>
+          <li>把实例<script type="math/tex">\vec x</script>输入到此单元，计算出o</li>
+          <li>对于线性单元的每个权<script type="math/tex">w_i</script>，做:</li>
+        </ul>
+
+        <script type="math/tex; mode=display">\Delta w_i\leftarrow \Delta w_i +\eta (t-o)x_i \tag8</script>
+      </li>
+      <li>
+        <p>对于线性单元的每个权<script type="math/tex">w_i</script>，做:</p>
+
+        <script type="math/tex; mode=display">w_i \leftarrow w_i+\Delta w_i \tag9</script>
+      </li>
+    </ul>
+  </li>
+</ul>
+
+<hr />
+<p>从算法的描述中就可以看出，每一步都要应用所有的训练样例到线性单元并计算出o，因此训练过程是极其缓慢的。<code class="highlighter-rouge">算法中所提到的终止条件指的是事先设定一个可以接受的误差范围，当误差小于这个范围时则终止。</code></p>
+
+<h3 id="section-2">实验</h3>
+
+<p>这一节实验使用书中的一个练习题：</p>
 
 <blockquote>
-  <p>我们可以把感知器看作是n维实例空间(即点空间)中的超平面决策面。对于超平面一侧的实例，感知器输出1，对于另一侧输出-1。</p>
+  <p>实现一个两输入线性单元的delta训练法则。训练它来拟合目标概念 <script type="math/tex">-2+x_1+2x_2>0</script>。画出误差E相对训练迭代次数的函数曲线。画出5，10，50，100，……次迭代后的决策面。
+(a)为 <script type="math/tex">\eta</script> 选取不同的常量值，并使用衰减的学习速率——也就是第i次迭代使用 <script type="math/tex">\eta_0 / i</script>，再进行实验。哪一个效果更好？</p>
 </blockquote>
 
-<p>什么是超平面？在N维空间中，任何N-1维的次空间都是超平面，在二维平面中，超平面是一条<strong>直线</strong>，在三维空间中，超平面就是我们日常所理解的平面。</p>
-
-<p>不是所有的正反样例集合都可以恰好被分成两份，可以被分割的称为线性可分(linearly separable)样例集合。</p>
-
-<p>单独的感知器可以表示一些布尔函数。例如在一个有两个输入的感知器中，实现AND函数可以设<script type="math/tex">w_0</script>为-0.8，<script type="math/tex">w_1=w_2=0.5</script>，实现OR函数可以设<script type="math/tex">w_0</script>为-0.3，<script type="math/tex">w_1=w_2=0.5</script>，还可以实现与非(NAND)和或非(NOR)等函数，使用两层深度的感知器网络就可以实现所有的布尔函数。</p>
-
-<blockquote>
-  <p>因为阈值单元的网络可以表示大量的函数，而单独的单元不能做到这一点，所以通常我们感兴趣的事学习阈值单元组成的多层网络。</p>
-</blockquote>
-
-<p><code class="highlighter-rouge">阈值是一个很重要的概念，它就像y=ax+b中的b，是一个必不可少的常量。</code></p>
-
-<p>如何训练一个感知器，这里主要考虑两种训练法则，感知器训练法则(perceptron training rule)和delta法则(delta rule)。感知器训练法则在线性可分的训练样例中<strong>保证</strong>收敛到可接受的假设，delta法则无论是否线性可分都可以收敛，但是在线性不可分时收敛到目标概念的最佳<strong>近似</strong>。</p>
-
-<h3 id="section-2">感知器训练法则</h3>
-
-<p>感知器训练法则的过程是，首先生成随机的权值，然后反复地应用感知器到每一个训练样例，如果感知器分类<strong>错误</strong>，那么就根据训练样例来修改权值。<strong>重复这个过程直到感知器能够正确分类所有样例</strong>。</p>
-
-<script type="math/tex; mode=display">w_i\leftarrow w_i+\Delta w_i</script>
-
-<script type="math/tex; mode=display">\Delta w_i=\eta (t-o)x_i</script>
-
-<p>其中t是训练样例的目标输出，o是感知器的输出，<script type="math/tex">\eta</script>是学习速率(learning rate)，它是一个很小的数值，并且它有时会随着权调整次数的增加而衰减(<code class="highlighter-rouge">并不是一直不变的</code>)。</p>
-
-<p>如果训练样例线性可分，且<script type="math/tex">\eta</script>足够小，那么感知器训练法则可以在<strong>有限次</strong>内收敛到一个能正确分类所有训练样例的权向量。</p>
-
-<h3 id="section-3">实验</h3>
-
-<p>这一节的代码实现了AND函数的学习，在多次实验中，发现使用200个以上的训练数据便可以学习到一个完全正确的AND函数。</p>
-
-<p><code class="highlighter-rouge">有人说神经网络的缺点之一是不理解权值，以及难以调试，在多个单元组成的网络中有时甚至要靠经验去判断使用多少层和多少个基本单元，我同意这样的说法，但对于这样的结果我会更兴奋，因为这就像我正在理解我自己的大脑。</code></p>
-
-<p>使用感知器训练法则所学习的AND函数的权值是可以被理解的，这是一张包含了错误与正确的训练结果图，可以发现，正确的权值中|<script type="math/tex">w_0</script>|始终大于<script type="math/tex">w_1和w_2</script>。</p>
-
-<p><img src="/img/in-post/ann/perceptron/perceptron-result.png" alt="感知器训练法则结果" /></p>
-
-<p>使用感知器训练法则可以解决线性可分的问题，如果训练样例不是线性可分时，感知器训练法则将无法收敛，下一节会介绍适用于样例不是线性可分时的训练方法——delta法则。</p>
+<p>（未完待续）</p>
 
 
                 <hr>
@@ -243,13 +281,9 @@ o(x_1,...,x_n)=\begin{cases}
                 <ul class="pager">
                     
                     <li class="previous">
-                        <a href="/2016/05/14/ann-introductory/" data-toggle="tooltip" data-placement="top" title="人工神经网络（序）">&larr; Previous Post</a>
+                        <a href="/2016/05/14/ann-perceptron-1/" data-toggle="tooltip" data-placement="top" title="人工神经网络（感知器）（一）">&larr; Previous Post</a>
                     </li>
                     
-                    
-                    <li class="next">
-                        <a href="/2016/05/15/ann-perceptron-2/" data-toggle="tooltip" data-placement="top" title="人工神经网络（感知器）（二）（delta法则）">Next Post &rarr;</a>
-                    </li>
                     
                 </ul>
 
@@ -320,8 +354,8 @@ o(x_1,...,x_n)=\begin{cases}
 <script type="text/javascript">
     /* * * CONFIGURATION VARIABLES * * */
     var disqus_shortname = "hackiey";
-    var disqus_identifier = "/2016/05/14/ann-perceptron-1";
-    var disqus_url = "http://words.hackiey.com/2016/05/14/ann-perceptron-1/";
+    var disqus_identifier = "/2016/05/15/ann-perceptron-2";
+    var disqus_url = "http://words.hackiey.com/2016/05/15/ann-perceptron-2/";
 
     (function() {
         var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;

@@ -5,9 +5,126 @@
     <description>To be a hacker</description>
     <link>http://words.hackiey.com/</link>
     <atom:link href="http://words.hackiey.com/feed.xml" rel="self" type="application/rss+xml" />
-    <pubDate>Sat, 14 May 2016 23:24:28 +0800</pubDate>
-    <lastBuildDate>Sat, 14 May 2016 23:24:28 +0800</lastBuildDate>
+    <pubDate>Mon, 16 May 2016 01:52:03 +0800</pubDate>
+    <lastBuildDate>Mon, 16 May 2016 01:52:03 +0800</lastBuildDate>
     <generator>Jekyll v3.1.3</generator>
+    
+      <item>
+        <title>人工神经网络（感知器）（二）（delta法则）</title>
+        <description>&lt;p&gt;感知器训练法则所能解决的问题是非常有限的，大部分的问题都是线性不可分的，所以为了保证在线性不可分时仍能够使训练过程收敛，要引入delta法则。它同时也是学习多个单元的互联网络的基础。&lt;/p&gt;
+
+&lt;h3 id=&quot;delta&quot;&gt;delta法则&lt;/h3&gt;
+
+&lt;p&gt;delta法则的关键思想是使用梯度下降(gradient descent)搜索“所有“（由于程序在训练时不可能完全平滑，所以设置一个足够小的&lt;script type=&quot;math/tex&quot;&gt;\eta&lt;/script&gt;来尽可能的在误差最小值附近逼近这个值）可能的权值假设空间，从中找出能够最佳拟合训练样例的权向量。&lt;/p&gt;
+
+&lt;blockquote&gt;
+  &lt;p&gt;最好把delta训练法则理解为训练一个无阈值的感知器，也就是一个线性单元(linear unit)，它的输出o如下:&lt;/p&gt;
+&lt;/blockquote&gt;
+
+&lt;script type=&quot;math/tex; mode=display&quot;&gt;o(\vec x) = \vec w \cdot \vec x \tag{1}&lt;/script&gt;
+
+&lt;p&gt;为了理解梯度下降，首先先定义训练误差:&lt;/p&gt;
+
+&lt;script type=&quot;math/tex; mode=display&quot;&gt;E(\vec w)={1\over 2}\sum_{d\epsilon D}(t_d-o_d)^2 \tag{2}&lt;/script&gt;
+
+&lt;p&gt;这是最常用的用来度量误差的定义，其中D是训练样例集合，&lt;script type=&quot;math/tex&quot;&gt;t_d&lt;/script&gt;是训练样例d的目标输出，&lt;script type=&quot;math/tex&quot;&gt;o_d&lt;/script&gt;是线性单元对训练样例d的输出，&lt;code class=&quot;highlighter-rouge&quot;&gt;形式上如同方差，至于为什么要乘1/2，可能是为了推导出最后的公式后有一个简洁的运算。&lt;/code&gt;一个有两个输入的线性单元对应的误差平面图如下，从这里可以直观的看出，当随机初始化权值后，误差有可能在误差平面上任何一个点，为了到达&lt;script type=&quot;math/tex&quot;&gt;E(\vec w)&lt;/script&gt;的最小值，要不断去寻找当前点在这个平面上&lt;strong&gt;最陡&lt;/strong&gt;的方向并朝着这个方向进行移动。这里可以看出为什么delta法则总能收敛。&lt;code class=&quot;highlighter-rouge&quot;&gt;如果训练数据不能线性可分，那么这个误差平面与$$w_1和w_2$$组成的平面不会相交，即使收敛也无法学习到最正确的目标函数(考虑异或函数，你无论如和也无法找出两个权值来拟合这个目标函数)。&lt;/code&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;/img/in-post/ann/perceptron/error.png&quot; alt=&quot;不同假设的误差&quot; /&gt;&lt;/p&gt;
+
+&lt;h3 id=&quot;section&quot;&gt;梯度下降法则的推导&lt;/h3&gt;
+
+&lt;p&gt;推导过程的关键是找出沿误差曲面最陡峭下降的方向。可以通过计算E相对向量&lt;script type=&quot;math/tex&quot;&gt;\vec w&lt;/script&gt;的&lt;strong&gt;每个分量的导数&lt;/strong&gt;来得到这个&lt;strong&gt;方向&lt;/strong&gt;。这个向量导数被称为E对于&lt;script type=&quot;math/tex&quot;&gt;\vec w&lt;/script&gt;的梯度(gradient)，记作&lt;script type=&quot;math/tex&quot;&gt;\nabla E(\vec w)&lt;/script&gt;。&lt;/p&gt;
+
+&lt;script type=&quot;math/tex; mode=display&quot;&gt;\nabla E(\vec w)\equiv \left [
+		{\partial E\over \partial w_0} ,
+		{\partial E\over \partial w_1} ,
+		... ,
+		{\partial E\over \partial w_n} ,
+	\right ]\tag{3}&lt;/script&gt;
+
+&lt;p&gt;梯度本身是一个向量，没有具体的距离量度，因此梯度下降的训练法则是:&lt;/p&gt;
+
+&lt;script type=&quot;math/tex; mode=display&quot;&gt;\vec w\leftarrow \vec w+ \Delta \vec w&lt;/script&gt;
+
+&lt;p&gt;其中:&lt;/p&gt;
+
+&lt;script type=&quot;math/tex; mode=display&quot;&gt;\Delta \vec w=- \eta \nabla E(\vec w) \tag {4}&lt;/script&gt;
+
+&lt;p&gt;&lt;script type=&quot;math/tex&quot;&gt;\eta&lt;/script&gt;是学习速率，它决定了在梯度下降中向误差最小值移动的速度。为了获取最终的权值更新公式(&lt;script type=&quot;math/tex&quot;&gt;w_i&lt;/script&gt;的更新公式)，可以写出其分量形式:&lt;/p&gt;
+
+&lt;script type=&quot;math/tex; mode=display&quot;&gt;w_i\leftarrow w_i +\Delta w_i&lt;/script&gt;
+
+&lt;p&gt;其中:&lt;/p&gt;
+
+&lt;script type=&quot;math/tex; mode=display&quot;&gt;\Delta w_i=-\eta {\partial E\over\partial w_i} \tag{5}&lt;/script&gt;
+
+&lt;p&gt;现在来推导一下&lt;script type=&quot;math/tex&quot;&gt;\partial E \over \partial w_i&lt;/script&gt;,根据(2)式可以得出第一步，然后根据求导法则逐步推导，需要注意的是，&lt;script type=&quot;math/tex&quot;&gt;t_d&lt;/script&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;是训练数据的目标输出，它与&lt;/code&gt;&lt;script type=&quot;math/tex&quot;&gt;w_i&lt;/script&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;无关，而&lt;/code&gt;&lt;script type=&quot;math/tex&quot;&gt;o_d&lt;/script&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;包含了在公式中充当未知数的&lt;/code&gt;&lt;script type=&quot;math/tex&quot;&gt;w_i&lt;/script&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;，因此最后一步求导时&lt;/code&gt;&lt;script type=&quot;math/tex&quot;&gt;t_d&lt;/script&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;被视为一个常数最终成为0。这个推导过程十分重要，它是梯度下降算法的核心过程。&lt;/code&gt;&lt;/p&gt;
+
+&lt;script type=&quot;math/tex; mode=display&quot;&gt;% &lt;![CDATA[
+\begin{align}
+{\partial E\over \partial w_i} &amp; = {\partial \over \partial w_i}{1\over 2}\sum_{d\epsilon D}(t_d-o_d)^2 = {1\over 2}\sum_{d\epsilon D}{\partial \over \partial w_i}(t_d-o_d)^2\\
+&amp; = {1\over 2}\sum_{d\epsilon D}2(t_d-o_d){\partial \over \partial w_i}(t_d-o_d) \\
+&amp; = \sum_{d\epsilon D}(t_d-o_d){\partial \over \partial w_i}(t_d-\vec w \cdot \vec x_d) \\
+{\partial E\over \partial w_i} &amp; = \sum_{d\epsilon D}(t_d-o_d)(-x_{id}) \tag{6}\\
+\end{align} %]]&gt;&lt;/script&gt;
+
+&lt;p&gt;其中&lt;script type=&quot;math/tex&quot;&gt;x_{id}&lt;/script&gt;是训练样例d的一个输入分量&lt;script type=&quot;math/tex&quot;&gt;x_i&lt;/script&gt;。将(6)代入(5)中可以得出最终的梯度下降权值更新法则:&lt;/p&gt;
+
+&lt;script type=&quot;math/tex; mode=display&quot;&gt;\nabla w_i=\eta \sum_{d\epsilon D}(t_d-o_d)x_{id} \tag{7}&lt;/script&gt;
+
+&lt;h3 id=&quot;section-1&quot;&gt;训练线性单元的梯度下降算法&lt;/h3&gt;
+
+&lt;hr /&gt;
+&lt;p&gt;&lt;strong&gt;GRADIENT-DESCENT(training_examples, &lt;script type=&quot;math/tex&quot;&gt;\eta&lt;/script&gt;)&lt;/strong&gt;&lt;/p&gt;
+
+&lt;p&gt;training_examples中每一个训练样例形式为序偶&amp;lt;&lt;script type=&quot;math/tex&quot;&gt;\vec x&lt;/script&gt;, t&amp;gt;，其中&lt;script type=&quot;math/tex&quot;&gt;\vec x&lt;/script&gt;是输入值向量，t是目标输出值，&lt;script type=&quot;math/tex&quot;&gt;\eta&lt;/script&gt;是学习速率(例如0.05)&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;初始化每个&lt;script type=&quot;math/tex&quot;&gt;w_i&lt;/script&gt;为某个小的随机值&lt;/li&gt;
+  &lt;li&gt;遇到终止条件之前，做以下操作:
+    &lt;ul&gt;
+      &lt;li&gt;初始化每个&lt;script type=&quot;math/tex&quot;&gt;\nabla w_i&lt;/script&gt;为0&lt;/li&gt;
+      &lt;li&gt;对于训练样例training_examples中的每个&amp;lt;&lt;script type=&quot;math/tex&quot;&gt;\vec x&lt;/script&gt;, t&amp;gt;，做:
+        &lt;ul&gt;
+          &lt;li&gt;把实例&lt;script type=&quot;math/tex&quot;&gt;\vec x&lt;/script&gt;输入到此单元，计算出o&lt;/li&gt;
+          &lt;li&gt;对于线性单元的每个权&lt;script type=&quot;math/tex&quot;&gt;w_i&lt;/script&gt;，做:&lt;/li&gt;
+        &lt;/ul&gt;
+
+        &lt;script type=&quot;math/tex; mode=display&quot;&gt;\Delta w_i\leftarrow \Delta w_i +\eta (t-o)x_i \tag8&lt;/script&gt;
+      &lt;/li&gt;
+      &lt;li&gt;
+        &lt;p&gt;对于线性单元的每个权&lt;script type=&quot;math/tex&quot;&gt;w_i&lt;/script&gt;，做:&lt;/p&gt;
+
+        &lt;script type=&quot;math/tex; mode=display&quot;&gt;w_i \leftarrow w_i+\Delta w_i \tag9&lt;/script&gt;
+      &lt;/li&gt;
+    &lt;/ul&gt;
+  &lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;hr /&gt;
+&lt;p&gt;从算法的描述中就可以看出，每一步都要应用所有的训练样例到线性单元并计算出o，因此训练过程是极其缓慢的。&lt;code class=&quot;highlighter-rouge&quot;&gt;算法中所提到的终止条件指的是事先设定一个可以接受的误差范围，当误差小于这个范围时则终止。&lt;/code&gt;&lt;/p&gt;
+
+&lt;h3 id=&quot;section-2&quot;&gt;实验&lt;/h3&gt;
+
+&lt;p&gt;这一节实验使用书中的一个练习题：&lt;/p&gt;
+
+&lt;blockquote&gt;
+  &lt;p&gt;实现一个两输入线性单元的delta训练法则。训练它来拟合目标概念 &lt;script type=&quot;math/tex&quot;&gt;-2+x_1+2x_2&gt;0&lt;/script&gt;。画出误差E相对训练迭代次数的函数曲线。画出5，10，50，100，……次迭代后的决策面。
+(a)为 &lt;script type=&quot;math/tex&quot;&gt;\eta&lt;/script&gt; 选取不同的常量值，并使用衰减的学习速率——也就是第i次迭代使用 &lt;script type=&quot;math/tex&quot;&gt;\eta_0 / i&lt;/script&gt;，再进行实验。哪一个效果更好？&lt;/p&gt;
+&lt;/blockquote&gt;
+
+&lt;p&gt;（未完待续）&lt;/p&gt;
+</description>
+        <pubDate>Sun, 15 May 2016 08:00:00 +0800</pubDate>
+        <link>http://words.hackiey.com/2016/05/15/ann-perceptron-2/</link>
+        <guid isPermaLink="true">http://words.hackiey.com/2016/05/15/ann-perceptron-2/</guid>
+        
+        <category>机器学习</category>
+        
+        <category>人工神经网络</category>
+        
+        
+      </item>
     
       <item>
         <title>人工神经网络（感知器）（一）</title>
@@ -51,7 +168,7 @@ o(x_1,...,x_n)=\begin{cases}
 
 &lt;p&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;阈值是一个很重要的概念，它就像y=ax+b中的b，是一个必不可少的常量。&lt;/code&gt;&lt;/p&gt;
 
-&lt;p&gt;如何训练一个感知器，这里主要考虑两种训练法则，感知器训练法则(perceptron training rule)和delta法则(delta rule)。这两种算法&lt;strong&gt;保证&lt;/strong&gt;收敛到可接受的假设。&lt;/p&gt;
+&lt;p&gt;如何训练一个感知器，这里主要考虑两种训练法则，感知器训练法则(perceptron training rule)和delta法则(delta rule)。感知器训练法则在线性可分的训练样例中&lt;strong&gt;保证&lt;/strong&gt;收敛到可接受的假设，delta法则无论是否线性可分都可以收敛，但是在线性不可分时收敛到目标概念的最佳&lt;strong&gt;近似&lt;/strong&gt;。&lt;/p&gt;
 
 &lt;h3 id=&quot;section-2&quot;&gt;感知器训练法则&lt;/h3&gt;
 
@@ -71,11 +188,11 @@ o(x_1,...,x_n)=\begin{cases}
 
 &lt;p&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;有人说神经网络的缺点之一是不理解权值，以及难以调试，在多个单元组成的网络中有时甚至要靠经验去判断使用多少层和多少个基本单元，我同意这样的说法，但对于这样的结果我会更兴奋，因为这就像我正在理解我自己的大脑。&lt;/code&gt;&lt;/p&gt;
 
-&lt;p&gt;感知器所实现的AND函数的权值是可以被理解的，这是一张包含了错误与正确的训练结果图，可以发现，正确的权值中|&lt;script type=&quot;math/tex&quot;&gt;w_0&lt;/script&gt;|始终大于&lt;script type=&quot;math/tex&quot;&gt;w_1和w_2&lt;/script&gt;。&lt;/p&gt;
+&lt;p&gt;使用感知器训练法则所学习的AND函数的权值是可以被理解的，这是一张包含了错误与正确的训练结果图，可以发现，正确的权值中|&lt;script type=&quot;math/tex&quot;&gt;w_0&lt;/script&gt;|始终大于&lt;script type=&quot;math/tex&quot;&gt;w_1和w_2&lt;/script&gt;。&lt;/p&gt;
 
 &lt;p&gt;&lt;img src=&quot;/img/in-post/ann/perceptron/perceptron-result.png&quot; alt=&quot;感知器训练法则结果&quot; /&gt;&lt;/p&gt;
 
-&lt;p&gt;如果训练样例不是线性可分时，感知器训练法则将无法收敛，下一节会介绍适用于样例不是线性可分时的训练方法——delta法则。&lt;/p&gt;
+&lt;p&gt;使用感知器训练法则可以解决线性可分的问题，如果训练样例不是线性可分时，感知器训练法则将无法收敛，下一节会介绍适用于样例不是线性可分时的训练方法——delta法则。&lt;/p&gt;
 </description>
         <pubDate>Sat, 14 May 2016 08:00:00 +0800</pubDate>
         <link>http://words.hackiey.com/2016/05/14/ann-perceptron-1/</link>
@@ -94,7 +211,7 @@ o(x_1,...,x_n)=\begin{cases}
 
 &lt;p&gt;自从接触了人工智能，就一直梦想着可以实现能够写程序的程序，本想从这篇论文中得到一些灵感，但是读完相关工作后就读不懂了，我觉得肯定是因为基础不牢固的原因，NPI的基础是深度学习，深度学习的基础是神经网络，所以我从头开始学习人工神经网络。有人说学习的最好方法是教别人，我越来越赞成这一点了，因为等我足够有名了，肯定会有大神来指出我的错误(doge脸)，不过我一定会努力少犯错误，避免误导初学的小朋友。&lt;/p&gt;
 
-&lt;p&gt;这一系列文章主要参考Tom M. Mitchell的《机器学习》，除非特别说明，所有的引用均来自这本书。为避免教坏小朋友，我自己理解的部分会使用&lt;code class=&quot;highlighter-rouge&quot;&gt;code标签&lt;/code&gt;包裹起来。&lt;/p&gt;
+&lt;p&gt;这一系列文章主要参考Tom M. Mitchell的《机器学习》（更像是在抄书的时候加了点自己的理解），除非特别说明，所有的引用均来自这本书。为避免教坏小朋友，我自己理解的部分会使用&lt;code class=&quot;highlighter-rouge&quot;&gt;code标签&lt;/code&gt;包裹起来。&lt;/p&gt;
 
 &lt;h3 id=&quot;ann&quot;&gt;人工神经网络(ANN)&lt;/h3&gt;
 
@@ -132,6 +249,8 @@ o(x_1,...,x_n)=\begin{cases}
 &lt;h3 id=&quot;section&quot;&gt;目录&lt;/h3&gt;
 
 &lt;p&gt;1.1 &lt;a href=&quot;/2016/05/14/ann-perceptron-1/&quot;&gt;感知器（一）&lt;/a&gt;(描述了感知器以及感知器训练法则)&lt;/p&gt;
+
+&lt;p&gt;1.2 &lt;a href=&quot;/2016/05/15/ann-perceptron-2/&quot;&gt;感知器（二）（delta法则）&lt;/a&gt;(描述了delta训练法则)&lt;/p&gt;
 </description>
         <pubDate>Sat, 14 May 2016 08:00:00 +0800</pubDate>
         <link>http://words.hackiey.com/2016/05/14/ann-introductory/</link>
