@@ -1,6 +1,6 @@
 ---
 layout:     post
-title:      "人工神经网络（感知器）（一）"
+title:      "人工神经网络（感知器）"
 subtitle:   ""
 date:       2016-05-14 00:00:00
 header-img: img/in-post/ann/ann2.jpg
@@ -30,6 +30,8 @@ $$
 为了简化，可以将$$x_0$$设置为1，不等式可写为$${\sum_{i=0}^nw_ix_i}>0$$，这样可以表示为**向量**$$\vec w\cdot\vec x>0$$，因此感知器函数可以写为:
 
 $$o(\vec x)=sgn(\vec w\cdot\vec x)$$
+
+sgn是阈值函数，当x>0时，sgn(x)=1，当x<=0时，sgn(x)=-1。
 
 ### 感知器的表征能力
 

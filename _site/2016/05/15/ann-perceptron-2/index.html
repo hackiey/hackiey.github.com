@@ -10,7 +10,7 @@
     <meta name="keyword"  content="">
     <link rel="shortcut icon" href="/img/favicon.ico">
 
-    <title>人工神经网络（感知器）（二）（delta法则） - Harry的博客 | Harry's Blog</title>
+    <title>人工神经网络（线性单元）（delta法则） - Harry的博客 | Harry's Blog</title>
 
     <link rel="canonical" href="http://words.hackiey.com/2016/05/15/ann-perceptron-2/">
 
@@ -145,7 +145,7 @@
                         <a class="tag" href="/tags/#人工神经网络" title="人工神经网络">人工神经网络</a>
                         
                     </div>
-                    <h1>人工神经网络（感知器）（二）（delta法则）</h1>
+                    <h1>人工神经网络（线性单元）（delta法则）</h1>
                     
                     
                     <h2 class="subheading"></h2>
@@ -259,7 +259,7 @@
 </ul>
 
 <hr />
-<p>从算法的描述中就可以看出，每一步都要应用所有的训练样例到线性单元并计算出o，因此训练过程是极其缓慢的。<code class="highlighter-rouge">算法中所提到的终止条件指的是事先设定一个可以接受的误差范围，当误差小于这个范围时则终止。</code></p>
+<p>你可能会发现算法中没有出现<script type="math/tex">t_d或o_d</script>之类的符号，在对训练样例的循环中，t和o就代表<script type="math/tex">t_d和o_d</script>，一次training_examples的循环结束之后，使用不断累加得到的<script type="math/tex">\Delta w_i</script>对<script type="math/tex">w_i</script>更新。从算法的描述中就可以看出，每一次权值更新都要应用所有的训练样例到线性单元并计算出<script type="math/tex">\Delta w_i</script>，因此训练过程是极其缓慢的。<code class="highlighter-rouge">算法中所提到的终止条件指的是事先设定一个可以接受的误差范围，当误差小于这个范围时则终止。</code></p>
 
 <h3 id="section-2">实验</h3>
 
@@ -281,7 +281,7 @@
                 <ul class="pager">
                     
                     <li class="previous">
-                        <a href="/2016/05/14/ann-perceptron-1/" data-toggle="tooltip" data-placement="top" title="人工神经网络（感知器）（一）">&larr; Previous Post</a>
+                        <a href="/2016/05/14/ann-perceptron-1/" data-toggle="tooltip" data-placement="top" title="人工神经网络（感知器）">&larr; Previous Post</a>
                     </li>
                     
                     
