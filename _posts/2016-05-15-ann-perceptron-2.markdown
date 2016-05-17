@@ -116,4 +116,6 @@ training_examples中每一个训练样例形式为序偶<$$\vec x$$, t>，其中
 
 ![实验前30轮权值及误差E](/img/in-post/ann/perceptron/linear-unit-experiment.png)
 
-(未完待续)
+误差E的前30轮曲线图：
+
+![误差E曲线图](/img/in-post/ann/perceptron/errorE.png)
