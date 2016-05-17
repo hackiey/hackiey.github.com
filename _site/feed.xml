@@ -5,8 +5,8 @@
     <description>To be a hacker</description>
     <link>http://words.hackiey.com/</link>
     <atom:link href="http://words.hackiey.com/feed.xml" rel="self" type="application/rss+xml" />
-    <pubDate>Tue, 17 May 2016 22:27:38 +0800</pubDate>
-    <lastBuildDate>Tue, 17 May 2016 22:27:38 +0800</lastBuildDate>
+    <pubDate>Wed, 18 May 2016 02:18:38 +0800</pubDate>
+    <lastBuildDate>Wed, 18 May 2016 02:18:38 +0800</lastBuildDate>
     <generator>Jekyll v3.1.3</generator>
     
       <item>
@@ -116,9 +116,17 @@
 &lt;p&gt;在我动手去做这个实验之前，我有很多疑问：
 （1）为什么一个线性单元学习的目标概念有不等式？（2）如何在没有阈值的情况下学习到目标概念中的(-2)？（3）它的训练样例是怎样的？&lt;/p&gt;
 
-&lt;p&gt;翻了一遍书之后，我认为答案是这样的:（1）不等式代表了一种线性划分，它是二维平面的分类器。如果没有不等式，它就是一条直线，这条直线正是我们要学习的决策面，而决策面只有在不等式的条件下才有存在的意义（没有不等式的划分，哪里会有决策面呢）。（2）虽然线性单元中没有阈值的概念，但实际上观察感知器训练法则和delta法则都会发现他们的o的输出公式中，都包含了&lt;script type=&quot;math/tex&quot;&gt;\vec w\cdot \vec x&lt;/script&gt;，这说明权值&lt;script type=&quot;math/tex&quot;&gt;w_0&lt;/script&gt;是在两种训练方法中都存在的，且&lt;script type=&quot;math/tex&quot;&gt;x_0&lt;/script&gt;都为1，只是由于感知器中存在sgn这样的映射，因此在感知器中(&lt;script type=&quot;math/tex&quot;&gt;-w_0&lt;/script&gt;)成为了阈值的概念。(3)针对这个目标函数，它的训练样例输出就是 &lt;script type=&quot;math/tex&quot;&gt;-2+x_1+2x_2&lt;/script&gt;，这样最终学习到的权值&lt;script type=&quot;math/tex&quot;&gt;\vec w&lt;/script&gt;与&lt;script type=&quot;math/tex&quot;&gt;\vec x&lt;/script&gt;进行点乘就是最后的决策面(&lt;script type=&quot;math/tex&quot;&gt;\vec w\cdot \vec x=0&lt;/script&gt;)。&lt;/p&gt;
+&lt;p&gt;翻了一遍书之后，我认为答案是这样的:&lt;code class=&quot;highlighter-rouge&quot;&gt;（1）不等式代表了一种线性划分，它是二维平面的分类器。如果没有不等式，它就是一条直线，这条直线正是我们要学习的决策面，而决策面只有在不等式的条件下才有存在的意义（没有不等式的划分，哪里会有决策面呢）。（2）虽然线性单元中没有阈值的概念，但实际上观察感知器训练法则和delta法则都会发现他们的o的输出公式中，都包含了&lt;/code&gt;&lt;script type=&quot;math/tex&quot;&gt;\vec w\cdot \vec x&lt;/script&gt;，&lt;code class=&quot;highlighter-rouge&quot;&gt;这说明权值&lt;/code&gt;&lt;script type=&quot;math/tex&quot;&gt;w_0&lt;/script&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;是在两种训练方法中都存在的，且&lt;/code&gt;&lt;script type=&quot;math/tex&quot;&gt;x_0&lt;/script&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;都为1，只是由于感知器中存在sgn这样的映射，因此在感知器中&lt;/code&gt;(&lt;script type=&quot;math/tex&quot;&gt;-w_0&lt;/script&gt;)&lt;code class=&quot;highlighter-rouge&quot;&gt;成为了阈值的概念。(3)针对这个目标函数，它的训练样例输出就是 &lt;/code&gt;&lt;script type=&quot;math/tex&quot;&gt;-2+x_1+2x_2&lt;/script&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;，这样最终学习到的权值&lt;/code&gt;&lt;script type=&quot;math/tex&quot;&gt;\vec w&lt;/script&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;与&lt;/code&gt;&lt;script type=&quot;math/tex&quot;&gt;\vec x&lt;/script&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;进行点乘就是最后的决策面(&lt;/code&gt;&lt;script type=&quot;math/tex&quot;&gt;\vec w\cdot \vec x=0&lt;/script&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;)。&lt;/code&gt;&lt;/p&gt;
 
-&lt;p&gt;（未完待续）&lt;/p&gt;
+&lt;p&gt;做这个实验的过程中，我体会到了理论研究中很少注意到的一个参数——学习速率，其实在感知器中就已经说明了学习过程的收敛条件之一是&lt;script type=&quot;math/tex&quot;&gt;\eta&lt;/script&gt;要足够小，如果&lt;script type=&quot;math/tex&quot;&gt;\eta&lt;/script&gt;没有足够小，那么权值会不断增大到无穷大。一个基本的技巧是如果你的训练数据中输入的数字都比较大，那么学习速率一定要缩小。例如你的训练数据范围在[-0.1,0.1]，那么你可能需要一个&lt;script type=&quot;math/tex&quot;&gt;10^(-6)&lt;/script&gt;数量级的&lt;script type=&quot;math/tex&quot;&gt;\eta&lt;/script&gt;，如果你的训练数据范围在[-1,1]，那么你需要更小的&lt;script type=&quot;math/tex&quot;&gt;\eta&lt;/script&gt;，你可以监控学习过程中所得到的权值来不断调整这一参数。&lt;/p&gt;
+
+&lt;p&gt;本实验的训练数据使用了[-0.1,0.1]的输入范围，学习速率为0.000005，在E(梯度下降所设定的误差)小于0.1时结束循环。为了快速收敛，没有采用a)问中的&lt;script type=&quot;math/tex&quot;&gt;\eta_0 / i&lt;/script&gt;学习速率(使用这个参数之后，在接近收敛时仍会花费很多时间)。&lt;/p&gt;
+
+&lt;p&gt;学习过程总共经过了136轮权值修正。下图中是前30轮的权值和误差E(可以看出E从开始的急速下降到后面的缓慢下降)。最终的权值为[-1.996601 1.003349 2.002383]。&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;/img/in-post/ann/perceptron/linear-unit-experiment.png&quot; alt=&quot;实验前30轮权值及误差E&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;(未完待续)&lt;/p&gt;
 </description>
         <pubDate>Sun, 15 May 2016 08:00:00 +0800</pubDate>
         <link>http://words.hackiey.com/2016/05/15/ann-perceptron-2/</link>
