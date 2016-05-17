@@ -84,5 +84,9 @@ friends: [
     {
         title: "Hackiey",
         href: "http://www.hackiey.com"
+    },
+    {
+        title: "David Gu",
+        href: "http://gty.org.in/"
     }
 ]

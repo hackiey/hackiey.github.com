@@ -267,8 +267,13 @@
 
 <blockquote>
   <p>实现一个两输入线性单元的delta训练法则。训练它来拟合目标概念 <script type="math/tex">-2+x_1+2x_2>0</script>。画出误差E相对训练迭代次数的函数曲线。画出5，10，50，100，……次迭代后的决策面。
-(a)为 <script type="math/tex">\eta</script> 选取不同的常量值，并使用衰减的学习速率——也就是第i次迭代使用 <script type="math/tex">\eta_0 / i</script>，再进行实验。哪一个效果更好？</p>
+(a)为 <script type="math/tex">\eta</script> 选取不同的常量值，并使用衰减的学习速率——也就是第 i 次迭代使用 <script type="math/tex">\eta_0 / i</script>，再进行实验。哪一个效果更好？</p>
 </blockquote>
+
+<p>在我动手去做这个实验之前，我有很多疑问：
+（1）为什么一个线性单元学习的目标概念有不等式？（2）如何在没有阈值的情况下学习到目标概念中的(-2)？（3）它的训练样例是怎样的？</p>
+
+<p>翻了一遍书之后，我认为答案是这样的:（1）不等式代表了一种线性划分，它是二维平面的分类器。如果没有不等式，它就是一条直线，这条直线正是我们要学习的决策面，而决策面只有在不等式的条件下才有存在的意义（没有不等式的划分，哪里会有决策面呢）。（2）虽然线性单元中没有阈值的概念，但实际上观察感知器训练法则和delta法则都会发现他们的o的输出公式中，都包含了<script type="math/tex">\vec w\cdot \vec x</script>，这说明权值<script type="math/tex">w_0</script>是在两种训练方法中都存在的，且<script type="math/tex">x_0</script>都为1，只是由于感知器中存在sgn这样的映射，因此在感知器中(<script type="math/tex">-w_0</script>)成为了阈值的概念。(3)针对这个目标函数，它的训练样例输出就是 <script type="math/tex">-2+x_1+2x_2</script>，这样最终学习到的权值<script type="math/tex">\vec w</script>与<script type="math/tex">\vec x</script>进行点乘就是最后的决策面(<script type="math/tex">\vec w\cdot \vec x=0</script>)。</p>
 
 <p>（未完待续）</p>
 
@@ -338,6 +343,8 @@
                 <ul class="list-inline">
                     
                         <li><a href="http://www.hackiey.com">Hackiey</a></li>
+                    
+                        <li><a href="http://gty.org.in/">David Gu</a></li>
                     
                 </ul>
                 
