@@ -275,9 +275,9 @@
 
 <p>翻了一遍书之后，我认为答案是这样的:<code class="highlighter-rouge">（1）不等式代表了一种线性划分，它是二维平面的分类器。如果没有不等式，它就是一条直线，这条直线正是我们要学习的决策面，而决策面只有在不等式的条件下才有存在的意义（没有不等式的划分，哪里会有决策面呢）。（2）虽然线性单元中没有阈值的概念，但实际上观察感知器训练法则和delta法则都会发现他们的o的输出公式中，都包含了</code><script type="math/tex">\vec w\cdot \vec x</script>，<code class="highlighter-rouge">这说明权值</code><script type="math/tex">w_0</script><code class="highlighter-rouge">是在两种训练方法中都存在的，且</code><script type="math/tex">x_0</script><code class="highlighter-rouge">都为1，只是由于感知器中存在sgn这样的映射，因此在感知器中</code>(<script type="math/tex">-w_0</script>)<code class="highlighter-rouge">成为了阈值的概念。(3)针对这个目标函数，它的训练样例输出就是 </code><script type="math/tex">-2+x_1+2x_2</script><code class="highlighter-rouge">，这样最终学习到的权值</code><script type="math/tex">\vec w</script><code class="highlighter-rouge">与</code><script type="math/tex">\vec x</script><code class="highlighter-rouge">进行点乘就是最后的决策面(</code><script type="math/tex">\vec w\cdot \vec x=0</script><code class="highlighter-rouge">)。</code></p>
 
-<p>做这个实验的过程中，我体会到了理论研究中很少注意到的一个参数——学习速率，其实在感知器中就已经说明了学习过程的收敛条件之一是<script type="math/tex">\eta</script>要足够小，如果<script type="math/tex">\eta</script>没有足够小，那么权值会不断增大到无穷大。一个基本的技巧是如果你的训练数据中输入的数字都比较大，那么学习速率一定要缩小。例如你的训练数据范围在[-0.1,0.1]，那么你可能需要一个<script type="math/tex">10^(-6)</script>数量级的<script type="math/tex">\eta</script>，如果你的训练数据范围在[-1,1]，那么你需要更小的<script type="math/tex">\eta</script>，你可以监控学习过程中所得到的权值来不断调整这一参数。</p>
+<p>做这个实验的过程中，我体会到了理论研究中很少注意到的一个参数——学习速率，其实在感知器中就已经说明了学习过程的收敛条件之一是<script type="math/tex">\eta</script>要足够小，如果<script type="math/tex">\eta</script>没有足够小，那么权值会不断增大到无穷大。一个基本的技巧是如果你的训练数据中输入的数字都比较大，那么学习速率一定要缩小。例如你的训练数据范围在[-0.1,0.1]，那么你可能需要一个<script type="math/tex">10^{-6}</script>数量级的<script type="math/tex">\eta</script>，如果你的训练数据范围在[-1,1]，那么你需要更小的<script type="math/tex">\eta</script>，你可以监控学习过程中所得到的权值来不断调整这一参数。</p>
 
-<p>本实验的训练数据使用了[-0.1,0.1]的输入范围，学习速率为0.000005，在E(梯度下降所设定的误差)小于0.1时结束循环。为了快速收敛，没有采用a)问中的<script type="math/tex">\eta_0 / i</script>学习速率(使用这个参数之后，在接近收敛时仍会花费很多时间)。</p>
+<p>本实验的训练数据使用了[-0.1,0.1]的输入范围，学习速率为0.000005，在E(梯度下降所设定的误差)小于0.1时结束循环。为了快速收敛，我偷了一些小懒，一是直接将<script type="math/tex">w_0</script>设为0，<script type="math/tex">w_1和w_2</script>设置为大于0的小的随机数（正常的设置权值应该是[-x,x]中的随机值，x具体应该取决于你所学习的对象）；二是没有采用a)问中的<script type="math/tex">\eta_0 / i</script>学习速率(使用这个参数之后，在接近收敛时仍会花费很多时间，但是这是一个好的策略，它会尽可能的避免你跃过最小值点)。</p>
 
 <p>学习过程总共经过了136轮权值修正。下图中是前30轮的权值和误差E(可以看出E从开始的急速下降到后面的缓慢下降)。最终的权值为[-1.996601 1.003349 2.002383]。</p>
 
@@ -286,6 +286,24 @@
 <p>误差E的前30轮曲线图：</p>
 
 <p><img src="/img/in-post/ann/perceptron/errorE.png" alt="误差E曲线图" /></p>
+
+<h3 id="section-3">随机梯度下降</h3>
+
+<p>在上面的误差曲面图中只有一个最小值，实际上在很多实际应用中有多个局部最小值，那么就不能保证最终会收敛到全局最小值。缓解这个困难的一个常见的梯度下降变体被称为增量梯度下降(incremental gradient descent)或随机梯度下降(stochastic gradient descent)。随机梯度下降可被看作为每个单独的训练样例d定义不同的误差函数<script type="math/tex">E_d(\vec w)</script>：</p>
+
+<script type="math/tex; mode=display">E_d(\vec w)= {1\over 2} (t_d-o_d)^2 \tag{10}</script>
+
+<p>根据误差公式所计算的<script type="math/tex">\Delta w_i</script>为：</p>
+
+<script type="math/tex; mode=display">\Delta w_i=\eta (t-o)x_i \tag{11}</script>
+
+<p>将(8)替换为(11)并删掉(9)就是随机梯度下降算法。标准的梯度下降和随机的梯度下降之间的关键区别是：</p>
+
+<ul>
+  <li>标准的梯度下降是权值更新前对所有样例汇总误差，而随机梯度下降的权值是通过考察每个训练实例来更新的。</li>
+  <li>在标准的梯度下降中，权值更新的每一步对多个样例求和，这需要更多的计算。另一方面，因为使用真正的梯度，标准的梯度下降对于每一次权值更新经常使用比随机梯度下降大的步长。</li>
+  <li>如果<script type="math/tex">E(\vec w)</script>有多个局部极小值，随机的梯度下降有时可能避免陷入这些局部极小值中，因为它使用不同的<script type="math/tex">\nabla E_d(\vec w)</script>而不是<script type="math/tex">\nabla E(\vec w)</script>来引导搜索。</li>
+</ul>
 
 
                 <hr>
