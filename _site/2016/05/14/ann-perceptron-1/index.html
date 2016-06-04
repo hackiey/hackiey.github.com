@@ -180,7 +180,7 @@ o(x_1,...,x_n)=\begin{cases}
 						-1, & \text{otherwise} \\ 
 					\end{cases} %]]></script>
 
-<p>其中<script type="math/tex">w_i</script>叫做权值(weight)，是一个<strong>实数常量</strong>，用来决定输入<script type="math/tex">x_i</script>对感知器输出的贡献率。需要注意的是(<script type="math/tex">-w_0</script>)是一个阈值，如果想要使感知器输出1，其余的<script type="math/tex">w_1x_1+...+w_nx_n</script>必须要大于(<script type="math/tex">-w_0</script>)。从这里可以看出，<code class="highlighter-rouge">感知器可以做一个二叉分类器，因为它对所有的输入做出1或-1的输出，是线性分类器(linear classifier)的一种。</code></p>
+<p>其中<script type="math/tex">w_i</script>叫做权值(weight)，是一个<strong>实数常量</strong>，用来决定输入<script type="math/tex">x_i</script>对感知器输出的贡献率。需要注意的是(<script type="math/tex">-w_0</script>)是一个阈值，如果想要使感知器输出1，其余的<script type="math/tex">w_1x_1+...+w_nx_n</script>必须要大于(<script type="math/tex">-w_0</script>)。从这里可以看出，<code class="highlighter-rouge">感知器可以做一个二叉分类器，因为它对所有的输入做出1或-1的输出，是线性分类器(linear classifier)的一种。但不要因为存在阈值概念，就把</code><script type="math/tex">w_0</script><code class="highlighter-rouge">当做是感知器独有的，事实上所有的基础单元都是存在</code><script type="math/tex">w_0</script><code class="highlighter-rouge">的，而对应的</code><script type="math/tex">x_0</script><code class="highlighter-rouge">也都是1。</code></p>
 
 <p><img src="/img/in-post/ann/perceptron/perceptron.png" alt="感知器" /></p>
 
@@ -207,8 +207,6 @@ o(x_1,...,x_n)=\begin{cases}
 <blockquote>
   <p>因为阈值单元的网络可以表示大量的函数，而单独的单元不能做到这一点，所以通常我们感兴趣的事学习阈值单元组成的多层网络。</p>
 </blockquote>
-
-<p><script type="math/tex">w_0</script><code class="highlighter-rouge">是一个很重要的概念，它就像y=ax+b中的b，是一个必不可少的常量。</code></p>
 
 <p>如何训练一个感知器，这里主要考虑两种训练法则，感知器训练法则(perceptron training rule)和delta法则(delta rule)。感知器训练法则在线性可分的训练样例中<strong>保证</strong>收敛到可接受的假设，delta法则无论是否线性可分都可以收敛，但是在线性不可分时收敛到目标概念的最佳<strong>近似</strong>。</p>
 
