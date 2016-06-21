@@ -35,9 +35,9 @@ $$\sigma'(y)=\sigma(y)(1-\sigma(y))$$
 
 $$ o = \sigma (\vec w \cdot \vec x) $$ 
 
-### 反向传播算法
+### 反向传播算法推导
 
-在书中是先介绍了算法后介绍公式的推导，但我认如果能够理解推导过程，那么理解算法也是自然而然的了。因此我会先写下算法的推导过程，之后给出算法描述。
+在书中是先介绍了算法后介绍算法的推导，但我认为如果能够理解推导过程，那么理解算法也是自然而然的了。因此我会先写下算法的推导过程，之后给出算法描述。
 
 在具体的推导之前先来了解一下多层网络，下图展示了一个典型的三层网络结构，输入层(Input layer)-隐藏层(Hidden layer)-输出层(Output layer)。
 
@@ -119,6 +119,23 @@ $$
 
 $$\Delta w_{ji}=-\eta{\partial E_d\over \partial w_{ji}}=\eta (t_j-o_j)o_j(1-o_j)x_{ji}  \tag{7}$$
 
-**情况2：隐藏单元的权值训练法则** 
+**情况2：隐藏单元的权值训练法则** 由于隐藏层单元不能直接影响网络的输出，因此隐藏层单元j必须要通过它的直接下游网络来影响网络输出，进而影响$$E_d$$。单元j的直接下游集合被定义为Downstream(j)，这个下游集合的定义为直接输入中包含上游单元j的输出的所有单元。所以：
 
-（未完待续）
+$$
+\begin{align}
+{\partial E_d\over \partial net_j} & = {\sum_{k \in Downstream(j)}}{\partial E_d\over \partial net_k}{\partial net_k \over \partial net_j} \\
+& = {\sum_{k \in Downstream(j)}}{- \delta_k}{\partial net_k \over \partial net_j} \\
+& = {\sum_{k \in Downstream(j)}}{- \delta_k}{\partial net_k \over \partial o_j} {\partial o_j\over \partial net_j} \\
+& = \sum_{k\in Downstream(j)}{- \delta_k}{w_{kj}}o_j(1-o_j) \tag8 \\
+\end{align} 
+$$
+
+重新组织各项并使用$$\delta_j$$表示$$-{\partial E_d\over \partial net_j}$$，我们得到：
+
+$$\delta_j=o_j(1-o_j)\sum_{k\in Downstream(j)}\delta_k w_{kj}$$
+
+和
+
+$$\Delta w_{ji}=\eta \delta_j x_{ji}$$
+
+其中第一个公式可能会引起一些疑问，$$\delta_j$$中包含了$$\delta_k$$，像是一直在递归！这的确是一个递归定义，终止条件是当$$k\in outputs$$时，我们又会回到情况1来结束这个递归。

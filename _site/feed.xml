@@ -5,8 +5,8 @@
     <description>To be a hacker</description>
     <link>http://words.hackiey.com/</link>
     <atom:link href="http://words.hackiey.com/feed.xml" rel="self" type="application/rss+xml" />
-    <pubDate>Tue, 21 Jun 2016 20:11:31 +0800</pubDate>
-    <lastBuildDate>Tue, 21 Jun 2016 20:11:31 +0800</lastBuildDate>
+    <pubDate>Tue, 21 Jun 2016 21:38:15 +0800</pubDate>
+    <lastBuildDate>Tue, 21 Jun 2016 21:38:15 +0800</lastBuildDate>
     <generator>Jekyll v3.1.3</generator>
     
       <item>
@@ -38,9 +38,9 @@
 
 &lt;script type=&quot;math/tex; mode=display&quot;&gt;o = \sigma (\vec w \cdot \vec x)&lt;/script&gt;
 
-&lt;h3 id=&quot;section-1&quot;&gt;反向传播算法&lt;/h3&gt;
+&lt;h3 id=&quot;section-1&quot;&gt;反向传播算法推导&lt;/h3&gt;
 
-&lt;p&gt;在书中是先介绍了算法后介绍公式的推导，但我认如果能够理解推导过程，那么理解算法也是自然而然的了。因此我会先写下算法的推导过程，之后给出算法描述。&lt;/p&gt;
+&lt;p&gt;在书中是先介绍了算法后介绍算法的推导，但我认为如果能够理解推导过程，那么理解算法也是自然而然的了。因此我会先写下算法的推导过程，之后给出算法描述。&lt;/p&gt;
 
 &lt;p&gt;在具体的推导之前先来了解一下多层网络，下图展示了一个典型的三层网络结构，输入层(Input layer)-隐藏层(Hidden layer)-输出层(Output layer)。&lt;/p&gt;
 
@@ -128,9 +128,25 @@
 
 &lt;script type=&quot;math/tex; mode=display&quot;&gt;\Delta w_{ji}=-\eta{\partial E_d\over \partial w_{ji}}=\eta (t_j-o_j)o_j(1-o_j)x_{ji}  \tag{7}&lt;/script&gt;
 
-&lt;p&gt;&lt;strong&gt;情况2：隐藏单元的权值训练法则&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;情况2：隐藏单元的权值训练法则&lt;/strong&gt; 由于隐藏层单元不能直接影响网络的输出，因此隐藏层单元j必须要通过它的直接下游网络来影响网络输出，进而影响&lt;script type=&quot;math/tex&quot;&gt;E_d&lt;/script&gt;。单元j的直接下游集合被定义为Downstream(j)，这个下游集合的定义为直接输入中包含上游单元j的输出的所有单元。所以：&lt;/p&gt;
 
-&lt;p&gt;（未完待续）&lt;/p&gt;
+&lt;script type=&quot;math/tex; mode=display&quot;&gt;% &lt;![CDATA[
+\begin{align}
+{\partial E_d\over \partial net_j} &amp; = {\sum_{k \in Downstream(j)}}{\partial E_d\over \partial net_k}{\partial net_k \over \partial net_j} \\
+&amp; = {\sum_{k \in Downstream(j)}}{- \delta_k}{\partial net_k \over \partial net_j} \\
+&amp; = {\sum_{k \in Downstream(j)}}{- \delta_k}{\partial net_k \over \partial o_j} {\partial o_j\over \partial net_j} \\
+&amp; = \sum_{k\in Downstream(j)}{- \delta_k}{w_{kj}}o_j(1-o_j) \tag8 \\
+\end{align} %]]&gt;&lt;/script&gt;
+
+&lt;p&gt;重新组织各项并使用&lt;script type=&quot;math/tex&quot;&gt;\delta_j&lt;/script&gt;表示&lt;script type=&quot;math/tex&quot;&gt;-{\partial E_d\over \partial net_j}&lt;/script&gt;，我们得到：&lt;/p&gt;
+
+&lt;script type=&quot;math/tex; mode=display&quot;&gt;\delta_j=o_j(1-o_j)\sum_{k\in Downstream(j)}\delta_k w_{kj}&lt;/script&gt;
+
+&lt;p&gt;和&lt;/p&gt;
+
+&lt;script type=&quot;math/tex; mode=display&quot;&gt;\Delta w_{ji}=\eta \delta_j x_{ji}&lt;/script&gt;
+
+&lt;p&gt;其中第一个公式可能会引起一些疑问，&lt;script type=&quot;math/tex&quot;&gt;\delta_j&lt;/script&gt;中包含了&lt;script type=&quot;math/tex&quot;&gt;\delta_k&lt;/script&gt;，像是一直在递归！这的确是一个递归定义，终止条件是当&lt;script type=&quot;math/tex&quot;&gt;k\in outputs&lt;/script&gt;时，我们又会回到情况1来结束这个递归。&lt;/p&gt;
 </description>
         <pubDate>Tue, 21 Jun 2016 08:00:00 +0800</pubDate>
         <link>http://words.hackiey.com/2016/06/21/backpropagation/</link>
@@ -144,7 +160,7 @@
       </item>
     
       <item>
-        <title>人工神经网络（线性单元）（delta法则）</title>
+        <title>人工神经网络（线性单元）（梯度下降）</title>
         <description>&lt;p&gt;感知器训练法则所能解决的问题是非常有限的，大部分的问题都是线性不可分的，所以为了保证在线性不可分时仍能够使训练过程收敛，要引入delta法则。它同时也是学习多个单元的互联网络的基础。&lt;/p&gt;
 
 &lt;h3 id=&quot;delta&quot;&gt;delta法则&lt;/h3&gt;
@@ -378,7 +394,7 @@ o(x_1,...,x_n)=\begin{cases}
 
 &lt;p&gt;自从接触了人工智能，就一直梦想着可以实现能够写程序的程序，本想从这篇论文中得到一些灵感，但是读完相关工作后就读不懂了，我觉得肯定是因为基础不牢固的原因，NPI的基础是深度学习，深度学习的基础是神经网络，所以我从头开始学习人工神经网络。有人说学习的最好方法是教别人，我越来越赞成这一点了，因为等我足够有名了，肯定会有大神来指出我的错误(doge脸)，不过我一定会努力少犯错误，避免误导初学的小朋友。&lt;/p&gt;
 
-&lt;p&gt;这一系列文章主要参考Tom M. Mitchell的《机器学习》（更像是在抄书的时候加了点自己的理解），除非特别说明，所有的引用均来自这本书。为避免教坏小朋友，我自己理解的部分会使用&lt;code class=&quot;highlighter-rouge&quot;&gt;code标签&lt;/code&gt;包裹起来。&lt;/p&gt;
+&lt;p&gt;这一系列文章主要参考Tom M. Mitchell的《机器学习》（更像是在抄书的时候加了点自己的理解）。在阅读之前你需要具备一定的微积分知识，在对人工神经网络中的一些数学方法做额外的介绍时，你还需要具备概率统计和线性代数的知识。&lt;/p&gt;
 
 &lt;h3 id=&quot;ann&quot;&gt;人工神经网络(ANN)&lt;/h3&gt;
 
@@ -415,9 +431,11 @@ o(x_1,...,x_n)=\begin{cases}
 
 &lt;h3 id=&quot;section&quot;&gt;目录&lt;/h3&gt;
 
-&lt;p&gt;1.1 &lt;a href=&quot;/2016/05/14/ann-perceptron-1/&quot;&gt;感知器（一）&lt;/a&gt;(描述了感知器以及感知器训练法则)&lt;/p&gt;
+&lt;p&gt;1.1 &lt;a href=&quot;/2016/05/14/ann-perceptron-1/&quot;&gt;感知器&lt;/a&gt;(描述了感知器以及感知器训练法则)&lt;/p&gt;
 
-&lt;p&gt;1.2 &lt;a href=&quot;/2016/05/15/ann-perceptron-2/&quot;&gt;感知器（二）（delta法则）&lt;/a&gt;(描述了delta训练法则)&lt;/p&gt;
+&lt;p&gt;1.2 &lt;a href=&quot;/2016/05/15/ann-perceptron-2/&quot;&gt;线性单元（梯度下降)&lt;/a&gt;(描述了梯度下降)&lt;/p&gt;
+
+&lt;p&gt;2.1 &lt;a href=&quot;/2016/06/21/backpropagation/&quot;&gt;多层网络和BP算法（一）&lt;/a&gt;(主要对反向传播算法进行了推导)&lt;/p&gt;
 </description>
         <pubDate>Sat, 14 May 2016 08:00:00 +0800</pubDate>
         <link>http://words.hackiey.com/2016/05/14/ann-introductory/</link>

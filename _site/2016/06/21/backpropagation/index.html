@@ -195,9 +195,9 @@
 
 <script type="math/tex; mode=display">o = \sigma (\vec w \cdot \vec x)</script>
 
-<h3 id="section-1">反向传播算法</h3>
+<h3 id="section-1">反向传播算法推导</h3>
 
-<p>在书中是先介绍了算法后介绍公式的推导，但我认如果能够理解推导过程，那么理解算法也是自然而然的了。因此我会先写下算法的推导过程，之后给出算法描述。</p>
+<p>在书中是先介绍了算法后介绍算法的推导，但我认为如果能够理解推导过程，那么理解算法也是自然而然的了。因此我会先写下算法的推导过程，之后给出算法描述。</p>
 
 <p>在具体的推导之前先来了解一下多层网络，下图展示了一个典型的三层网络结构，输入层(Input layer)-隐藏层(Hidden layer)-输出层(Output layer)。</p>
 
@@ -285,9 +285,25 @@
 
 <script type="math/tex; mode=display">\Delta w_{ji}=-\eta{\partial E_d\over \partial w_{ji}}=\eta (t_j-o_j)o_j(1-o_j)x_{ji}  \tag{7}</script>
 
-<p><strong>情况2：隐藏单元的权值训练法则</strong></p>
+<p><strong>情况2：隐藏单元的权值训练法则</strong> 由于隐藏层单元不能直接影响网络的输出，因此隐藏层单元j必须要通过它的直接下游网络来影响网络输出，进而影响<script type="math/tex">E_d</script>。单元j的直接下游集合被定义为Downstream(j)，这个下游集合的定义为直接输入中包含上游单元j的输出的所有单元。所以：</p>
 
-<p>（未完待续）</p>
+<script type="math/tex; mode=display">% <![CDATA[
+\begin{align}
+{\partial E_d\over \partial net_j} & = {\sum_{k \in Downstream(j)}}{\partial E_d\over \partial net_k}{\partial net_k \over \partial net_j} \\
+& = {\sum_{k \in Downstream(j)}}{- \delta_k}{\partial net_k \over \partial net_j} \\
+& = {\sum_{k \in Downstream(j)}}{- \delta_k}{\partial net_k \over \partial o_j} {\partial o_j\over \partial net_j} \\
+& = \sum_{k\in Downstream(j)}{- \delta_k}{w_{kj}}o_j(1-o_j) \tag8 \\
+\end{align} %]]></script>
+
+<p>重新组织各项并使用<script type="math/tex">\delta_j</script>表示<script type="math/tex">-{\partial E_d\over \partial net_j}</script>，我们得到：</p>
+
+<script type="math/tex; mode=display">\delta_j=o_j(1-o_j)\sum_{k\in Downstream(j)}\delta_k w_{kj}</script>
+
+<p>和</p>
+
+<script type="math/tex; mode=display">\Delta w_{ji}=\eta \delta_j x_{ji}</script>
+
+<p>其中第一个公式可能会引起一些疑问，<script type="math/tex">\delta_j</script>中包含了<script type="math/tex">\delta_k</script>，像是一直在递归！这的确是一个递归定义，终止条件是当<script type="math/tex">k\in outputs</script>时，我们又会回到情况1来结束这个递归。</p>
 
 
                 <hr>
@@ -298,7 +314,7 @@
                 <ul class="pager">
                     
                     <li class="previous">
-                        <a href="/2016/05/15/ann-perceptron-2/" data-toggle="tooltip" data-placement="top" title="人工神经网络（线性单元）（delta法则）">&larr; Previous Post</a>
+                        <a href="/2016/05/15/ann-perceptron-2/" data-toggle="tooltip" data-placement="top" title="人工神经网络（线性单元）（梯度下降）">&larr; Previous Post</a>
                     </li>
                     
                     

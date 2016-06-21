@@ -1,6 +1,6 @@
 ---
 layout:     post
-title:      "人工神经网络（线性单元）（delta法则）"
+title:      "人工神经网络（线性单元）（梯度下降）"
 subtitle:   ""
 date:       2016-05-15 00:00:00
 header-img: img/in-post/ann/ann2.jpg
