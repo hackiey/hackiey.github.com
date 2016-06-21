@@ -23,7 +23,7 @@ $$ o(\vec x) = \vec w \cdot \vec x \tag{1}$$
 为了理解梯度下降，首先先定义训练误差:
 
 $$
-	E(\vec w)={1\over 2}\sum_{d\epsilon D}(t_d-o_d)^2 \tag{2}
+	E(\vec w)={1\over 2}\sum_{d\in D}(t_d-o_d)^2 \tag{2}
 $$
 
 这是最常用的用来度量误差的定义，其中D是训练样例集合，$$t_d$$是训练样例d的目标输出，$$o_d$$是线性单元对训练样例d的输出，`形式上如同方差，至于为什么要乘1/2，可能是为了推导出最后的公式后有一个简洁的运算。`一个有两个输入的线性单元对应的误差平面图如下，从这里可以直观的看出，当随机初始化权值后，误差有可能在误差平面上任何一个点，为了到达$$E(\vec w)$$的最小值，要不断去寻找当前点在这个平面上**最陡**的方向并朝着这个方向进行移动。这里可以看出为什么delta法则总能收敛。`如果训练数据不能线性可分，那么这个误差平面与`$$w_1$$`和`$$w_2$$`组成的平面不会相交，即使收敛也无法学习到最正确的目标函数(考虑异或函数，你无论如和也无法找出两个权值来拟合这个目标函数)。`
@@ -63,16 +63,16 @@ $$\Delta w_i=-\eta {\partial E\over\partial w_i} \tag{5}$$
 
 $$
 \begin{align}
-{\partial E\over \partial w_i} & = {\partial \over \partial w_i}{1\over 2}\sum_{d\epsilon D}(t_d-o_d)^2 = {1\over 2}\sum_{d\epsilon D}{\partial \over \partial w_i}(t_d-o_d)^2\\
-& = {1\over 2}\sum_{d\epsilon D}2(t_d-o_d){\partial \over \partial w_i}(t_d-o_d) \\
-& = \sum_{d\epsilon D}(t_d-o_d){\partial \over \partial w_i}(t_d-\vec w \cdot \vec x_d) \\
-{\partial E\over \partial w_i} & = \sum_{d\epsilon D}(t_d-o_d)(-x_{id}) \tag{6}\\
+{\partial E\over \partial w_i} & = {\partial \over \partial w_i}{1\over 2}\sum_{d\in D}(t_d-o_d)^2 = {1\over 2}\sum_{d\in D}{\partial \over \partial w_i}(t_d-o_d)^2\\
+& = {1\over 2}\sum_{d\in D}2(t_d-o_d){\partial \over \partial w_i}(t_d-o_d) \\
+& = \sum_{d\in D}(t_d-o_d){\partial \over \partial w_i}(t_d-\vec w \cdot \vec x_d) \\
+{\partial E\over \partial w_i} & = \sum_{d\in D}(t_d-o_d)(-x_{id}) \tag{6}\\
 \end{align}
 $$
 
 其中$$x_{id}$$是训练样例d的一个输入分量$$x_i$$。将(6)代入(5)中可以得出最终的梯度下降权值更新法则:
 
-$$\nabla w_i=\eta \sum_{d\epsilon D}(t_d-o_d)x_{id} \tag{7}$$
+$$\nabla w_i=\eta \sum_{d\in D}(t_d-o_d)x_{id} \tag{7}$$
 
 ### 训练线性单元的梯度下降算法
 
