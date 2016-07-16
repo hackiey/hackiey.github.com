@@ -10,9 +10,9 @@
     <meta name="keyword"  content="">
     <link rel="shortcut icon" href="/img/favicon.ico">
 
-    <title>人工神经网络（多层网络和BP算法）（一） - Harry的博客 | Harry's Blog</title>
+    <title>线性回归 - Harry的博客 | Harry's Blog</title>
 
-    <link rel="canonical" href="http://words.hackiey.com/2016/06/21/backpropagation/">
+    <link rel="canonical" href="http://words.hackiey.com/2016/07/16/linear-regression/">
 
     <!-- Bootstrap Core CSS -->
     <link rel="stylesheet" href="/css/bootstrap.min.css">
@@ -142,15 +142,13 @@
                         
                         <a class="tag" href="/tags/#机器学习" title="机器学习">机器学习</a>
                         
-                        <a class="tag" href="/tags/#人工神经网络" title="人工神经网络">人工神经网络</a>
-                        
                     </div>
-                    <h1>人工神经网络（多层网络和BP算法）（一）</h1>
+                    <h1>线性回归</h1>
                     
                     
                     <h2 class="subheading"></h2>
                     
-                    <span class="meta">Posted by Harry on June 21, 2016</span>
+                    <span class="meta">Posted by Harry on July 16, 2016</span>
                 </div>
             </div>
         </div>
@@ -168,142 +166,109 @@
                 col-md-10 col-md-offset-1
                 post-container">
 
-				<p>现在我们了解了感知器和线性单元这两个基本单元，也用它们学习了一些基本的函数，但是单个单元的学习能力是有限的，为了解决更多的实际问题，研究人员提出了多层网络。</p>
+				<p>线性回归是机器学习中的基础方法，一个完整的线性回归学习过程可以很好地表达出机器学习的基本思想。这一篇介绍了单变量的线性回归，描述了<strong>代价函数</strong>。</p>
 
-<h3 id="section">可微阈值单元</h3>
-
-<p>首先要说明的是梯度下降算法是一个非常实用的算法，它有效地保证了我们能够在误差最小的地方收敛，因此我们需要选择一个能够配合梯度下降且能够表示非线性函数的网络的基本单元。感知器的函数输出不连续，因此它不可微，不适用于梯度下降，而多个线性单元的组合也只能表示线性函数，因此也不适合。我们需要一个这样的单元：</p>
+<h3 id="section">数据</h3>
 
 <blockquote>
-  <p>它的输出是输入的非线性函数，并且输出是输入的可微函数。一种答案是sigmoid单元(双曲正切函数tanh也可满足)，这是一种非常类似于感知器的单元，但它基于一个平滑的可谓阈值函数。</p>
+  <p>数据来自Coursera中机器学习课程的作业。</p>
 </blockquote>
 
-<p><img src="/img/in-post/ann/multi-networks-and-BP/sigmoid.png" alt="sigmoid函数图像" /></p>
+<p>通常来说，在学习过程中要用到两个数据集，一个是训练集，另一个是测试集。数据集的中每个数据样例包括一些输入和输出，学习程序要从训练集中，根据每个训练样例的输入和输出拟合一个假设函数（根据输入计算输出，后面会提到），在得到假设函数之后会将其应用在测试集中观察拟合的结果。通过测试之后，便可根据新的数据输入来预测结果。整个过程就像我们参考历史房价，然后对明年的房价做出预测。通常测试部分大多取决于具体的应用环境，所以这里描述训练集的学习部分。</p>
 
-<p>下面是sigmoid函数的公式：</p>
+<p>下方的散点图是不同的人口城市的食品盈利情况，横坐标是不同城市人口数量，纵坐标是快餐车的盈利状况，我们的学习目标就是给一个城市的人口数量，预测快餐车的盈利。</p>
 
-<script type="math/tex; mode=display">\sigma(y)={1\over {1+e^{-y}}} \tag 1</script>
+<p><img src="/img/in-post/machine-learning/linear-regression/scatter-profit-of-population.png" alt="Scatter plot of training data" /></p>
 
-<p>sigmoid函数的导数为：
-<script type="math/tex">\sigma'(y)=\sigma(y)(1-\sigma(y))</script></p>
+<h3 id="section-1">建立模型</h3>
 
-<p>根据图像可以看出，sigmoid函数可以把非常的输入值映射到(-1,1)的输出，它经常被称为sigmoid单元的挤压函数(squashing function)。下面是sigmoid单元的图示：</p>
+<p>回归问题通常用于两个用途，一是预测得出一个实数输出，输出空间的值是连续的、不间断的；另一个是分类问题，输出得到不同的离散的值，对应于各个不同的分类。快餐车的盈利不是一个分类问题，我们要根据人口情况来预测盈利的值究竟是多少。使用表格来表示数据如下：</p>
 
-<p><img src="/img/in-post/ann/multi-networks-and-BP/ann-sigmoid.png" alt="sigmoid函数图像" /></p>
+<table>
+  <thead>
+    <tr>
+      <th>Population of City in 10,000s  (x)</th>
+      <th style="text-align: right">profit in $10,000s  (y)</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>6.1101</td>
+      <td style="text-align: right">17.592</td>
+    </tr>
+    <tr>
+      <td>5.5277</td>
+      <td style="text-align: right">9.1302</td>
+    </tr>
+    <tr>
+      <td>8.5186</td>
+      <td style="text-align: right">13.662</td>
+    </tr>
+    <tr>
+      <td>…</td>
+      <td style="text-align: right">…</td>
+    </tr>
+  </tbody>
+</table>
 
-<p>根据图示可以看出sigmoid单元的输出为：</p>
-
-<script type="math/tex; mode=display">o = \sigma (\vec w \cdot \vec x)</script>
-
-<h3 id="section-1">反向传播算法推导</h3>
-
-<p>在书中是先介绍了算法后介绍算法的推导，但我认为如果能够理解推导过程，那么理解算法也是自然而然的了。因此我会先写下算法的推导过程，之后给出算法描述。</p>
-
-<p>在具体的推导之前先来了解一下多层网络，下图展示了一个典型的三层网络结构，输入层(Input layer)-隐藏层(Hidden layer)-输出层(Output layer)。</p>
-
-<p><img src="/img/in-post/ann/multi-networks-and-BP/back-propagation.png" alt="BP网络" /></p>
-
-<p>为了求每条边线的权值，我们从一个随机的初始权值开始，不断使用梯度下降算法来更新权值，因此我们要求的是<script type="math/tex">\Delta w_{ji}</script>（注意这里使用的是随机梯度下降），<script type="math/tex">w_{ji}</script>中的j是第j个单元。</p>
-
-<p>在对多层网络有了一个直观的了解之后，就可以定义各个符号的意义了：</p>
+<p>首先根据图表定义一些符号，图表标题栏左侧的</p>
 
 <ul>
-  <li>
-    <p><script type="math/tex">x_{ji}</script> = 单元 j 的第 i 个输入</p>
-  </li>
-  <li>
-    <p><script type="math/tex">w_{ji}</script> = 与单元 j 的第 i 个输入相关联的权值</p>
-  </li>
-  <li>
-    <p><script type="math/tex">net_j=\sum_i w_{ji}x_{ji}</script>（单元 j 的输入的集合）</p>
-  </li>
-  <li>
-    <p><script type="math/tex">o_j</script> = 单元 j 计算出的输出</p>
-  </li>
-  <li>
-    <p><script type="math/tex">t_j</script> = 单元 j 的目标输出</p>
-  </li>
-  <li>
-    <p><script type="math/tex">\sigma = sigmoid</script>函数</p>
-  </li>
-  <li>
-    <p>outputs = 网络最后一层的单元的集合</p>
-  </li>
-  <li>
-    <p>Downstream( j ) = 单元的直接输入（immediate inputs）中包含单元 j 的输出的单元的集合</p>
-  </li>
+  <li><strong>m</strong> = 训练样例的个数  	(Number of training examples)</li>
+  <li><strong>x</strong>’s = 输入变量/特征	    (“input” variable/feature)</li>
+  <li><strong>y</strong>’s = 输出变量/目标变量	 (“output” variable/”target” variable)</li>
 </ul>
 
-<p>首先定义<script type="math/tex">\Delta w_{ji}</script>：</p>
+<p>m是训练样例的个数，在快餐车盈利的数据集中，m为97；x是输入变量，这里指的是城市人口数量，其中<script type="math/tex">x^{(i)}</script>指的是第i个训练样例中的输入变量；y是输出变量，这里是盈利的金额，其中<script type="math/tex">y^{(i)}</script>指的是第i个训练样例中的输出变量（带括号的i都不是指数，而是序数）。训练集之所以成为训练集，是因为它把x和y都已列出来，这是“过去的经验”，我们要从这些正确的样例中找出其中的规律，所以学习的目标就是，给定一个x，能预测出与经验相符的y。</p>
 
-<script type="math/tex; mode=display">\Delta w_{ji}=-\eta{\partial E_d\over \partial w_{ji}} \tag{1}</script>
+<p>学习算法的工作是根据训练集训练出一个假设函数h (hypothesis)，其中h的输入是城市人口，输出是盈利金额。</p>
 
-<p>其中<script type="math/tex">E_d</script>是训练样例d的误差，通过对<strong>网络中所有输出单元的求和</strong>得到：</p>
+<p>接下来该如何表示一个假设函数？</p>
 
-<script type="math/tex; mode=display">E_d(\vec w)\equiv {1\over 2} {\sum_{k \in outputs}(t_k-o_k)^2}</script>
+<p>在单变量的线性回归(简单线性回归)中，假设函数通常为一条直线：</p>
 
-<p>由于权值<script type="math/tex">w_{ji}</script>仅能通过<script type="math/tex">net_j</script>来影响网络的其他部分，所以用链式法则(chain rule)可以得到：</p>
+<script type="math/tex; mode=display">h_\theta(x)=\theta_0+\theta_1 x \tag1</script>
 
-<script type="math/tex; mode=display">% <![CDATA[
-\begin{align}
-\partial E_d\over \partial w_{ji} & = {\partial E_d\over \partial net_j}{\partial net_j\over \partial w_{ji}} \\
-& = {\partial E_d\over \partial net_j}x_{ji} \tag2 \\
-\end{align} %]]></script>
+<p>其中的<script type="math/tex">\theta</script>我们起初并不清楚，需要经过下面的训练方法来逐步确定。（为什么公式用没有y？是因为假设函数的目标就是尽量向y靠近而不严格等于y，在拟合度很高情况下，假设函数所得的值可以约等于y，这就可以成为一个学习成绩良好的假设函数）</p>
 
-<p>在多层网络中，你会遇到两种情况，一种情况是单元j是输出单元，另一种情况是单元j是一个隐藏层的单元。</p>
+<h3 id="cost-function">代价函数（cost function）</h3>
 
-<p><strong>情况1：输出单元的权值训练法则</strong>  就像<script type="math/tex">w_{ji}</script>仅能通过<script type="math/tex">net_j</script>影响网络一样，<script type="math/tex">net_j</script>仅能通过<script type="math/tex">o_j</script>影响网络。再次使用链式法则可以得到：</p>
+<p>这部分没有使用快餐车盈利的数据，只在图中画了3个点以便理解。</p>
 
-<script type="math/tex; mode=display">{\partial E_d\over \partial net_j}={\partial E_d\over \partial o_j}{\partial o_j\over \partial net_j} \tag 3</script>
+<p>代价函数又称为损失函数(loss function)，是用来当<script type="math/tex">\theta</script>取不同的值的时候，评判该取值是否合理的标准，代价函数值越大，<script type="math/tex">\theta</script>所确定的直线就越偏离训练集，代价函数值越小，就说明这组<script type="math/tex">\theta</script>所确定的直线越能拟合训练集。为了能使选择的<script type="math/tex">\theta1和\theta2</script>能够尽量使<script type="math/tex">h_\theta(x)</script>靠近y（即<script type="math/tex">h_\theta(x)-y</script>要小），推广到所有的训练样例上，定义代价函数如下：</p>
 
-<p>考虑(3)式中的第一项<script type="math/tex">\partial E_d\over \partial o_j</script>：</p>
+<script type="math/tex; mode=display">J(\theta_0,\theta_1)={1\over 2m}\sum_{i=1}^m(h_\theta(x^{(i)}) - y^{(i)})^2 \tag2</script>
 
-<script type="math/tex; mode=display">{\partial E_d\over \partial o_j}={\partial \over \partial o_j}{1\over 2}{\sum_{k \in outputs}(t_k-o_k)^2}</script>
+<p>关于定义中为什么要有平方和<script type="math/tex">1\over 2</script>项，主要是为了数学上的方便。而学习算法的工作是选择合适的<script type="math/tex">\theta_0和\theta_1</script>使得<script type="math/tex">J(\theta)</script>取得最小值。</p>
 
-<p>尽管误差<script type="math/tex">E_d</script>是所有的输出单元误差的和，但是当<script type="math/tex">k\neq j</script>时，上式求导的结果均为0，因此当k=j时：</p>
+<p>下面几幅图从直观上解释了为什么这样的定义可以评判一组<script type="math/tex">\theta</script>的取值好坏。为了简化，将截距项<script type="math/tex">\theta_0</script>设为0，观察<script type="math/tex">\theta_1</script>在取不同值的情况下，<script type="math/tex">J(\theta)</script>的值如何变化。</p>
 
-<script type="math/tex; mode=display">% <![CDATA[
-\begin{align}
-{\partial E_d\over \partial o_j} & = {\partial \over \partial o_j}{1\over 2}{(t_j-o_j)2} \\
-& = {1\over 2}2{(t_j-o_j)}{\partial(t_j-o_j)\over \partial o_j} \\
-& = -(t_j-o_j)	\tag4
-\end{align} %]]></script>
+<table>
+  <tbody>
+    <tr>
+      <td><img src="/img/in-post/machine-learning/linear-regression/cost-function-1.jpeg" alt="cost-function-1" /></td>
+      <td><img src="/img/in-post/machine-learning/linear-regression/cost-function-4.png" alt="cost-function-1" /></td>
+    </tr>
+    <tr>
+      <td><img src="/img/in-post/machine-learning/linear-regression/cost-function-3.png" alt="cost-function-1" /></td>
+      <td><img src="/img/in-post/machine-learning/linear-regression/cost-function-2.png" alt="cost-function-1" /></td>
+    </tr>
+  </tbody>
+</table>
 
-<p>接下来考虑(3)式中的第二项<script type="math/tex">\partial net_j\over \partial w_{ji}</script>，在反向传播算法中，输出单元是sigmoid单元( <script type="math/tex">o_j=\sigma(net_j)</script> ），因此：</p>
+<p>第一幅图代表了训练集，现在想要生成一条能够尽量满足这几个点的直线，图2-4分别是<script type="math/tex">\theta_1</script>取0、0.5和1时的直线，根据公式(2)计算相对应的<script type="math/tex">J(\theta)</script>为：</p>
 
-<script type="math/tex; mode=display">% <![CDATA[
-\begin{align}
-{\partial o_j\over \partial net_j} & = {\partial \sigma(net_j)\over \partial net_j} \\
-& = o_j(1-o_j)	\tag5 
-\end{align} %]]></script>
+<script type="math/tex; mode=display">J(0,0)={1\over 2*3}[(0-1)^2+(0-2)^2+(0-3)^2]={7\over 3}\approx 2.33</script>
 
-<p>把(5)和(4)代入(3)中，可以得到：</p>
+<script type="math/tex; mode=display">J(0,0.5)={1\over 2*3}[(0.5-1)^2+(1-2)^2+(1.5-3)^2]={7\over 12}\approx 0.58</script>
 
-<script type="math/tex; mode=display">{\partial E_d\over \partial net_j} = -(t_j-o_j)o_j(1-o_j) \tag6</script>
+<script type="math/tex; mode=display">J(0,1)={1\over 2*3}[(1-1)^2+(2-2)^2+(3-3)^2]=0</script>
 
-<p>再与(1)和(2)合并，便推导出<strong>输出单元的随机梯度下降法则</strong>：</p>
+<p>直观上可以看出J越小，直线越能拟合所有的点。有了这样的认识之后我们再看一下J的图像，为了简化，仍然把<script type="math/tex">\theta_0</script>设为1，只作出J关于<script type="math/tex">\theta_1</script>的图像。</p>
 
-<script type="math/tex; mode=display">\Delta w_{ji}=-\eta{\partial E_d\over \partial w_{ji}}=\eta (t_j-o_j)o_j(1-o_j)x_{ji}  \tag{7}</script>
+<p><img src="/img/in-post/machine-learning/linear-regression/cost-function-5.png" alt="cost-function-1" /></p>
 
-<p><strong>情况2：隐藏单元的权值训练法则</strong> 由于隐藏层单元不能直接影响网络的输出，因此隐藏层单元j必须要通过它的直接下游网络来影响网络输出，进而影响<script type="math/tex">E_d</script>。单元j的直接下游集合被定义为Downstream(j)，这个下游集合的定义为直接输入中包含上游单元j的输出的所有单元。所以：</p>
-
-<script type="math/tex; mode=display">% <![CDATA[
-\begin{align}
-{\partial E_d\over \partial net_j} & = {\sum_{k \in Downstream(j)}}{\partial E_d\over \partial net_k}{\partial net_k \over \partial net_j} \\
-& = {\sum_{k \in Downstream(j)}}{- \delta_k}{\partial net_k \over \partial net_j} \\
-& = {\sum_{k \in Downstream(j)}}{- \delta_k}{\partial net_k \over \partial o_j} {\partial o_j\over \partial net_j} \\
-& = \sum_{k\in Downstream(j)}{- \delta_k}{w_{kj}}o_j(1-o_j) \tag8 \\
-\end{align} %]]></script>
-
-<p>重新组织各项并使用<script type="math/tex">\delta_j</script>表示<script type="math/tex">-{\partial E_d\over \partial net_j}</script>，我们得到：</p>
-
-<script type="math/tex; mode=display">\delta_j=o_j(1-o_j)\sum_{k\in Downstream(j)}\delta_k w_{kj}</script>
-
-<p>和</p>
-
-<script type="math/tex; mode=display">\Delta w_{ji}=\eta \delta_j x_{ji}</script>
-
-<p>其中第一个公式可能会引起一些疑问，<script type="math/tex">\delta_j</script>中包含了<script type="math/tex">\delta_k</script>，像是一直在递归！这的确是一个递归定义，终止条件是当<script type="math/tex">k\in outputs</script>时，我们又会回到情况1来结束这个递归。</p>
+<p>下一篇文章会介绍如何寻找能够使J最小的<script type="math/tex">\theta</script>值的算法——<strong>梯度下降</strong>。</p>
 
 
                 <hr>
@@ -314,13 +279,9 @@
                 <ul class="pager">
                     
                     <li class="previous">
-                        <a href="/2016/05/15/ann-perceptron-2/" data-toggle="tooltip" data-placement="top" title="人工神经网络（线性单元）（梯度下降）">&larr; Previous Post</a>
+                        <a href="/2016/06/21/backpropagation/" data-toggle="tooltip" data-placement="top" title="人工神经网络（多层网络和BP算法）（一）">&larr; Previous Post</a>
                     </li>
                     
-                    
-                    <li class="next">
-                        <a href="/2016/07/16/linear-regression/" data-toggle="tooltip" data-placement="top" title="线性回归">Next Post &rarr;</a>
-                    </li>
                     
                 </ul>
 
@@ -393,8 +354,8 @@
 <script type="text/javascript">
     /* * * CONFIGURATION VARIABLES * * */
     var disqus_shortname = "hackiey";
-    var disqus_identifier = "/2016/06/21/backpropagation";
-    var disqus_url = "http://words.hackiey.com/2016/06/21/backpropagation/";
+    var disqus_identifier = "/2016/07/16/linear-regression";
+    var disqus_url = "http://words.hackiey.com/2016/07/16/linear-regression/";
 
     (function() {
         var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
