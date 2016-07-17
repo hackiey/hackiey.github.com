@@ -225,11 +225,11 @@
 
 <p>接下来该如何表示一个假设函数？</p>
 
-<p>在单变量的线性回归(简单线性回归)中，假设函数通常为一条直线：</p>
+<p>在单变量的线性回归(简单线性回归)中，假设函数通常为一条直线（<script type="math/tex">\theta</script>又称为权值）：</p>
 
 <script type="math/tex; mode=display">h_\theta(x)=\theta_0+\theta_1 x \tag1</script>
 
-<p>其中的<script type="math/tex">\theta</script>我们起初并不清楚，需要经过下面的训练方法来逐步确定。（为什么公式用没有y？是因为假设函数的目标就是尽量向y靠近而不严格等于y，在拟合度很高情况下，假设函数所得的值可以约等于y，这就可以成为一个学习成绩良好的假设函数）</p>
+<p>其中的<script type="math/tex">\theta_0和\theta_1</script>我们起初并不清楚，需要经过下面的训练方法来逐步确定。（为什么公式用没有y？是因为假设函数的目标就是尽量向y靠近而不严格等于y，在拟合度很高情况下，假设函数所得的值可以约等于y，这就可以成为一个学习成绩良好的假设函数）</p>
 
 <h3 id="cost-function">代价函数（cost function）</h3>
 
@@ -247,11 +247,11 @@
   <tbody>
     <tr>
       <td><img src="/img/in-post/machine-learning/linear-regression/cost-function-1.jpeg" alt="cost-function-1" /></td>
-      <td><img src="/img/in-post/machine-learning/linear-regression/cost-function-4.png" alt="cost-function-1" /></td>
+      <td><img src="/img/in-post/machine-learning/linear-regression/cost-function-4.png" alt="cost-function-1" />            <script type="math/tex">J\approx 2.33</script></td>
     </tr>
     <tr>
-      <td><img src="/img/in-post/machine-learning/linear-regression/cost-function-3.png" alt="cost-function-1" /></td>
-      <td><img src="/img/in-post/machine-learning/linear-regression/cost-function-2.png" alt="cost-function-1" /></td>
+      <td><img src="/img/in-post/machine-learning/linear-regression/cost-function-3.png" alt="cost-function-1" />                        <script type="math/tex">J\approx 0.58</script></td>
+      <td><img src="/img/in-post/machine-learning/linear-regression/cost-function-2.png" alt="cost-function-1" />      <script type="math/tex">J=0</script></td>
     </tr>
   </tbody>
 </table>
@@ -268,7 +268,7 @@
 
 <p><img src="/img/in-post/machine-learning/linear-regression/cost-function-5.png" alt="cost-function-1" /></p>
 
-<p>下一篇文章会介绍如何寻找能够使J最小的<script type="math/tex">\theta</script>值的算法——<strong>梯度下降</strong>。</p>
+<p>由于初始<script type="math/tex">\theta_1</script>的不确定，所以在学习开始的时候J有可能落在曲线的任何一点上，如何从初始点到达最小值点便成为学习算法的重要任务，下一篇文章会介绍如何寻找能够使J最小的<script type="math/tex">\theta_1</script>值的算法——<a href="/2016/07/17/gradient-descent"><strong>梯度下降</strong></a>。</p>
 
 
                 <hr>
@@ -282,6 +282,10 @@
                         <a href="/2016/06/21/backpropagation/" data-toggle="tooltip" data-placement="top" title="人工神经网络（多层网络和BP算法）（一）">&larr; Previous Post</a>
                     </li>
                     
+                    
+                    <li class="next">
+                        <a href="/2016/07/17/gradient-descent/" data-toggle="tooltip" data-placement="top" title="梯度下降">Next Post &rarr;</a>
+                    </li>
                     
                 </ul>
 
@@ -314,7 +318,7 @@
                             
         				
                             
-                				<a href="/tags/#机器学习" title="机器学习" rel="5">
+                				<a href="/tags/#机器学习" title="机器学习" rel="6">
                                     机器学习
                                 </a>
                             

@@ -44,11 +44,11 @@ m是训练样例的个数，在快餐车盈利的数据集中，m为97；x是输
 
 接下来该如何表示一个假设函数？
 
-在单变量的线性回归(简单线性回归)中，假设函数通常为一条直线：
+在单变量的线性回归(简单线性回归)中，假设函数通常为一条直线（$$\theta$$又称为权值）：
 
 $$h_\theta(x)=\theta_0+\theta_1 x \tag1$$
 
-其中的$$\theta$$我们起初并不清楚，需要经过下面的训练方法来逐步确定。（为什么公式用没有y？是因为假设函数的目标就是尽量向y靠近而不严格等于y，在拟合度很高情况下，假设函数所得的值可以约等于y，这就可以成为一个学习成绩良好的假设函数）
+其中的$$\theta_0和\theta_1$$我们起初并不清楚，需要经过下面的训练方法来逐步确定。（为什么公式用没有y？是因为假设函数的目标就是尽量向y靠近而不严格等于y，在拟合度很高情况下，假设函数所得的值可以约等于y，这就可以成为一个学习成绩良好的假设函数）
 
 ### 代价函数（cost function）
 
@@ -63,8 +63,8 @@ $$J(\theta_0,\theta_1)={1\over 2m}\sum_{i=1}^m(h_\theta(x^{(i)}) - y^{(i)})^2 \t
 下面几幅图从直观上解释了为什么这样的定义可以评判一组$$\theta$$的取值好坏。为了简化，将截距项$$\theta_0$$设为0，观察$$\theta_1$$在取不同值的情况下，$$J(\theta)$$的值如何变化。
 
 | ------------------------------| -------------------:|
-| ![cost-function-1](/img/in-post/machine-learning/linear-regression/cost-function-1.jpeg)  | ![cost-function-1](/img/in-post/machine-learning/linear-regression/cost-function-4.png)            | 
-| ![cost-function-1](/img/in-post/machine-learning/linear-regression/cost-function-3.png)                        | ![cost-function-1](/img/in-post/machine-learning/linear-regression/cost-function-2.png)              |
+| ![cost-function-1](/img/in-post/machine-learning/linear-regression/cost-function-1.jpeg)   | ![cost-function-1](/img/in-post/machine-learning/linear-regression/cost-function-4.png)            $$J\approx 2.33$$| 
+| ![cost-function-1](/img/in-post/machine-learning/linear-regression/cost-function-3.png)                        $$J\approx 0.58$$| ![cost-function-1](/img/in-post/machine-learning/linear-regression/cost-function-2.png)      $$J=0$$        |
 
 第一幅图代表了训练集，现在想要生成一条能够尽量满足这几个点的直线，图2-4分别是$$\theta_1$$取0、0.5和1时的直线，根据公式(2)计算相对应的$$J(\theta)$$为：
 
@@ -78,4 +78,4 @@ $$J(0,1)={1\over 2*3}[(1-1)^2+(2-2)^2+(3-3)^2]=0$$
 
 ![cost-function-1](/img/in-post/machine-learning/linear-regression/cost-function-5.png)
 
-下一篇文章会介绍如何寻找能够使J最小的$$\theta$$值的算法——**梯度下降**。
+由于初始$$\theta_1$$的不确定，所以在学习开始的时候J有可能落在曲线的任何一点上，如何从初始点到达最小值点便成为学习算法的重要任务，下一篇文章会介绍如何寻找能够使J最小的$$\theta_1$$值的算法——[**梯度下降**](/2016/07/17/gradient-descent)。
