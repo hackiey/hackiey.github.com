@@ -10,9 +10,9 @@
     <meta name="keyword"  content="">
     <link rel="shortcut icon" href="/img/favicon.ico">
 
-    <title>人工神经网络（感知器） - Harry的博客 | Harry's Blog</title>
+    <title>我的2016 - Harry的博客 | Harry's Blog</title>
 
-    <link rel="canonical" href="http://words.hackiey.com/2016/05/14/ann-perceptron-1-copy/">
+    <link rel="canonical" href="http://localhost:4000/personal/2017-01-14-my-2016/">
 
     <!-- Bootstrap Core CSS -->
     <link rel="stylesheet" href="/css/bootstrap.min.css">
@@ -79,6 +79,10 @@
                     </li>
                     
                     <li>
+                        <a href="/personal/2017-01-14-my-2016/">我的2016</a>
+                    </li>
+                    
+                    <li>
                         <a href="/about/">About</a>
                     </li>
                     
@@ -125,12 +129,12 @@
 
     <!-- Image to hack wechat -->
 <!-- <img src="/img/icon_wechat.png" width="0" height="0"> -->
-<!-- <img src="/img/in-post/ann/ann2.jpg" width="0" height="0"> -->
+<!-- <img src="/img/home-bg(1).jpg" width="0" height="0"> -->
 
 <!-- Post Header -->
 <style type="text/css">
     header.intro-header{
-        background-image: url('/img/in-post/ann/ann2.jpg')
+        background-image: url('/img/home-bg(1).jpg')
     }
 </style>
 <header class="intro-header" >
@@ -140,17 +144,13 @@
                 <div class="post-heading">
                     <div class="tags">
                         
-                        <a class="tag" href="/tags/#机器学习" title="机器学习">机器学习</a>
-                        
-                        <a class="tag" href="/tags/#人工神经网络" title="人工神经网络">人工神经网络</a>
-                        
                     </div>
-                    <h1>人工神经网络（感知器）</h1>
+                    <h1>我的2016</h1>
                     
                     
                     <h2 class="subheading"></h2>
                     
-                    <span class="meta">Posted by Harry on May 14, 2016</span>
+                    <span class="meta">Posted by Hackiey on January 14, 2017</span>
                 </div>
             </div>
         </div>
@@ -168,71 +168,35 @@
                 col-md-10 col-md-offset-1
                 post-container">
 
-				<p>我曾经一度以为所有的ANN就是由感知器(pecrceptron)组成的，但实际上，感知器只是一种ANN的基础单元。</p>
+				<p>昨天是部门的年终分享，大家都总结了自己的2016年做了什么，也展望了在新的一年想要做的事情。
+作为一个实习生，我并没有参与到这次的分享中，但我仍然很享受坐在台下听这些优秀的人讲优秀的故事。
+所以我就在这里回顾一下我的2016。</p>
 
-<h3 id="section">感知器</h3>
+<h3 id="简单的回顾">简单的回顾</h3>
 
-<p>感知器以一个实数值向量作为输入，计算这些输入的线性组合，如果结果大于某个<strong>阈值</strong>，就输出1，否则输出-1。如果输入为<script type="math/tex">x_1</script>到<script type="math/tex">x_n</script>，那么感知器计算的输出为:</p>
+<p>2016年是有趣的一年，这一年听了很多话，认识了很多优秀的朋友，学到了很多新的东西，有了很多新的想法。9月份实习以后，不仅仅在知识上，在对人生的思考上都有了很多新理解，感谢这些有思想的人为我带来了很多的感悟。</p>
 
-<script type="math/tex; mode=display">% <![CDATA[
-o(x_1,...,x_n)=\begin{cases} 
-						1,  & \text{if $w_0+w_1x_1+w_2x_2+...+w_nx_n>0$}\\ 
-						-1, & \text{otherwise} \\ 
-					\end{cases} %]]></script>
+<h3 id="关于职业规划">关于职业规划</h3>
 
-<p>其中<script type="math/tex">w_i</script>叫做权值(weight)，是一个<strong>实数常量</strong>，用来决定输入<script type="math/tex">x_i</script>对感知器输出的贡献率。需要注意的是(<script type="math/tex">-w_0</script>)是一个阈值，如果想要使感知器输出1，其余的<script type="math/tex">w_1x_1+...+w_nx_n</script>必须要大于(<script type="math/tex">-w_0</script>)。从这里可以看出，<code class="highlighter-rouge">感知器可以做一个二叉分类器，因为它对所有的输入做出1或-1的输出，是线性分类器(linear classifier)的一种。但不要因为存在阈值概念，就把</code><script type="math/tex">w_0</script><code class="highlighter-rouge">当做是感知器独有的，事实上所有的基础单元都是存在</code><script type="math/tex">w_0</script><code class="highlighter-rouge">的，而对应的</code><script type="math/tex">x_0</script><code class="highlighter-rouge">也都是1。</code></p>
+<p>一位MIT的博士告诉我，我们的价值在于了解各种各样的算法，当遇到问题时，我们能够选择出合适的方法来解决这个问题，简单点说，我们的价值在于<strong>解决问题</strong>。其实在很早之前决定读研时就是这个想法，那时有个好朋友告诉我，如果我们去做开发，工资也会很高，但是这样的工作替代性很强。上海有很多培训结构，即使不需要太多的基础知识，经过培训以后也会有不低的工资，两位朋友的话结合起来看我们的价值其实是解决那些大众难以解决的问题。</p>
 
-<p><img src="/img/in-post/ann/perceptron/perceptron.png" alt="感知器" /></p>
+<h3 id="关于阅读">关于阅读</h3>
 
-<p>为了简化，可以将<script type="math/tex">x_0</script>设置为1，不等式可写为<script type="math/tex">{\sum_{i=0}^nw_ix_i}>0</script>，这样可以表示为<strong>向量</strong><script type="math/tex">\vec w\cdot\vec x>0</script>，因此感知器函数可以写为:</p>
+<p>很久没有认认真真读过一本书了，读书是一件非常有趣且有用的事。我们可以从书中获得别人的智慧，总结别人的经验，学习别人的思想。思想是很重要的东西，而读书能够让我们少走很多弯路。</p>
 
-<script type="math/tex; mode=display">o(\vec x)=sgn(\vec w\cdot\vec x)</script>
+<p>当然阅读不只是读书，微信公众号、微博上每天都有很多很不错的文章（不是那些鸡汤文），五月份的时候我通过一篇文章找到了我的论文方向。从学术上来讲，阅读别人的工作成果并从中获取灵感，一方面可以让我更了解这个领域，另一方面也可以避免重复别人的工作。</p>
 
-<p>sgn是阈值函数，当x&gt;0时，sgn(x)=1，当x&lt;=0时，sgn(x)=-1。</p>
+<h3 id="关于工作">关于工作</h3>
 
-<h3 id="section-1">感知器的表征能力</h3>
+<p>有位产品经理告诉我们，产品经理就像一个CEO，我们要对自己的项目负责，去和所有人沟通，保证我们的项目能够健康成长。所以11月份的时候，我们实验室和一个公司合作，我主动去做一个项目的负责人，我希望能够从中收获一些负责人的经验。因此我不得不公司、实验室和自己的课题三件事同时并行，同时还有同学和老师的不信任以及不理解，这不仅对我的精力造成了巨大的考验，也对我的心理造成了很大的考验。周二的时候，当我介绍完的课题后老师带领学生一起鼓掌时、公司的人对我们的项目表示满意的时候，我真的非常感动，让我真正觉得这两个月的努力没有白费。2016，我值得为自己鼓掌。</p>
 
-<p>从上面的几个式子中可以看出来感知器可以做分类，而这个类别只有两种，要么是，要么不是。</p>
+<h3 id="关于游戏">关于游戏</h3>
 
-<blockquote>
-  <p>我们可以把感知器看作是n维实例空间(即点空间)中的超平面决策面。对于超平面一侧的实例，感知器输出1，对于另一侧输出-1。</p>
-</blockquote>
+<p>8月底，魔兽世界7.0上线了，我又一次去推动了一个休闲团的成立，这一次我作为一个普通的成员，当团里缺位置的时候，我去努力帮忙招人，在帮助大家招到了几个重要位置的时候我很开心。当大家想从新建立一个工会的时候，我去帮助他们协调朋友之间的关系，这并不容易。当大家选择相互敌对时，我没有选择退缩，而是尽一切努力去开导大家，这是解决问题，是我们的人生价值。所以当我的游戏时间越来越少，有人觉得我拖了后腿时，我就决定离开，因为生命中有更重要的事情值得追逐。</p>
 
-<p>什么是超平面？在N维空间中，任何N-1维的次空间都是超平面，在二维平面中，超平面是一条<strong>直线</strong>，在三维空间中，超平面就是我们日常所理解的平面。</p>
+<h3 id="关于未来">关于未来</h3>
 
-<p>不是所有的正反样例集合都可以恰好被分成两份，可以被分割的称为线性可分(linearly separable)样例集合。</p>
-
-<p>单独的感知器可以表示一些布尔函数。例如在一个有两个输入的感知器中，实现AND函数可以设<script type="math/tex">w_0</script>为-0.8，<script type="math/tex">w_1=w_2=0.5</script>，实现OR函数可以设<script type="math/tex">w_0</script>为-0.3，<script type="math/tex">w_1=w_2=0.5</script>，还可以实现与非(NAND)和或非(NOR)等函数，使用两层深度的感知器网络就可以实现所有的布尔函数。</p>
-
-<blockquote>
-  <p>因为阈值单元的网络可以表示大量的函数，而单独的单元不能做到这一点，所以通常我们感兴趣的事学习阈值单元组成的多层网络。</p>
-</blockquote>
-
-<p>如何训练一个感知器，这里主要考虑两种训练法则，感知器训练法则(perceptron training rule)和delta法则(delta rule)。感知器训练法则在线性可分的训练样例中<strong>保证</strong>收敛到可接受的假设，delta法则无论是否线性可分都可以收敛，但是在线性不可分时收敛到目标概念的最佳<strong>近似</strong>。</p>
-
-<h3 id="section-2">感知器训练法则</h3>
-
-<p>感知器训练法则的过程是，首先生成随机的权值，然后反复地应用感知器到每一个训练样例，如果感知器分类<strong>错误</strong>，那么就根据训练样例来修改权值。<strong>重复这个过程直到感知器能够正确分类所有样例</strong>。</p>
-
-<script type="math/tex; mode=display">w_i\leftarrow w_i+\Delta w_i</script>
-
-<script type="math/tex; mode=display">\Delta w_i=\eta (t-o)x_i</script>
-
-<p>其中t是训练样例的目标输出，o是感知器的输出，<script type="math/tex">\eta</script>是学习速率(learning rate)，它是一个很小的数值，并且它有时会随着权调整次数的增加而衰减(<code class="highlighter-rouge">并不是一直不变的</code>)。</p>
-
-<p>如果训练样例线性可分，且<script type="math/tex">\eta</script>足够小，那么感知器训练法则可以在<strong>有限次</strong>内收敛到一个能正确分类所有训练样例的权向量。</p>
-
-<h3 id="section-3">实验</h3>
-
-<p>这一节的代码实现了AND函数的学习，在多次实验中，发现使用200个以上的训练数据便可以学习到一个完全正确的AND函数。</p>
-
-<p><code class="highlighter-rouge">有人说神经网络的缺点之一是不理解权值，以及难以调试，在多个单元组成的网络中有时甚至要靠经验去判断使用多少层和多少个基本单元，我同意这样的说法，但对于这样的结果我会更兴奋，因为这就像我正在理解我自己的大脑。</code></p>
-
-<p>使用感知器训练法则所学习的AND函数的权值是可以被理解的，这是一张包含了错误与正确的训练结果图，可以发现，正确的权值中|<script type="math/tex">w_0</script>|始终大于<script type="math/tex">w_1和w_2</script>。</p>
-
-<p><img src="/img/in-post/ann/perceptron/perceptron-result.png" alt="感知器训练法则结果" /></p>
-
-<p>使用感知器训练法则可以解决线性可分的问题，如果训练样例不是线性可分时，感知器训练法则将无法收敛，下一节会介绍适用于样例不是线性可分时的训练方法——delta法则。</p>
+<p>零零散散写的有点像日记，但是未来的主题很明确，2017年，我会用一整年的时间去申请博士。去朝着更优秀的自己前进。</p>
 
 
                 <hr>
@@ -242,14 +206,6 @@ o(x_1,...,x_n)=\begin{cases}
 
                 <ul class="pager">
                     
-                    <li class="previous">
-                        <a href="/2016/05/14/ann-introductory/" data-toggle="tooltip" data-placement="top" title="人工神经网络（序）">&larr; Previous Post</a>
-                    </li>
-                    
-                    
-                    <li class="next">
-                        <a href="/2016/05/14/ann-perceptron-1/" data-toggle="tooltip" data-placement="top" title="人工神经网络（感知器）">Next Post &rarr;</a>
-                    </li>
                     
                 </ul>
 
@@ -281,18 +237,6 @@ o(x_1,...,x_n)=\begin{cases}
         				
                             
         				
-                            
-                				<a href="/tags/#机器学习" title="机器学习" rel="5">
-                                    机器学习
-                                </a>
-                            
-        				
-                            
-                				<a href="/tags/#人工神经网络" title="人工神经网络" rel="5">
-                                    人工神经网络
-                                </a>
-                            
-        				
         			</div>
                 </section>
                 
@@ -322,8 +266,8 @@ o(x_1,...,x_n)=\begin{cases}
 <script type="text/javascript">
     /* * * CONFIGURATION VARIABLES * * */
     var disqus_shortname = "hackiey";
-    var disqus_identifier = "/2016/05/14/ann-perceptron-1 copy";
-    var disqus_url = "http://words.hackiey.com/2016/05/14/ann-perceptron-1-copy/";
+    var disqus_identifier = "";
+    var disqus_url = "http://localhost:4000/personal/2017-01-14-my-2016/";
 
     (function() {
         var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
@@ -399,7 +343,7 @@ o(x_1,...,x_n)=\begin{cases}
                     
                 </ul>
                 <p class="copyright text-muted">
-                    Copyright &copy; Hackiey 2016
+                    Copyright &copy; Hackiey 2017
                     <br>
 <!--                     Theme by <a href="http://huangxuan.me">Hux</a> |
                     <iframe

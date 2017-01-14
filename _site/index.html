@@ -12,7 +12,7 @@
 
     <title>Harry的博客 | Harry's Blog</title>
 
-    <link rel="canonical" href="http://words.hackiey.com/">
+    <link rel="canonical" href="http://localhost:4000/">
 
     <!-- Bootstrap Core CSS -->
     <link rel="stylesheet" href="/css/bootstrap.min.css">
@@ -76,6 +76,10 @@
                 <ul class="nav navbar-nav navbar-right">
                     <li>
                         <a href="/">Home</a>
+                    </li>
+                    
+                    <li>
+                        <a href="/personal/2017-01-14-my-2016/">我的2016</a>
                     </li>
                     
                     <li>
@@ -154,160 +158,6 @@
             ">
     			
 <div class="post-preview">
-    <a href="/2016/07/17/gradient-descent/">
-        <h2 class="post-title">
-            梯度下降
-        </h2>
-        
-        <h3 class="post-subtitle">
-            
-        </h3>
-        
-        <div class="post-content-preview">
-            梯度下降是一个最优化算法，通过迭代的方式寻找代价函数的最小值，梯度下降是一个非常常用的算法，不仅仅可以应用在线性回归问题中，还被广泛应用于机器学习中的众多领域，
-
-基本思想
-
-定义
-
-目标： 
-
-到目前为止，我们仍然只使用了一个变量x，所以代价函数的变量只有，指的是选择合适的使得取得最小值。
-
-在线性回归中的末尾为了简化，我们设为0，画出了的图像，是一个一元二次函数的图像，现在将加入进来，画...
-        </div>
-    </a>
-    <p class="post-meta">
-        Posted by Harry on July 17, 2016
-    </p>
-</div>
-<hr>
-
-<div class="post-preview">
-    <a href="/2016/07/16/linear-regression/">
-        <h2 class="post-title">
-            线性回归
-        </h2>
-        
-        <h3 class="post-subtitle">
-            
-        </h3>
-        
-        <div class="post-content-preview">
-            线性回归是机器学习中的基础方法，一个完整的线性回归学习过程可以很好地表达出机器学习的基本思想。这一篇介绍了单变量的线性回归，描述了代价函数。
-
-数据
-
-
-  数据来自Coursera中机器学习课程的作业。
-
-
-通常来说，在学习过程中要用到两个数据集，一个是训练集，另一个是测试集。数据集的中每个数据样例包括一些输入和输出，学习程序要从训练集中，根据每个训练样例的输入和输出拟合一个假设函数（根据...
-        </div>
-    </a>
-    <p class="post-meta">
-        Posted by Harry on July 16, 2016
-    </p>
-</div>
-<hr>
-
-<div class="post-preview">
-    <a href="/2016/06/21/backpropagation/">
-        <h2 class="post-title">
-            人工神经网络（多层网络和BP算法）（一）
-        </h2>
-        
-        <h3 class="post-subtitle">
-            
-        </h3>
-        
-        <div class="post-content-preview">
-            现在我们了解了感知器和线性单元这两个基本单元，也用它们学习了一些基本的函数，但是单个单元的学习能力是有限的，为了解决更多的实际问题，研究人员提出了多层网络。
-
-可微阈值单元
-
-首先要说明的是梯度下降算法是一个非常实用的算法，它有效地保证了我们能够在误差最小的地方收敛，因此我们需要选择一个能够配合梯度下降且能够表示非线性函数的网络的基本单元。感知器的函数输出不连续，因此它不可微，不适用于梯度下...
-        </div>
-    </a>
-    <p class="post-meta">
-        Posted by Harry on June 21, 2016
-    </p>
-</div>
-<hr>
-
-<div class="post-preview">
-    <a href="/2016/05/15/ann-perceptron-2/">
-        <h2 class="post-title">
-            人工神经网络（线性单元）（梯度下降）
-        </h2>
-        
-        <h3 class="post-subtitle">
-            
-        </h3>
-        
-        <div class="post-content-preview">
-            感知器训练法则所能解决的问题是非常有限的，大部分的问题都是线性不可分的，所以为了保证在线性不可分时仍能够使训练过程收敛，要引入delta法则。它同时也是学习多个单元的互联网络的基础。
-
-delta法则
-
-delta法则的关键思想是使用梯度下降(gradient descent)搜索“所有“（由于程序在训练时不可能完全平滑，所以设置一个足够小的来尽可能的在误差最小值附近逼近这个值）可能的权值假...
-        </div>
-    </a>
-    <p class="post-meta">
-        Posted by Harry on May 15, 2016
-    </p>
-</div>
-<hr>
-
-<div class="post-preview">
-    <a href="/2016/05/14/ann-perceptron-1/">
-        <h2 class="post-title">
-            人工神经网络（感知器）
-        </h2>
-        
-        <h3 class="post-subtitle">
-            
-        </h3>
-        
-        <div class="post-content-preview">
-            我曾经一度以为所有的ANN就是由感知器(pecrceptron)组成的，但实际上，感知器只是一种ANN的基础单元。
-
-感知器
-
-感知器以一个实数值向量作为输入，计算这些输入的线性组合，如果结果大于某个阈值，就输出1，否则输出-1。如果输入为到，那么感知器计算的输出为:
-
-
-
-其中叫做权值(weight)，是一个实数常量，用来决定输入对感知器输出的贡献率。需要注意的是()是一个阈值，如果想要使...
-        </div>
-    </a>
-    <p class="post-meta">
-        Posted by Harry on May 14, 2016
-    </p>
-</div>
-<hr>
-
-<div class="post-preview">
-    <a href="/2016/05/14/ann-introductory/">
-        <h2 class="post-title">
-            人工神经网络（序）
-        </h2>
-        
-        <h3 class="post-subtitle">
-            
-        </h3>
-        
-        <div class="post-content-preview">
-            ICLR2016的最佳论文是《Neural Programmer-Interpreters》(神经程序解释器),Google DeepMind的Scot Reed和Nando de Freitas提出了一种神经程序解释器，它是一种递归性的合成神经网络，能学习对程序进行表征和执行。(新智元公众号在对这一文章宣传时用了“有望取代初级程序员”，足以说明这篇论文的重要性，在此强烈推荐这个公众号，它每...
-        </div>
-    </a>
-    <p class="post-meta">
-        Posted by Harry on May 14, 2016
-    </p>
-</div>
-<hr>
-
-<div class="post-preview">
     <a href="/2016/01/21/honeycomb-mesh-shortest-path/">
         <h2 class="post-title">
             蜂窝网格最短距离问题
@@ -351,18 +201,6 @@ delta法则的关键思想是使用梯度下降(gradient descent)搜索“所有
                     <h5><a href="/tags/">FEATURED TAGS</a></h5>
                     <div class="tags">
                         
-                            
-                        
-                            
-                                <a href="/tags/#机器学习" title="机器学习" rel="6">
-                                    机器学习
-                                </a>
-                            
-                        
-                            
-                                <a href="/tags/#人工神经网络" title="人工神经网络" rel="4">
-                                    人工神经网络
-                                </a>
                             
                         
                     </div>
@@ -442,7 +280,7 @@ delta法则的关键思想是使用梯度下降(gradient descent)搜索“所有
                     
                 </ul>
                 <p class="copyright text-muted">
-                    Copyright &copy; Hackiey 2016
+                    Copyright &copy; Hackiey 2017
                     <br>
 <!--                     Theme by <a href="http://huangxuan.me">Hux</a> |
                     <iframe
