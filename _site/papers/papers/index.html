@@ -10,9 +10,9 @@
     <meta name="keyword"  content="">
     <link rel="shortcut icon" href="/img/favicon.ico">
 
-    <title>蜂窝网格最短距离问题 - Harry的博客 | Harry's Blog</title>
+    <title>论文打卡 - Harry的博客 | Harry's Blog</title>
 
-    <link rel="canonical" href="http://localhost:4000/2016/01/21/honeycomb-mesh-shortest-path/">
+    <link rel="canonical" href="http://localhost:4000/papers/papers/">
 
     <!-- Bootstrap Core CSS -->
     <link rel="stylesheet" href="/css/bootstrap.min.css">
@@ -144,15 +144,15 @@
                 <div class="post-heading">
                     <div class="tags">
                         
-                        <a class="tag" href="/tags/#游戏算法" title="游戏算法">游戏算法</a>
+                        <a class="tag" href="/tags/#论文" title="论文">论文</a>
                         
                     </div>
-                    <h1>蜂窝网格最短距离问题</h1>
+                    <h1>论文打卡</h1>
                     
                     
                     <h2 class="subheading"></h2>
                     
-                    <span class="meta">Posted by Harry on January 21, 2016</span>
+                    <span class="meta">Posted by Harry on February 3, 2017</span>
                 </div>
             </div>
         </div>
@@ -170,33 +170,9 @@
                 col-md-10 col-md-offset-1
                 post-container">
 
-				<p>大概半年前在写蜂窝网格的A*寻路算法时，遇到了如何选择启发式的问题。传统的曼哈顿距离虽然可以正常运行找到正确的最短路径，但是在蜂窝网格地图中，两点间的最短路径不止一条，曼哈顿距离会使路径的选择总是偏向某一方向。根本原因是启发式中的曼哈顿距离并不是两点间真正的最短距离。</p>
+				<h3 id="20170202-designing-neural-network-architectures-using-reinforcement-learning">2017.02.02-Designing Neural Network Architectures Using Reinforcement Learning</h3>
 
-<p>在网上搜索了很多，但是一直没有搜到合适的方法，于是在炎热的某一天，自己动笔寻找这种方法。没想到的是答案竟然十分简单。</p>
-
-<p>下图采用二维坐标表示了一个蜂窝网格地图，关于二维坐标系的选择，可以参考这一篇文章<a href="http://www.cnblogs.com/alamiye010/archive/2011/10/17/2214477.html">《蜂窝拓扑结构在SLG地图布局中的应用》</a>。</p>
-
-<p><img src="/img/in-post/honeycomb-mesh-shortest-path/honeycomb-mesh-2d.png" alt="蜂窝网格地图二维坐标系" /></p>
-
-<p>在二维坐标系中，横坐标为x，纵坐标为y，可以得出结论，p1(x1,y1)和p2(x2,y2)之间的最短距离为：</p>
-
-<p><img src="/img/in-post/honeycomb-mesh-shortest-path/formula1.png" alt="蜂窝网格二维坐标最短距离公式" /></p>
-
-<p>注: 公式中的除法是求整数商，比如 3/2=1.</p>
-
-<p>用这个公式可以计算出(1,1)到(4,4)的最短距离为</p>
-
-<p><code>(|1/2-4/2+1-4|+|1-4x|+|(1-4)+(4/2-1/2)+4-1|)/2=5</code></p>
-
-<p>看上去是有一些复杂，所以之前在用二维坐标寻找这个规律时费了很多工夫都没有找到，但是改成使用3个坐标来确定一个点的位置就会方便很多，如下图所示。坐标表示为(x,y,z)，出于对称的美观原因，我将Z轴按照负方向增长。在平面上，只需2个坐标即可表示一个点，所以第三个坐标必然可以通过前两个坐标推导出来，在这幅图中，z=y-x。这其中的数学原因不去深究，总之通过一些计算肯定可以得出其中的关系。</p>
-
-<p><img src="/img/in-post/honeycomb-mesh-shortest-path/honeycomb-mesh-3d.png" alt="蜂窝网格地图三维坐标系" /></p>
-
-<p>三维坐标中最引人注目的一个性质是，从任意一个点向相邻方向移动1格距离，一定会恰好使两个坐标都发生一次改变，改变的数值均为1。通过这个性质，可以得出两点之间的最短距离为：</p>
-
-<p><img src="/img/in-post/honeycomb-mesh-shortest-path/formula2.png" alt="蜂窝网格三维坐标最短距离公式" /></p>
-
-<p>最后，将三维坐标改为(x,y,y-x)代入上式，可得出二维坐标的最短距离公式，同时需要对二维坐标进行一些变换以适应蜂窝网格，最终就是第二张图中的公式。</p>
+<p>使用Reinforcement learning自动构建卷积神经网络。</p>
 
 
                 <hr>
@@ -266,8 +242,8 @@
 <script type="text/javascript">
     /* * * CONFIGURATION VARIABLES * * */
     var disqus_shortname = "hackiey";
-    var disqus_identifier = "/2016/01/21/honeycomb-mesh-shortest-path";
-    var disqus_url = "http://localhost:4000/2016/01/21/honeycomb-mesh-shortest-path/";
+    var disqus_identifier = "";
+    var disqus_url = "http://localhost:4000/papers/papers/";
 
     (function() {
         var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
