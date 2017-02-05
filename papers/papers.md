@@ -8,6 +8,12 @@ tags:
     - 论文
 ---
 
+### 2017.02.05-Learning to Optimize (!*****)
+
+这篇文章提出一个方法用以学习更好的优化算法，并将其描述为一个增强学习问题——任何优化算法都可以被表示为一个策略问题，学习优化算法可以简单
+概括为寻找一个最优策略。使用了guided policy search进行训练，奖励机制则为惩罚那些收敛过慢的算法。实验表明自主的优化算法比手工调节
+收敛的更快或能达到一个更好的最优值。
+
 ### 2017.02.04-Differentiable neural computers
 
 [Differentiable neural computers](https://deepmind.com/blog/differentiable-neural-computers/)，这是Hybrid computing using a neural network with dynamic external memory
