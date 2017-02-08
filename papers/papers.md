@@ -8,6 +8,13 @@ tags:
     - 论文
 ---
 
+### 2017.02.08-
+
+### 2017.02.07-Learning to learn by gradient descent by gradient descent(!*****)
+
+将使用梯度下降的优化函数描述为一个可以被梯度下降优化的函数。在一些问题上超过了人类手工设计的优化函数。
+综合了不同问题领域内不同的优化函数。
+
 ### 2017.02.06-Reinforcement Learning Neural Turing Machines - Revised(2015,!)
 
 将reinforcement learning和neural turing machine结合起来学习简单算法。
