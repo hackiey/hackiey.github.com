@@ -170,12 +170,24 @@
                 col-md-10 col-md-offset-1
                 post-container">
 
-				<h3 id="20170208-">2017.02.08-</h3>
+				<h3 id="20170208-making-neural-programming-architectures-generalize-via-recursion">2017.02.08-Making Neural Programming Architectures Generalize Via Recursion</h3>
+
+<p>总算有一篇能看懂的了！这篇文章对于neural programmer做了一个递归方面的改进，作者首先表明了所有的neural programmer都是支持递归的，只是原作者没有明确利用这一点，
+符合递归的需要满足两个属性：</p>
+
+<ul>
+  <li>基础指令，不使用递归产生答案的终止场景</li>
+  <li>一组规则使所有程序均可简化为基础指令</li>
+</ul>
+
+<p>以NPI为例:
+<img src="/img/in-post/papers/papers-2017.02.08.png" alt="Alt" />
+当递归的调用一个函数时，清空lstm状态h，进入新的上下文，修改训练数据以满足此算法，最终实现了在输入长度上的一般化，在排序60以上长度的数字时仍能保持100%的正确率。</p>
 
 <h3 id="20170207-learning-to-learn-by-gradient-descent-by-gradient-descent">2017.02.07-Learning to learn by gradient descent by gradient descent(!*****)</h3>
 
 <p>将使用梯度下降的优化函数描述为一个可以被梯度下降优化的函数。在一些问题上超过了人类手工设计的优化函数。
-综合了不同问题领域内不同的优化函数。</p>
+以往在不同问题里使用着不同的优化方法，使用此方法将不再分为多种优化方法。</p>
 
 <h3 id="20170206-reinforcement-learning-neural-turing-machines---revised2015">2017.02.06-Reinforcement Learning Neural Turing Machines - Revised(2015,!)</h3>
 
