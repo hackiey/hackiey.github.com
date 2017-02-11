@@ -8,6 +8,11 @@ tags:
     - 论文
 ---
 
+### 2017.02。11-Deep Q Learning with Keras and Gym
+
+[Deep Q Learning with Keras and Gym](https://keon.io/rl/deep-q-learning-with-keras-and-gym/),一个简短的deep Q learning的教程，解决了困惑我好几天的episode的含义，
+也是一篇不错的keras入门。keras真的很简单实用！
+
 ### 2017.02.08-Making Neural Programming Architectures Generalize Via Recursion
 
 总算有一篇能看懂的了！这篇文章对于neural programmer做了一个递归方面的改进，作者首先表明了所有的neural programmer都是支持递归的，只是原作者没有明确利用这一点，
