@@ -1,0 +1,581 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="google-site-verification" content="xBT4GhYoi5qRD5tr338pgPM5OWHHIDR6mNg1a3euekI" />
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="To be a hacker">
+    <meta name="keyword"  content="">
+    <link rel="shortcut icon" href="/img/favicon.ico">
+
+    <title>AlphaGO详解 - Harry的博客 | Harry's Blog</title>
+
+    <link rel="canonical" href="http://localhost:4000/2017/04/23/AlphaGO-review/">
+
+    <!-- Bootstrap Core CSS -->
+    <link rel="stylesheet" href="/css/bootstrap.min.css">
+
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="/css/hux-blog.min.css">
+
+    <!-- Pygments Github CSS -->
+    <link rel="stylesheet" href="/css/syntax.css">
+
+    <!-- Custom Fonts -->
+    <!-- <link href="http://maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css" rel="stylesheet" type="text/css"> -->
+    <!-- Hux change font-awesome CDN to qiniu -->
+    <link href="http://cdn.staticfile.org/font-awesome/4.2.0/css/font-awesome.min.css" rel="stylesheet" type="text/css">
+
+
+    <!-- Hux Delete, sad but pending in China
+    <link href='http://fonts.googleapis.com/css?family=Lora:400,700,400italic,700italic' rel='stylesheet' type='text/css'>
+    <link href='http://fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800' rel='stylesheet' type='text/
+    css'>
+    -->
+
+
+    <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+    <!--[if lt IE 9]>
+        <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+        <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+    <![endif]-->
+
+    <!-- ga & ba script hoook -->
+    <script></script>
+</head>
+
+
+<!-- hack iOS CSS :active style -->
+<body ontouchstart="">
+
+    <!-- Navigation -->
+<nav class="navbar navbar-default navbar-custom navbar-fixed-top">
+    <div class="container-fluid">
+        <!-- Brand and toggle get grouped for better mobile display -->
+        <div class="navbar-header page-scroll">
+            <button type="button" class="navbar-toggle">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            <a class="navbar-brand" href="/">Hackiey</a>
+        </div>
+
+        <!-- Collect the nav links, forms, and other content for toggling -->
+        <!-- Known Issue, found by Hux:
+            <nav>'s height woule be hold on by its content.
+            so, when navbar scale out, the <nav> will cover tags.
+            also mask any touch event of tags, unfortunately.
+        -->
+        <div id="huxblog_navbar">
+            <div class="navbar-collapse">
+                <ul class="nav navbar-nav navbar-right">
+                    <li>
+                        <a href="/">Home</a>
+                    </li>
+                    
+                    <li>
+                        <a href="/about/">About</a>
+                    </li>
+                    
+                    <li>
+                        <a href="/papers/papers/">论文打卡</a>
+                    </li>
+                    
+                    <li>
+                        <a href="/tags/">Tags</a>
+                    </li>
+                    
+                </ul>
+            </div>
+        </div>
+        <!-- /.navbar-collapse -->
+    </div>
+    <!-- /.container -->
+</nav>
+<script>
+    // Drop Bootstarp low-performance Navbar
+    // Use customize navbar with high-quality material design animation
+    // in high-perf jank-free CSS3 implementation
+    var $body   = document.body;
+    var $toggle = document.querySelector('.navbar-toggle');
+    var $navbar = document.querySelector('#huxblog_navbar');
+    var $collapse = document.querySelector('.navbar-collapse');
+
+    $toggle.addEventListener('click', handleMagic)
+    function handleMagic(e){
+        if ($navbar.className.indexOf('in') > 0) {
+        // CLOSE
+            $navbar.className = " ";
+            // wait until animation end.
+            setTimeout(function(){
+                // prevent frequently toggle
+                if($navbar.className.indexOf('in') < 0) {
+                    $collapse.style.height = "0px"
+                }
+            },400)
+        }else{
+        // OPEN
+            $collapse.style.height = "auto"
+            $navbar.className += " in";
+        }
+    }
+</script>
+
+
+    <!-- Image to hack wechat -->
+<!-- <img src="/img/icon_wechat.png" width="0" height="0"> -->
+<!-- <img src="/img/home-bg(1).jpg" width="0" height="0"> -->
+
+<!-- Post Header -->
+<style type="text/css">
+    header.intro-header{
+        background-image: url('/img/home-bg(1).jpg')
+    }
+</style>
+<header class="intro-header" >
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+                <div class="post-heading">
+                    <div class="tags">
+                        
+                        <a class="tag" href="/tags/#增强学习" title="增强学习">增强学习</a>
+                        
+                    </div>
+                    <h1>AlphaGO详解</h1>
+                    
+                    
+                    <h2 class="subheading"></h2>
+                    
+                    <span class="meta">Posted by Harry on April 23, 2017</span>
+                </div>
+            </div>
+        </div>
+    </div>
+</header>
+
+<!-- Post Content -->
+<article>
+    <div class="container">
+        <div class="row">
+
+    <!-- Post Container -->
+            <div class="
+                col-lg-8 col-lg-offset-2
+                col-md-10 col-md-offset-1
+                post-container">
+
+				<h3 id="简介">简介</h3>
+
+<p>围棋被誉为是人类的智力巅峰，在很长一段时间一直都是人工智能在棋类领域内最大的挑战。在所有具有完全信息的博弈游戏中，都有一个可以决定最优策略的价值函数<script type="math/tex">v^*(s)</script>，在每一个局面下，可以通过递归的搜索最优策略使得自己获得胜利（穷举所有可能的走法，找到最优的策略），也就是说只有决定了先后手，就决定了游戏的输赢。搜索序列个数大约是<script type="math/tex">b^d</script>个，<script type="math/tex">b</script>是搜索的宽度（在围棋中是每一个局面下所有合法的落子），<script type="math/tex">d</script>是搜索的深度(双方棋手一共落子的步数)。大型棋类游戏中，国际象棋中的<script type="math/tex">b\approx35</script>，<script type="math/tex">d\approx80</script>，在围棋游戏中，<script type="math/tex">b\approx250</script>，<script type="math/tex">d\approx150</script>，在现有的计算条件是不可能完成的。可以通过两种方式来有效的减少搜索空间：</p>
+
+<ul>
+  <li>
+    <p>通过对局面的评估降低搜索深度，在搜索树中的某一节点<script type="math/tex">s</script>时停止向下搜索，以当前<script type="math/tex">s</script>的评估代替对子节点的评估，这在国际象棋、西洋棋等游戏中有着超越人类的效果，但在复杂的围棋中的效果并不好。</p>
+  </li>
+  <li>
+    <p>通过训练一个策略函数 <script type="math/tex">p(a\mid s)</script> (一个根据当前状态s输出落子策略的概率分布函数)来减少搜索宽度（舍去概率低的落子策略），这在西洋双陆棋等游戏中有超越类的表现，在围棋中只能达到业余爱好者的水平。</p>
+  </li>
+</ul>
+
+<p>AlphaGO通过训练策略网络<script type="math/tex">p</script>、估值网络<script type="math/tex">v</script>以及构造蒙特卡洛搜索树（MCTS）来减少搜索的宽度和深度，整个训练分为三个步骤：1.根据人类棋局使用监督学习训练出策略网络<script type="math/tex">p_\sigma</script>(SL Policy)和一个快速落子的策略网络<script type="math/tex">p_\pi</script>，<script type="math/tex">p_\pi</script>使用更少的特征和神经元，能够快速地计算出落子策略；2.自我对局提升策略网络，使用<script type="math/tex">p_\sigma</script>初始化，使用增强学习的方法训练的<script type="math/tex">p_\rho</script>(RL Policy)；3.最后利用<script type="math/tex">p_\rho</script>自我对局训练一个估值网络<script type="math/tex">v_\theta</script>用来预测在当前局面<script type="math/tex">s</script>下，估计白胜还是黑胜。</p>
+
+<p><img src="/img/in-post/machine-learning/Alphago/network.png" alt="" /></p>
+
+<h3 id="训练过程">训练过程</h3>
+
+<h4 id="supervised-learning-of-policy-network">Supervised learning of policy network</h4>
+
+<p>第一阶段通过预测人类专家落子位置训练出来的13层CNN策略网络<script type="math/tex">p_\sigma</script>，输入棋局的局面表示、游戏回合数等特征<script type="math/tex">s</script>（完整特征在附录），输出每一个合法落子的概率分布。利用人类棋局作为训练样本，可以快速的降低预测误差。AlphaGO采用的是KGS GO server的3000万个对局局面，在使用完整特征的<script type="math/tex">p_\sigma</script>的条件下能够在测试集达到57.0%的预测准确率，仅使用局面图像和历史输入作为特征的策略网络可以达到55.7%，这说明人类的落子策略也并不难猜。</p>
+
+<p>同时训练一个快速落子的策略网络<script type="math/tex">p_\pi</script>（特征列表在附录），简单地基于一些模式通过softmax预测落子，在测试集的预测准确率只有24.2%，但是相比于<script type="math/tex">p_\sigma</script>的3毫秒，<script type="math/tex">p_\pi</script>只需要2微秒。</p>
+
+<script type="math/tex; mode=display">\Delta\sigma \propto {\partial \log p_\sigma(a \mid s) \over \partial \sigma} \tag{1}</script>
+
+<h4 id="reinforcement-learning-of-policy-network">Reinforcement learning of policy network</h4>
+
+<p>第二阶段使用增强学习的policy gradient的通过自我对弈方法训练更强的、全新的策略网络<script type="math/tex">p_\rho</script>，<script type="math/tex">p_\rho</script>的结构与<script type="math/tex">p_\sigma</script>一致。以<script type="math/tex">p_\sigma</script>为起点，使用当前的<script type="math/tex">p_\rho</script>和随机之前某一次迭代过程中的<script type="math/tex">p_\rho</script>（防止对当前策略过拟合）进行对弈，直到分出胜负。<script type="math/tex">\rho</script>参数的更新公式：</p>
+
+<script type="math/tex; mode=display">\Delta\rho \propto {\partial \log p_\rho(a_t \mid s_t) \over \partial \rho} \tag{2}</script>
+
+<p>其中<script type="math/tex">z_t=\pm r(s_T)</script>（时间步<script type="math/tex">t</script>可以理解为到这一次落子之前走了多少步，<script type="math/tex">T</script>为终点步数），<script type="math/tex">r(s_T)</script>在胜利时为1，失败时为-1。奖励导致最终胜利的落子策略，增加此落子在局面<script type="math/tex">s</script>时的概率，惩罚最终失败的落子策略。</p>
+
+<p>值得一提的是，RL Policy对SL Policy的胜率超过了80%，对Pachi的胜率超过了85%（Pachi是一个开源的围棋程序，使用蒙特卡洛搜索，每一步需要执行十万次模拟，在KGS上达到了业余二段的水平）。</p>
+
+<h4 id="reinforcement-learning-of-value-network">Reinforcement learning of value network</h4>
+
+<p>最后阶段，训练评估局面的价值函数<script type="math/tex">v^p(s)</script>根据当前局面输出最终的期望结果。其定义为(3)</p>
+
+<script type="math/tex; mode=display">v^p(s) = \mathbb{E} [z_t \mid s_t = s, a_{t...T}\sim p] \tag{3}</script>
+
+<p>理想的情况是穷举所有局面以获得最优的<script type="math/tex">v^*(s)</script>，实际训练是使用最强的策略网络RL Policy <script type="math/tex">p_\rho</script>训练价值函数<script type="math/tex">v_\theta</script>，近似的认为
+<script type="math/tex">v^*(s) \approx v^p(s) \approx v^*(s)</script>。<script type="math/tex">v_\theta</script>的网络结构与策略网络一致，只是输出变为一个简单的预测数字。使用梯度下降对<script type="math/tex">\theta</script>进行更新：</p>
+
+<script type="math/tex; mode=display">\Delta \theta \propto {\partial v_\theta(s) \over \partial \theta }(z - v_\theta(s)) \tag{4}</script>
+
+<p>幼稚的做法是对于每局比赛的每一个局面都用来作为训练样本，因为相邻的局面耦合程度非常高，这会导致严重的过拟合。论文中采用的做法是从3000万局自我对局中每一局选取一个局面进行训练，使得过拟合达到最小化。</p>
+
+<p>策略网络可以在很短的时间内评估当前局面，尽管策略网络同样可以通过多次模拟比赛以计算平均结果值估计当前局面，但需要大量的计算时间。</p>
+
+<p><img src="/img/in-post/machine-learning/Alphago/MSE.png" alt="" /></p>
+
+<h3 id="落子">落子</h3>
+
+<p>MCTS是几乎所有围棋程序的核心组件，AlphaGO将策略网络和价值网络结合在MCTS中，MCTS的每个节点代表一个局面，每条边代表一个动作（落子），用<script type="math/tex">(s,a)</script>表示。其中每一条边都存储三个变量：1.动作-价值函数<script type="math/tex">Q(s,a)</script>(在<script type="math/tex">s</script>状态下执行动作<script type="math/tex">a</script>后对局面的评估值)；2.当前边的访问次数<script type="math/tex">N(s,a)</script>；3.先验概率<script type="math/tex">P(s,a)</script>。</p>
+
+<p>一个完整的MCTS包括四个步骤：Selection，Expansion，Evaluation，Backup。</p>
+
+<p><img src="/img/in-post/machine-learning/Alphago/MCTS.png" alt="" /></p>
+
+<p>搜索过程会进行多次迭代，每次迭代在模拟出胜负后结束，在所有迭代结束后选取当前节点对应的最高的<script type="math/tex">N(s,a)</script>的边，采取落子动作<script type="math/tex">a</script>，第<script type="math/tex">i</script>次迭代完整过程如下：</p>
+
+<p>从根节点（当前局面）开始，在每一个节点：</p>
+
+<ol>
+  <li>
+    <p>如果当前节是叶子节点，扩展叶子节点（Expansion）：</p>
+
+    <ul>
+      <li>
+        <p>对于所有合法的落子动作<script type="math/tex">a</script>，使用SL policy初始化这条边的先验概率<script type="math/tex">P(s,a) = p_\sigma(a\mid s)</script>，并根据对应的落子设置子节点；</p>
+      </li>
+      <li>
+        <p>评估叶子节点同时用到了估值网络和快速落子网络，设当前时间步为<script type="math/tex">L</script>，利用快速落子网络<script type="math/tex">p_\pi</script>模拟到比赛结束，根据胜负得到<script type="math/tex">z_L</script>，<script type="math/tex">\lambda</script>用于控制两者的贡献率</p>
+      </li>
+    </ul>
+
+    <script type="math/tex; mode=display">V(s_L) = (1-\lambda) v_\theta(s_L) + \lambda z_L \tag{5}</script>
+  </li>
+  <li>
+    <p>如果当前节点不是叶子节点，根据时间步t所处的状态节点<script type="math/tex">s_t</script>选取最优落子动作<script type="math/tex">a_t</script></p>
+
+    <script type="math/tex; mode=display">a_t = \mathop{\arg\,\max}\limits_a(Q(s,a)+u(s_t,a)) \tag{6}</script>
+
+    <script type="math/tex; mode=display">u(s,a) \propto {P(s,a) \over {1+N(s,a)} } \tag{7}</script>
+
+    <p>其中 <script type="math/tex">u(s,a)</script> 与先验概率<script type="math/tex">P(s,a)</script>成正比，与访问次数<script type="math/tex">N(s,a)</script>成反比，这样做的目的是为了更多的探索性。</p>
+  </li>
+</ol>
+
+<p>一旦完成模拟，就更新所有的<script type="math/tex">Q(s,a)</script>和<script type="math/tex">N(s,a)</script></p>
+
+<script type="math/tex; mode=display">N(s,a) = \Sigma^n_{i=1} 1(s,a,i) \tag{8}</script>
+
+<script type="math/tex; mode=display">Q(s,a) = {1\over N(s,a)} \Sigma^n_{i=1} 1(s,a,i) V(s^i_L) \tag{9}</script>
+
+<p>(9)的做法是对多次迭代中多次遇到的<script type="math/tex">(s,a)</script>时，计算Q(s,a)的平均值（蒙特卡洛思想）。<script type="math/tex">1(s,a,i)</script>表示在第i次迭代时访问过<script type="math/tex">(s,a)</script>为1，否则为0。</p>
+
+<p>使用SL policy做<script type="math/tex">P(s,a)</script>的效果要比RL policy好，论文中的解释是因为人类下棋时是带有对将来思考的，而自我学习得到的策略网络通常只针对当前局面选取最优的策略。但通过RL policy训练的<script type="math/tex">v_\theta(s)</script>仍然是强于SL policy的。</p>
+
+<p>有意思的是，只使用估值网络对局面评估的效果还不如快速落子网络，田渊栋给出的猜测是在棋局一开始时，大家下的比较和气，估值网络就比较重要；在复杂的对杀情况中，通过快速走子估计盘面就比较重要了，内部评分最高的版本使用的<script type="math/tex">\lambda</script>就是0.5（附录中有各种不同版本的AlphaGO评分）。</p>
+
+<p>另外，在叶子节点时并不是立刻展开，而是等访问次数到达40次时，这样可以避免产生太多分支，分散搜索的注意力。</p>
+
+<h3 id="结语">结语</h3>
+
+<p>AlphaGO使用了较少的专业知识达到如此惊人的效果，具有一定的通用性，文末指出了AlphaGO对以下三种问题具有启发性：</p>
+
+<ol>
+  <li>
+    <p>有挑战的决策任务</p>
+  </li>
+  <li>
+    <p>具有无法穷举的巨大的搜索空间</p>
+  </li>
+  <li>
+    <p>难以直接使用策略函数和估值函数估计出最优策略</p>
+  </li>
+</ol>
+
+<p>如果看到这里都明白的话，也许你也想实现一个自己的AlphaGO，那么你可以先采购单机版的AlphaGO所使用的硬件：48个CPU和8个GPU。</p>
+
+<h3 id="faq">FAQ</h3>
+
+<ol>
+  <li>
+    <p>为什么使用神经网络训练策略函数和价值函数？</p>
+
+    <p>因为棋盘局面太多，无法穷举出每一个局面state，因此使用神经网络根据一定特征来做value function approximation，而策略函数是基于state的，因此也需要神经网络的帮助。</p>
+  </li>
+  <li>
+    <p>在蒙特卡洛搜索中并没有提到对两个棋手的分别模拟，对方棋手的落子策略采用的是什么呢？</p>
+
+    <p>论文中没有提到使用<script type="math/tex">p_\pi</script>时是对双方进行模拟，但这应该是肯定的。</p>
+  </li>
+  <li>
+    <p>为什么不直接使用RL policy下棋，而是这么麻烦的构造一棵MCTS？</p>
+
+    <p>正如文中所提到的，RL policy没有前瞻性，无法规划一系列的动作，它只选取当前局面最优的策略，这样的策略并不是全局最优的。</p>
+  </li>
+  <li>
+    <p>为什么在构造MCTS时，要增加探索性（exploration）？</p>
+
+    <p>假如你面前有两扇门A和B，你第一次打开了A得到了1点奖励，那么下一次你是去选择当前最优的A还是B？</p>
+  </li>
+</ol>
+
+<h3 id="附录">附录</h3>
+
+<h4 id="策略网络和估值网络完整的训练特征">策略网络和估值网络完整的训练特征</h4>
+
+<p><img src="/img/in-post/machine-learning/Alphago/features.png" alt="" /></p>
+
+<h4 id="快速落子网络特征">快速落子网络特征</h4>
+
+<p><img src="/img/in-post/machine-learning/Alphago/pattern-of-pi.png" alt="" /></p>
+
+<h4 id="不同版本的alphago评分">不同版本的AlphaGO评分</h4>
+
+<p><img src="/img/in-post/machine-learning/Alphago/results.png" alt="" /></p>
+
+
+                <hr>
+
+                
+
+
+                <ul class="pager">
+                    
+                    <li class="previous">
+                        <a href="/2016/01/21/honeycomb-mesh-shortest-path/" data-toggle="tooltip" data-placement="top" title="蜂窝网格最短距离问题">&larr; Previous Post</a>
+                    </li>
+                    
+                    
+                </ul>
+
+
+                
+
+                
+                <!-- disqus 评论框 start -->
+                <div class="comment">
+                    <div id="disqus_thread" class="disqus-thread"></div>
+                </div>
+                <!-- disqus 评论框 end -->
+                
+
+            </div>
+
+    <!-- Sidebar Container -->
+            <div class="
+                col-lg-8 col-lg-offset-2
+                col-md-10 col-md-offset-1
+                sidebar-container">
+
+                <!-- Featured Tags -->
+                
+                <section>
+                    <hr class="hidden-sm hidden-xs">
+                    <h5><a href="/tags/">FEATURED TAGS</a></h5>
+                    <div class="tags">
+        				
+                            
+        				
+                            
+        				
+        			</div>
+                </section>
+                
+
+                <!-- Friends Blog -->
+                
+                <hr>
+                <h5>FRIENDS</h5>
+                <ul class="list-inline">
+                    
+                        <li><a href="http://www.hackiey.com">Hackiey</a></li>
+                    
+                        <li><a href="http://gty.org.in/">David Gu</a></li>
+                    
+                </ul>
+                
+            </div>
+        </div>
+    </div>
+</article>
+
+
+
+
+
+<!-- disqus 公共JS代码 start (一个网页只需插入一次) -->
+<script type="text/javascript">
+    /* * * CONFIGURATION VARIABLES * * */
+    var disqus_shortname = "hackiey";
+    var disqus_identifier = "/2017/04/23/AlphaGO-review";
+    var disqus_url = "http://localhost:4000/2017/04/23/AlphaGO-review/";
+
+    (function() {
+        var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+        dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+        (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    })();
+</script>
+<!-- disqus 公共JS代码 end -->
+
+
+
+
+<!-- async load function -->
+<script>
+    function async(u, c) {
+      var d = document, t = 'script',
+          o = d.createElement(t),
+          s = d.getElementsByTagName(t)[0];
+      o.src = u;
+      if (c) { o.addEventListener('load', function (e) { c(null, e); }, false); }
+      s.parentNode.insertBefore(o, s);
+    }
+</script>
+<!-- anchor-js, Doc:http://bryanbraun.github.io/anchorjs/ -->
+<script>
+    async("http://cdn.bootcss.com/anchor-js/1.1.1/anchor.min.js",function(){
+        anchors.options = {
+          visible: 'always',
+          placement: 'right',
+          icon: '#'
+        };
+        anchors.add().remove('.intro-header h1').remove('.subheading').remove('.sidebar-container h5');
+    })
+</script>
+<style>
+    /* place left on bigger screen */
+    @media all and (min-width: 800px) {
+        .anchorjs-link{
+            position: absolute;
+            left: -0.75em;
+            font-size: 1.1em;
+            margin-top : -0.1em;
+        }
+    }
+</style>
+
+
+
+    <!-- Footer -->
+<footer>
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+                <ul class="list-inline text-center">
+                    
+                    
+
+                    <!-- add Weibo, Zhihu by Hux, add target = "_blank" to <a> by Hux -->
+                    
+                    
+
+
+                    
+                    
+                    <li>
+                        <a target="_blank" href="https://github.com/hackiey">
+                            <span class="fa-stack fa-lg">
+                                <i class="fa fa-circle fa-stack-2x"></i>
+                                <i class="fa fa-github fa-stack-1x fa-inverse"></i>
+                            </span>
+                        </a>
+                    </li>
+                    
+                </ul>
+                <p class="copyright text-muted">
+                    Copyright &copy; Hackiey 2017
+                    <br>
+<!--                     Theme by <a href="http://huangxuan.me">Hux</a> |
+                    <iframe
+                        style="margin-left: 2px; margin-bottom:-5px;"
+                        frameborder="0" scrolling="0" width="91px" height="20px"
+                        src="https://ghbtns.com/github-btn.html?user=huxpro&repo=huxpro.github.io&type=star&count=true" >
+                    </iframe> -->
+                </p>
+            </div>
+        </div>
+    </div>
+</footer>
+
+<!-- jQuery -->
+<script src="/js/jquery.min.js "></script>
+
+<!-- Bootstrap Core JavaScript -->
+<script src="/js/bootstrap.min.js "></script>
+
+<!-- Custom Theme JavaScript -->
+<script src="/js/hux-blog.min.js "></script>
+
+
+<!-- async load function -->
+<script>
+    function async(u, c) {
+      var d = document, t = 'script',
+          o = d.createElement(t),
+          s = d.getElementsByTagName(t)[0];
+      o.src = u;
+      if (c) { o.addEventListener('load', function (e) { c(null, e); }, false); }
+      s.parentNode.insertBefore(o, s);
+    }
+</script>
+
+<!-- 
+     Because of the native support for backtick-style fenced code blocks 
+     right within the Markdown is landed in Github Pages, 
+     From V1.6, There is no need for Highlight.js, 
+     so Huxblog drops it officially.
+
+     - https://github.com/blog/2100-github-pages-now-faster-and-simpler-with-jekyll-3-0  
+     - https://help.github.com/articles/creating-and-highlighting-code-blocks/    
+-->
+<!--
+    <script>
+        async("http://cdn.bootcss.com/highlight.js/8.6/highlight.min.js", function(){
+            hljs.initHighlightingOnLoad();
+        })
+    </script>
+    <link href="http://cdn.bootcss.com/highlight.js/8.6/styles/github.min.css" rel="stylesheet">
+-->
+
+
+<!-- jquery.tagcloud.js -->
+<script>
+    // only load tagcloud.js in tag.html
+    if($('#tag_cloud').length !== 0){
+        async("/js/jquery.tagcloud.js",function(){
+            $.fn.tagcloud.defaults = {
+                //size: {start: 1, end: 1, unit: 'em'},
+                color: {start: '#bbbbee', end: '#0085a1'},
+            };
+            $('#tag_cloud a').tagcloud();
+        })
+    }
+</script>
+
+<!--fastClick.js -->
+<script>
+    async("http://cdn.bootcss.com/fastclick/1.0.6/fastclick.min.js", function(){
+        var $nav = document.querySelector("nav");
+        if($nav) FastClick.attach($nav);
+    })
+</script>
+
+
+<!-- Google Analytics -->
+
+
+
+<!-- Baidu Tongji -->
+
+
+
+
+<!-- Image to hack wechat -->
+<img src="/img/icon_wechat.png" width="0" height="0" />
+<!-- Migrate from head to bottom, no longer block render and still work -->
+<!-- script -->
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.0/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+</body>
+
+</html>
