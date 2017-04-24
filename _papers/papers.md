@@ -8,7 +8,7 @@ tags:
     - 论文
 ---
 
-### 2017.02。11-Deep Q Learning with Keras and Gym
+### 2017.02.11-Deep Q Learning with Keras and Gym
 
 [Deep Q Learning with Keras and Gym](https://keon.io/rl/deep-q-learning-with-keras-and-gym/),一个简短的deep Q learning的教程，解决了困惑我好几天的episode的含义，
 也是一篇不错的keras入门。keras真的很简单实用！
