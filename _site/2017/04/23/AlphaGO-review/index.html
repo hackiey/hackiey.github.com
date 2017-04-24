@@ -185,7 +185,7 @@
 
 <p>AlphaGO通过训练策略网络<script type="math/tex">p</script>、估值网络<script type="math/tex">v</script>以及构造蒙特卡洛搜索树（MCTS）来减少搜索的宽度和深度，整个训练分为三个步骤：1.根据人类棋局使用监督学习训练出策略网络<script type="math/tex">p_\sigma</script>(SL Policy)和一个快速落子的策略网络<script type="math/tex">p_\pi</script>，<script type="math/tex">p_\pi</script>使用更少的特征和神经元，能够快速地计算出落子策略；2.自我对局提升策略网络，使用<script type="math/tex">p_\sigma</script>初始化，使用增强学习的方法训练的<script type="math/tex">p_\rho</script>(RL Policy)；3.最后利用<script type="math/tex">p_\rho</script>自我对局训练一个估值网络<script type="math/tex">v_\theta</script>用来预测在当前局面<script type="math/tex">s</script>下，估计白胜还是黑胜。</p>
 
-<p><img src="/img/in-post/machine-learning/Alphago/network.png" alt="" /></p>
+<p><img src="/img/in-post/machine-learning/AlphaGO/network.png" alt="" /></p>
 
 <h3 id="训练过程">训练过程</h3>
 
@@ -222,7 +222,7 @@
 
 <p>策略网络可以在很短的时间内评估当前局面，尽管策略网络同样可以通过多次模拟比赛以计算平均结果值估计当前局面，但需要大量的计算时间。</p>
 
-<p><img src="/img/in-post/machine-learning/Alphago/MSE.png" alt="" /></p>
+<p><img src="/img/in-post/machine-learning/AlphaGO/MSE.png" alt="" /></p>
 
 <h3 id="落子">落子</h3>
 
@@ -230,7 +230,7 @@
 
 <p>一个完整的MCTS包括四个步骤：Selection，Expansion，Evaluation，Backup。</p>
 
-<p><img src="/img/in-post/machine-learning/Alphago/MCTS.png" alt="" /></p>
+<p><img src="/img/in-post/machine-learning/AlphaGO/MCTS.png" alt="" /></p>
 
 <p>搜索过程会进行多次迭代，每次迭代在模拟出胜负后结束，在所有迭代结束后选取当前节点对应的最高的<script type="math/tex">N(s,a)</script>的边，采取落子动作<script type="math/tex">a</script>，第<script type="math/tex">i</script>次迭代完整过程如下：</p>
 
@@ -323,15 +323,15 @@
 
 <h4 id="策略网络和估值网络完整的训练特征">策略网络和估值网络完整的训练特征</h4>
 
-<p><img src="/img/in-post/machine-learning/Alphago/features.png" alt="" /></p>
+<p><img src="/img/in-post/machine-learning/AlphaGO/features.png" alt="" /></p>
 
 <h4 id="快速落子网络特征">快速落子网络特征</h4>
 
-<p><img src="/img/in-post/machine-learning/Alphago/pattern-of-pi.png" alt="" /></p>
+<p><img src="/img/in-post/machine-learning/AlphaGO/pattern-of-pi.png" alt="" /></p>
 
 <h4 id="不同版本的alphago评分">不同版本的AlphaGO评分</h4>
 
-<p><img src="/img/in-post/machine-learning/Alphago/results.png" alt="" /></p>
+<p><img src="/img/in-post/machine-learning/AlphaGO/results.png" alt="" /></p>
 
 
                 <hr>

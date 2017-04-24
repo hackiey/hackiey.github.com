@@ -5,8 +5,8 @@
     <description>To be a hacker</description>
     <link>http://localhost:4000/</link>
     <atom:link href="http://localhost:4000/feed.xml" rel="self" type="application/rss+xml" />
-    <pubDate>Mon, 24 Apr 2017 00:35:10 +0800</pubDate>
-    <lastBuildDate>Mon, 24 Apr 2017 00:35:10 +0800</lastBuildDate>
+    <pubDate>Mon, 24 Apr 2017 11:11:09 +0800</pubDate>
+    <lastBuildDate>Mon, 24 Apr 2017 11:11:09 +0800</lastBuildDate>
     <generator>Jekyll v3.3.1</generator>
     
       <item>
@@ -26,7 +26,7 @@
 
 &lt;p&gt;AlphaGO通过训练策略网络&lt;script type=&quot;math/tex&quot;&gt;p&lt;/script&gt;、估值网络&lt;script type=&quot;math/tex&quot;&gt;v&lt;/script&gt;以及构造蒙特卡洛搜索树（MCTS）来减少搜索的宽度和深度，整个训练分为三个步骤：1.根据人类棋局使用监督学习训练出策略网络&lt;script type=&quot;math/tex&quot;&gt;p_\sigma&lt;/script&gt;(SL Policy)和一个快速落子的策略网络&lt;script type=&quot;math/tex&quot;&gt;p_\pi&lt;/script&gt;，&lt;script type=&quot;math/tex&quot;&gt;p_\pi&lt;/script&gt;使用更少的特征和神经元，能够快速地计算出落子策略；2.自我对局提升策略网络，使用&lt;script type=&quot;math/tex&quot;&gt;p_\sigma&lt;/script&gt;初始化，使用增强学习的方法训练的&lt;script type=&quot;math/tex&quot;&gt;p_\rho&lt;/script&gt;(RL Policy)；3.最后利用&lt;script type=&quot;math/tex&quot;&gt;p_\rho&lt;/script&gt;自我对局训练一个估值网络&lt;script type=&quot;math/tex&quot;&gt;v_\theta&lt;/script&gt;用来预测在当前局面&lt;script type=&quot;math/tex&quot;&gt;s&lt;/script&gt;下，估计白胜还是黑胜。&lt;/p&gt;
 
-&lt;p&gt;&lt;img src=&quot;/img/in-post/machine-learning/Alphago/network.png&quot; alt=&quot;&quot; /&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&quot;/img/in-post/machine-learning/AlphaGO/network.png&quot; alt=&quot;&quot; /&gt;&lt;/p&gt;
 
 &lt;h3 id=&quot;训练过程&quot;&gt;训练过程&lt;/h3&gt;
 
@@ -63,7 +63,7 @@
 
 &lt;p&gt;策略网络可以在很短的时间内评估当前局面，尽管策略网络同样可以通过多次模拟比赛以计算平均结果值估计当前局面，但需要大量的计算时间。&lt;/p&gt;
 
-&lt;p&gt;&lt;img src=&quot;/img/in-post/machine-learning/Alphago/MSE.png&quot; alt=&quot;&quot; /&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&quot;/img/in-post/machine-learning/AlphaGO/MSE.png&quot; alt=&quot;&quot; /&gt;&lt;/p&gt;
 
 &lt;h3 id=&quot;落子&quot;&gt;落子&lt;/h3&gt;
 
@@ -71,7 +71,7 @@
 
 &lt;p&gt;一个完整的MCTS包括四个步骤：Selection，Expansion，Evaluation，Backup。&lt;/p&gt;
 
-&lt;p&gt;&lt;img src=&quot;/img/in-post/machine-learning/Alphago/MCTS.png&quot; alt=&quot;&quot; /&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&quot;/img/in-post/machine-learning/AlphaGO/MCTS.png&quot; alt=&quot;&quot; /&gt;&lt;/p&gt;
 
 &lt;p&gt;搜索过程会进行多次迭代，每次迭代在模拟出胜负后结束，在所有迭代结束后选取当前节点对应的最高的&lt;script type=&quot;math/tex&quot;&gt;N(s,a)&lt;/script&gt;的边，采取落子动作&lt;script type=&quot;math/tex&quot;&gt;a&lt;/script&gt;，第&lt;script type=&quot;math/tex&quot;&gt;i&lt;/script&gt;次迭代完整过程如下：&lt;/p&gt;
 
@@ -164,15 +164,15 @@
 
 &lt;h4 id=&quot;策略网络和估值网络完整的训练特征&quot;&gt;策略网络和估值网络完整的训练特征&lt;/h4&gt;
 
-&lt;p&gt;&lt;img src=&quot;/img/in-post/machine-learning/Alphago/features.png&quot; alt=&quot;&quot; /&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&quot;/img/in-post/machine-learning/AlphaGO/features.png&quot; alt=&quot;&quot; /&gt;&lt;/p&gt;
 
 &lt;h4 id=&quot;快速落子网络特征&quot;&gt;快速落子网络特征&lt;/h4&gt;
 
-&lt;p&gt;&lt;img src=&quot;/img/in-post/machine-learning/Alphago/pattern-of-pi.png&quot; alt=&quot;&quot; /&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&quot;/img/in-post/machine-learning/AlphaGO/pattern-of-pi.png&quot; alt=&quot;&quot; /&gt;&lt;/p&gt;
 
 &lt;h4 id=&quot;不同版本的alphago评分&quot;&gt;不同版本的AlphaGO评分&lt;/h4&gt;
 
-&lt;p&gt;&lt;img src=&quot;/img/in-post/machine-learning/Alphago/results.png&quot; alt=&quot;&quot; /&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&quot;/img/in-post/machine-learning/AlphaGO/results.png&quot; alt=&quot;&quot; /&gt;&lt;/p&gt;
 </description>
         <pubDate>Sun, 23 Apr 2017 08:00:00 +0800</pubDate>
         <link>http://localhost:4000/2017/04/23/AlphaGO-review/</link>

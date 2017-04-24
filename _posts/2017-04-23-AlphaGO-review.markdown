@@ -18,7 +18,7 @@ tags:
 
 AlphaGO通过训练策略网络$$p$$、估值网络$$v$$以及构造蒙特卡洛搜索树（MCTS）来减少搜索的宽度和深度，整个训练分为三个步骤：1.根据人类棋局使用监督学习训练出策略网络$$p_\sigma$$(SL Policy)和一个快速落子的策略网络$$p_\pi$$，$$p_\pi$$使用更少的特征和神经元，能够快速地计算出落子策略；2.自我对局提升策略网络，使用$$p_\sigma$$初始化，使用增强学习的方法训练的$$p_\rho$$(RL Policy)；3.最后利用$$p_\rho$$自我对局训练一个估值网络$$v_\theta$$用来预测在当前局面$$s$$下，估计白胜还是黑胜。
 
-![](/img/in-post/machine-learning/Alphago/network.png)
+![](/img/in-post/machine-learning/AlphaGO/network.png)
 
 ### 训练过程
 
@@ -55,7 +55,7 @@ $$\Delta \theta \propto {\partial v_\theta(s) \over \partial \theta }(z - v_\the
 
 策略网络可以在很短的时间内评估当前局面，尽管策略网络同样可以通过多次模拟比赛以计算平均结果值估计当前局面，但需要大量的计算时间。
 
-![](/img/in-post/machine-learning/Alphago/MSE.png)
+![](/img/in-post/machine-learning/AlphaGO/MSE.png)
 
 ### 落子
 
@@ -63,7 +63,7 @@ MCTS是几乎所有围棋程序的核心组件，AlphaGO将策略网络和价值
 
 一个完整的MCTS包括四个步骤：Selection，Expansion，Evaluation，Backup。
 
-![](/img/in-post/machine-learning/Alphago/MCTS.png)
+![](/img/in-post/machine-learning/AlphaGO/MCTS.png)
 
 搜索过程会进行多次迭代，每次迭代在模拟出胜负后结束，在所有迭代结束后选取当前节点对应的最高的$$N(s,a)$$的边，采取落子动作$$a$$，第$$i$$次迭代完整过程如下：
 
@@ -134,12 +134,12 @@ AlphaGO使用了较少的专业知识达到如此惊人的效果，具有一定�
 
 #### 策略网络和估值网络完整的训练特征
 
-![](/img/in-post/machine-learning/Alphago/features.png)
+![](/img/in-post/machine-learning/AlphaGO/features.png)
 
 #### 快速落子网络特征
 
-![](/img/in-post/machine-learning/Alphago/pattern-of-pi.png)
+![](/img/in-post/machine-learning/AlphaGO/pattern-of-pi.png)
 
 #### 不同版本的AlphaGO评分
 
-![](/img/in-post/machine-learning/Alphago/results.png)
+![](/img/in-post/machine-learning/AlphaGO/results.png)
