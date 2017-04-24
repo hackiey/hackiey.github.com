@@ -34,9 +34,9 @@ $$\Delta\sigma \propto {\partial \log p_\sigma(a \mid s) \over \partial \sigma} 
 
 第二阶段使用增强学习的policy gradient的通过自我对弈方法训练更强的、全新的策略网络$$p_\rho$$，$$p_\rho$$的结构与$$p_\sigma$$一致。以$$p_\sigma$$为起点，使用当前的$$p_\rho$$和随机之前某一次迭代过程中的$$p_\rho$$（防止对当前策略过拟合）进行对弈，直到分出胜负。$$\rho$$参数的更新公式：
 
-$$\Delta\rho \propto {\partial \log p_\rho(a_t \mid s_t) \over \partial \rho} \tag{2}$$
+$$\Delta\rho \propto {\partial \log p_\rho(a_t \mid s_t) \over \partial \rho} z_t \tag{2}$$
 
-其中$$z_t=\pm r(s_T)$$（时间步$$t$$可以理解为到这一次落子之前走了多少步，$$T$$为终点步数），$$r(s_T)$$在胜利时为1，失败时为-1。奖励导致最终胜利的落子策略，增加此落子在局面$$s$$时的概率，惩罚最终失败的落子策略。
+其中$$z_t=\pm r(s_T)$$，时间步$$t\in \{1, T\}$$，$$T$$为对局结束时经历的步数，$$z_t$$是在第$$t$$步落子时获得的奖励，$$r(s_T)$$在对局结束时所获得的奖励。在围棋中，合理的奖励设置是胜利时为1，失败时为-1，其他任何一步的奖励都替换为最终的奖励，A和B对弈，最终A获胜时，将A的每一步落子奖励+1，失败时将每一步落子奖励-1。这会促使RL policy追求适合当前局面更能获胜的落子。
 
 值得一提的是，RL Policy对SL Policy的胜率超过了80%，对Pachi的胜率超过了85%（Pachi是一个开源的围棋程序，使用蒙特卡洛搜索，每一步需要执行十万次模拟，在KGS上达到了业余二段的水平）。
 
