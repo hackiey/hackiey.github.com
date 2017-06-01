@@ -16,11 +16,10 @@ Fictional programmer
 <script>
     window.onload=function(){ 
         
-        $.ajax(
+        $.ajax({
             type: "GET",
             url: "http://api.hackiey.com:8000/api?input1=100&input2=200",
-            xhrFields:
-                'Access-Control-Allow-Origin': '*'
+            xhrFields:{'Access-Control-Allow-Origin': '*'}}
         ).done((msg)->
             console.log "Data Saved: " + msg
             false
