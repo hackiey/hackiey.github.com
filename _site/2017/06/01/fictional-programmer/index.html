@@ -168,6 +168,17 @@
 
 				<p>Fictional programmer</p>
 
+<script>
+    window.onload=function(){ 
+        $.get('api.hackiey.com:8000/api?input1=100&input2=100', function(data){
+        console.log(data)
+    })
+
+} 
+    
+</script>
+
+
 
                 <hr>
 
@@ -415,11 +426,6 @@
 <!-- Migrate from head to bottom, no longer block render and still work -->
 <!-- script -->
 <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.0/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
-<script>
-    $.get('api.hackiey.com:8000/api?input1=100&input2=101', function(data){
-        console.log(data)
-    })
-    </script>
 </body>
 
 </html>
