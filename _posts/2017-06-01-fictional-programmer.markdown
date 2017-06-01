@@ -26,6 +26,5 @@ Fictional programmer
             console.log ("fail: " + textStatus)
         })
     }
-} 
     
 </script>
