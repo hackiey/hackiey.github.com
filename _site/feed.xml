@@ -5,28 +5,125 @@
     <description>To be a hacker</description>
     <link>http://localhost:4000/</link>
     <atom:link href="http://localhost:4000/feed.xml" rel="self" type="application/rss+xml" />
-    <pubDate>Fri, 02 Jun 2017 01:03:49 +0800</pubDate>
-    <lastBuildDate>Fri, 02 Jun 2017 01:03:49 +0800</lastBuildDate>
+    <pubDate>Fri, 02 Jun 2017 01:46:13 +0800</pubDate>
+    <lastBuildDate>Fri, 02 Jun 2017 01:46:13 +0800</lastBuildDate>
     <generator>Jekyll v3.3.1</generator>
     
       <item>
         <title>FICTIONAL PROGRAMMER</title>
-        <description>&lt;p&gt;Fictional programmer&lt;/p&gt;
+        <description>&lt;div class=&quot;row&quot;&gt;
+    &lt;form action=&quot;#&quot;&gt;  
+        &lt;span style=&quot;margin-left:15px&quot;&gt;INPUT1:&lt;/span&gt;
+        &lt;input type=&quot;text&quot; id=&quot;input1&quot; class=&quot;input&quot; /&gt;
+        &lt;span style=&quot;margin-left:20px&quot;&gt;INPUT2:&lt;/span&gt;
+        &lt;input type=&quot;text&quot; id=&quot;input2&quot; class=&quot;input&quot; /&gt;
 
-&lt;h1&gt; 123 &lt;/h1&gt;
+        &lt;input type=&quot;submit&quot; id=&quot;submit&quot; class=&quot;btn btn-sm btn-primary&quot; style=&quot;margin-left:20px&quot; /&gt;
+    &lt;/form&gt;
+    &lt;div class=&quot;col-md-8&quot;&gt;
+    &lt;p style=&quot;font-weight:bold&quot;&gt;POINTERS&lt;/p&gt;
+    &lt;table style=&quot;width:60%&quot;&gt;
+        &lt;tr&gt;
+            &lt;th&gt;INPUT1&lt;/th&gt;
+            &lt;th&gt;INPUT2&lt;/th&gt;
+            &lt;th&gt;OUTPUT&lt;/th&gt;
+        &lt;/tr&gt;
+        &lt;tr&gt;
+            &lt;td&gt;0&lt;/td&gt;
+            &lt;td&gt;0&lt;/td&gt;
+            &lt;td&gt;0&lt;/td&gt;
+        &lt;/tr&gt;
+    &lt;/table&gt;
+
+    &lt;p style=&quot;font-weight:bold&quot;&gt;MEMORY&lt;/p&gt;
+    &lt;table style=&quot;width:60%&quot;&gt;
+        &lt;tr&gt;
+            &lt;th&gt;MEM0&lt;/th&gt;
+            &lt;th&gt;MEM1&lt;/th&gt;
+            &lt;th&gt;MEM2&lt;/th&gt;
+        &lt;/tr&gt;
+        &lt;tr&gt;
+            &lt;td&gt;0&lt;/td&gt;
+            &lt;td&gt;0&lt;/td&gt;
+            &lt;td&gt;0&lt;/td&gt;
+        &lt;/tr&gt;
+    &lt;/table&gt;
+
+    &lt;p style=&quot;font-weight:bold&quot;&gt;ENVIRONMENT&lt;/p&gt;
+    &lt;table style=&quot;text-align:center;width:100%&quot;&gt;
+        &lt;tr&gt;
+            &lt;th style=&quot;width:40px&quot;&gt;&lt;/th&gt;&lt;th&gt;9&lt;/th&gt;&lt;th&gt;8&lt;/th&gt;&lt;th&gt;7&lt;/th&gt;&lt;th&gt;6&lt;/th&gt;&lt;th&gt;5&lt;/th&gt;&lt;th&gt;4&lt;/th&gt;&lt;th&gt;3&lt;/th&gt;&lt;th&gt;2&lt;/th&gt;&lt;th&gt;1&lt;/th&gt;&lt;th&gt;0&lt;/th&gt;
+        &lt;/tr&gt;
+        &lt;tr&gt;
+            &lt;td&gt;INPUT 1&lt;/td&gt;
+            &lt;td id=&quot;ptr-env0-9&quot;&gt;&lt;/td&gt;
+            &lt;td id=&quot;ptr-env0-8&quot;&gt;&lt;/td&gt;
+            &lt;td id=&quot;ptr-env0-7&quot;&gt;&lt;/td&gt;
+            &lt;td id=&quot;ptr-env0-6&quot;&gt;&lt;/td&gt;
+            &lt;td id=&quot;ptr-env0-5&quot;&gt;&lt;/td&gt;
+            &lt;td id=&quot;ptr-env0-4&quot;&gt;&lt;/td&gt;
+            &lt;td id=&quot;ptr-env0-3&quot;&gt;&lt;/td&gt;
+            &lt;td id=&quot;ptr-env0-2&quot;&gt;&lt;/td&gt;
+            &lt;td id=&quot;ptr-env0-1&quot;&gt;&lt;/td&gt;
+            &lt;td id=&quot;ptr-env0-0&quot;&gt;&lt;/td&gt;
+        &lt;/tr&gt;
+        &lt;tr&gt;
+            &lt;td&gt;INPUT 2&lt;/td&gt;
+            &lt;td id=&quot;ptr-env1-9&quot;&gt;&lt;/td&gt;
+            &lt;td id=&quot;ptr-env1-8&quot;&gt;&lt;/td&gt;
+            &lt;td id=&quot;ptr-env1-7&quot;&gt;&lt;/td&gt;
+            &lt;td id=&quot;ptr-env1-6&quot;&gt;&lt;/td&gt;
+            &lt;td id=&quot;ptr-env1-5&quot;&gt;&lt;/td&gt;
+            &lt;td id=&quot;ptr-env1-4&quot;&gt;&lt;/td&gt;
+            &lt;td id=&quot;ptr-env1-3&quot;&gt;&lt;/td&gt;
+            &lt;td id=&quot;ptr-env1-2&quot;&gt;&lt;/td&gt;
+            &lt;td id=&quot;ptr-env1-1&quot;&gt;&lt;/td&gt;
+            &lt;td id=&quot;ptr-env1-0&quot;&gt;&lt;/td&gt;
+        &lt;/tr&gt;
+        &lt;tr&gt;
+            &lt;td&gt;OUTPUT&lt;/td&gt;
+            &lt;td id=&quot;ptr-output-9&quot;&gt;&lt;/td&gt;
+            &lt;td id=&quot;ptr-output-8&quot;&gt;&lt;/td&gt;
+            &lt;td id=&quot;ptr-output-7&quot;&gt;&lt;/td&gt;
+            &lt;td id=&quot;ptr-output-6&quot;&gt;&lt;/td&gt;
+            &lt;td id=&quot;ptr-output-5&quot;&gt;&lt;/td&gt;
+            &lt;td id=&quot;ptr-output-4&quot;&gt;&lt;/td&gt;
+            &lt;td id=&quot;ptr-output-3&quot;&gt;&lt;/td&gt;
+            &lt;td id=&quot;ptr-output-2&quot;&gt;&lt;/td&gt;
+            &lt;td id=&quot;ptr-output-1&quot;&gt;&lt;/td&gt;
+            &lt;td id=&quot;ptr-output-0&quot;&gt;&lt;/td&gt;
+        &lt;/tr&gt;
+    &lt;/table&gt;
+    &lt;/div&gt;
+
+    &lt;div class=&quot;col-md-4&quot;&gt;
+        &lt;p style=&quot;font-weight:bold&quot;&gt;Programs&lt;/p&gt;
+
+
+    &lt;/div&gt;
+&lt;/div&gt;
 
 &lt;script&gt;
     window.onload=function(){ 
         
-        $.ajax({
-            type: &quot;GET&quot;,
-            url: &quot;http://api.hackiey.com:8000/api/?input1=100&amp;input2=200&quot;,
-            xhrFields:{'Access-Control-Allow-Origin': '*'}}
-        ).done(function(msg){
-            console.log (&quot;Data Saved: &quot; + msg)
-        }).fail(function(jqXHR, textStatus){
-            console.log (&quot;fail: &quot; + textStatus)
+        $(&quot;#submit&quot;).click(function(){
+            
+            $.ajax({
+                type: &quot;GET&quot;,
+                url: &quot;http://api.hackiey.com:8000/api/?input1=&quot;+$(&quot;#input1&quot;).val()+&quot;&amp;input2=&quot;+$(&quot;#input2&quot;).val(),
+                xhrFields:{'Access-Control-Allow-Origin': '*'}}
+            ).done(function(data){
+                console.log (&quot;Data Saved: &quot; + data)
+                
+
+            }).fail(function(jqXHR, textStatus){
+                console.log (&quot;fail: &quot; + textStatus)
+            })
+
+
+            return false
         })
+    
     }
     
 &lt;/script&gt;
