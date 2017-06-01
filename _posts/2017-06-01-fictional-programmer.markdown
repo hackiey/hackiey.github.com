@@ -25,7 +25,7 @@ Fictional programmer
         }).fail(function(jqXHR, textStatus){
             console.log ("fail: " + textStatus)
         })
-    })
+    }
 } 
     
 </script>
