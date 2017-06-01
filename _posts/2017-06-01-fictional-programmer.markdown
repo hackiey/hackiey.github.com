@@ -15,7 +15,7 @@ Fictional programmer
 
 <script>
     window.onload=function(){ 
-        $.get('api.hackiey.com:8000/api?input1=100&input2=100', function(data){
+        $.get('api.hackiey.com', function(data){
         console.log(data)
     })
 
