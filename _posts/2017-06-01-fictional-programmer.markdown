@@ -18,7 +18,7 @@ Fictional programmer
         
         $.ajax({
             type: "GET",
-            url: "http://api.hackiey.com:8000/api?input1=100&input2=200",
+            url: "http://api.hackiey.com:8000/api/?input1=100&input2=200",
             xhrFields:{'Access-Control-Allow-Origin': '*'}}
         ).done(function(msg){
             console.log ("Data Saved: " + msg)
