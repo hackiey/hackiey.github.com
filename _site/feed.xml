@@ -5,8 +5,8 @@
     <description>To be a hacker</description>
     <link>http://localhost:4000/</link>
     <atom:link href="http://localhost:4000/feed.xml" rel="self" type="application/rss+xml" />
-    <pubDate>Fri, 02 Jun 2017 01:46:13 +0800</pubDate>
-    <lastBuildDate>Fri, 02 Jun 2017 01:46:13 +0800</lastBuildDate>
+    <pubDate>Thu, 15 Jun 2017 03:23:06 +0800</pubDate>
+    <lastBuildDate>Thu, 15 Jun 2017 03:23:06 +0800</lastBuildDate>
     <generator>Jekyll v3.3.1</generator>
     
       <item>
@@ -29,9 +29,9 @@
             &lt;th&gt;OUTPUT&lt;/th&gt;
         &lt;/tr&gt;
         &lt;tr&gt;
-            &lt;td&gt;0&lt;/td&gt;
-            &lt;td&gt;0&lt;/td&gt;
-            &lt;td&gt;0&lt;/td&gt;
+            &lt;td id=&quot;env0&quot;&gt;0&lt;/td&gt;
+            &lt;td id=&quot;env1&quot;&gt;0&lt;/td&gt;
+            &lt;td id=&quot;output&quot;&gt;0&lt;/td&gt;
         &lt;/tr&gt;
     &lt;/table&gt;
 
@@ -43,9 +43,9 @@
             &lt;th&gt;MEM2&lt;/th&gt;
         &lt;/tr&gt;
         &lt;tr&gt;
-            &lt;td&gt;0&lt;/td&gt;
-            &lt;td&gt;0&lt;/td&gt;
-            &lt;td&gt;0&lt;/td&gt;
+            &lt;td id=&quot;mem0&quot;&gt;0&lt;/td&gt;
+            &lt;td id=&quot;mem1&quot;&gt;0&lt;/td&gt;
+            &lt;td id=&quot;mem2&quot;&gt;0&lt;/td&gt;
         &lt;/tr&gt;
     &lt;/table&gt;
 
@@ -97,15 +97,22 @@
     &lt;/div&gt;
 
     &lt;div class=&quot;col-md-4&quot;&gt;
-        &lt;p style=&quot;font-weight:bold&quot;&gt;Programs&lt;/p&gt;
+        &lt;p style=&quot;font-weight:bold&quot;&gt;Current Function&lt;/p&gt;
+        &lt;div style=&quot;margin-top:-20px;margin-bottom:10px; border-bottom:1px solid #aaa; padding-bottom:10px&quot;&gt;
+            &lt;div&gt;&lt;div id=&quot;current_function&quot;&gt;ADD&lt;/div&gt;&lt;div&gt;&lt;/div&gt;&lt;/div&gt;
+        &lt;/div&gt;
 
-
+        &lt;input class=&quot;btn btn-primary&quot; id=&quot;next_program&quot; value=&quot;NEXT&quot; type=&quot;button&quot; style=&quot;width:100%&quot; /&gt;
+        &lt;p style=&quot;font-weight:bold;margin-bottom:5px&quot;&gt;Programs&lt;/p&gt;
+        &lt;div id=&quot;programs&quot; style=&quot;overflow:auto; height:520px; &quot;&gt;
+            &lt;div&gt;&lt;div&gt;ADD&lt;/div&gt;&lt;div&gt;&lt;/div&gt;&lt;/div&gt;
+        &lt;/div&gt;
     &lt;/div&gt;
 &lt;/div&gt;
 
 &lt;script&gt;
     window.onload=function(){ 
-        
+        step_list = []
         $(&quot;#submit&quot;).click(function(){
             
             $.ajax({
@@ -113,8 +120,14 @@
                 url: &quot;http://api.hackiey.com:8000/api/?input1=&quot;+$(&quot;#input1&quot;).val()+&quot;&amp;input2=&quot;+$(&quot;#input2&quot;).val(),
                 xhrFields:{'Access-Control-Allow-Origin': '*'}}
             ).done(function(data){
-                console.log (&quot;Data Saved: &quot; + data)
-                
+                data = JSON.parse(data)
+                console.log(data)
+                for(var i = 0; i&lt; data.input1.length; ++i){
+                    $(&quot;#ptr-env0-&quot;+[data.input1.length - i - 1]).html(parseInt(data.input1[i]))
+                    $(&quot;#ptr-env1-&quot;+[data.input2.length - i - 1]).html(parseInt(data.input2[i]))
+                }
+
+                step_list = data.step_list
 
             }).fail(function(jqXHR, textStatus){
                 console.log (&quot;fail: &quot; + textStatus)
@@ -122,6 +135,49 @@
 
 
             return false
+        })
+
+        var step_i = -1
+        var current = {}
+        $('#next_program').click(function(){
+
+            $(&quot;#env0&quot;).html(current.env0)
+            $(&quot;#env1&quot;).html(current.env1)
+            $(&quot;#mem0&quot;).html(current.mem0)
+            $(&quot;#mem1&quot;).html(current.mem1)
+            $(&quot;#output&quot;).html(current.output)
+            var step = step_list[step_i + 1]
+            
+            if(step){
+                var output = step.current.output
+                for(var j = 0; j &lt; output.length; ++j){
+                    $(&quot;#ptr-output-&quot;+[output.length - j - 1]).html(parseInt(output[j]))
+                }
+                $(&quot;#programs&quot;).prepend(&quot;&lt;div style='border-bottom:1px solid #aaa'&gt;&lt;div&gt;&quot;+step.next.program+&quot;&lt;/div&gt;&lt;div&gt;（&quot;+step.next.args+&quot;）&lt;/div&gt;&lt;/div&gt;&quot;)
+                step_i += 1
+
+                if(step.next.program == 'PTR')
+                    current['env'+step.next.args[0][1]] = parseInt($(&quot;#env&quot;+step.next.args[0][1]).html())+1
+                    
+                else if(step.next.program == 'ADD_OPERATION'){
+                    var sum = parseInt($(&quot;#ptr-env0-&quot;+$(&quot;#env0&quot;).html()).html())+parseInt($(&quot;#ptr-env1-&quot;+$(&quot;#env1&quot;).html()).html())+parseInt($(&quot;#mem0&quot;).html())
+                    current['mem0'] = Math.floor(sum / 10)
+                    current['mem1'] = sum % 10
+                }
+                if(step_list.length &gt; (step_i+1))
+                    $(&quot;#current_function&quot;).html(step_list[step_i+1].current.current_function)
+
+                if(step_list[step_i].next.program == 'OUTPUT')
+                    current.output = parseInt($(&quot;#output&quot;).html()) + 1
+                    
+            }
+            else{
+                var location = $(&quot;#output&quot;).html() - 1
+                $(&quot;#ptr-output-&quot;+location).html(current.mem1)
+
+
+            }
+            
         })
     
     }
