@@ -154,9 +154,9 @@
             ">
     			
 <div class="post-preview">
-    <a href="/2017/06/01/fictional-programmer/">
+    <a href="/2017/08/09/keras-notes/">
         <h2 class="post-title">
-            FICTIONAL PROGRAMMER
+            Keras notes
         </h2>
         
         <h3 class="post-subtitle">
@@ -164,30 +164,21 @@
         </h3>
         
         <div class="post-content-preview">
-            
-      
-        INPUT1:
-        
-        INPUT2:
-        
+            层
 
-        
+
+  trainable属性可以设置层的weights和bias是否可以被更新
+  自定义层
     
+      编写自己的layer时，一定要注意考虑batch_size
     
-    POINTERS
-    
-        
-            INPUT1
-            INPUT2
-            OUTPUT
-        
-        
-            0
-   ...
+  
+  尽量为每个层命名，这样在fine tuning的时候你会很方便的调整每个层
+  Keras的Conv2D层的filter shape通常会写(width, height)，实际上的sha...
         </div>
     </a>
     <p class="post-meta">
-        Posted by Harry on June 1, 2017
+        Posted by Harry on August 9, 2017
     </p>
 </div>
 <hr>
@@ -261,9 +252,7 @@
                             
                         
                             
-                                <a href="/tags/#增强学习" title="增强学习" rel="2">
-                                    增强学习
-                                </a>
+                        
                             
                         
                     </div>

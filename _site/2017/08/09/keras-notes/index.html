@@ -10,9 +10,9 @@
     <meta name="keyword"  content="">
     <link rel="shortcut icon" href="/img/favicon.ico">
 
-    <title>FICTIONAL PROGRAMMER - Harry的博客 | Harry's Blog</title>
+    <title>Keras notes - Harry的博客 | Harry's Blog</title>
 
-    <link rel="canonical" href="http://localhost:4000/2017/06/01/fictional-programmer/">
+    <link rel="canonical" href="http://localhost:4000/2017/08/09/keras-notes/">
 
     <!-- Bootstrap Core CSS -->
     <link rel="stylesheet" href="/css/bootstrap.min.css">
@@ -140,15 +140,15 @@
                 <div class="post-heading">
                     <div class="tags">
                         
-                        <a class="tag" href="/tags/#增强学习" title="增强学习">增强学习</a>
+                        <a class="tag" href="/tags/#Keras" title="Keras">Keras</a>
                         
                     </div>
-                    <h1>FICTIONAL PROGRAMMER</h1>
+                    <h1>Keras notes</h1>
                     
                     
                     <h2 class="subheading"></h2>
                     
-                    <span class="meta">Posted by Harry on June 1, 2017</span>
+                    <span class="meta">Posted by Harry on August 9, 2017</span>
                 </div>
             </div>
         </div>
@@ -166,179 +166,106 @@
                 col-md-10 col-md-offset-1
                 post-container">
 
-				<div class="row">
-    <form action="#">  
-        <span style="margin-left:15px">INPUT1:</span>
-        <input type="text" id="input1" class="input" />
-        <span style="margin-left:20px">INPUT2:</span>
-        <input type="text" id="input2" class="input" />
+				<h3 id="层">层</h3>
 
-        <input type="submit" id="submit" class="btn btn-sm btn-primary" style="margin-left:20px" />
-    </form>
-    <div class="col-md-8">
-    <p style="font-weight:bold">POINTERS</p>
-    <table style="width:60%">
-        <tr>
-            <th>INPUT1</th>
-            <th>INPUT2</th>
-            <th>OUTPUT</th>
-        </tr>
-        <tr>
-            <td id="env0">0</td>
-            <td id="env1">0</td>
-            <td id="output">0</td>
-        </tr>
-    </table>
+<ol>
+  <li>trainable属性可以设置层的weights和bias是否可以被更新</li>
+  <li>自定义层
+    <ul>
+      <li>编写自己的layer时，一定要注意考虑batch_size</li>
+    </ul>
+  </li>
+  <li>尽量为每个层命名，这样在fine tuning的时候你会很方便的调整每个层</li>
+  <li>Keras的Conv2D层的filter shape通常会写(width, height)，实际上的shape是(width, height, channels), 因此输出的feature map个数是filter的个数</li>
+</ol>
 
-    <p style="font-weight:bold">MEMORY</p>
-    <table style="width:60%">
-        <tr>
-            <th>MEM0</th>
-            <th>MEM1</th>
-            <th>MEM2</th>
-        </tr>
-        <tr>
-            <td id="mem0">0</td>
-            <td id="mem1">0</td>
-            <td id="mem2">0</td>
-        </tr>
-    </table>
+<h3 id="模型">模型</h3>
 
-    <p style="font-weight:bold">ENVIRONMENT</p>
-    <table style="text-align:center;width:100%">
-        <tr>
-            <th style="width:40px"></th><th>9</th><th>8</th><th>7</th><th>6</th><th>5</th><th>4</th><th>3</th><th>2</th><th>1</th><th>0</th>
-        </tr>
-        <tr>
-            <td>INPUT 1</td>
-            <td id="ptr-env0-9"></td>
-            <td id="ptr-env0-8"></td>
-            <td id="ptr-env0-7"></td>
-            <td id="ptr-env0-6"></td>
-            <td id="ptr-env0-5"></td>
-            <td id="ptr-env0-4"></td>
-            <td id="ptr-env0-3"></td>
-            <td id="ptr-env0-2"></td>
-            <td id="ptr-env0-1"></td>
-            <td id="ptr-env0-0"></td>
-        </tr>
-        <tr>
-            <td>INPUT 2</td>
-            <td id="ptr-env1-9"></td>
-            <td id="ptr-env1-8"></td>
-            <td id="ptr-env1-7"></td>
-            <td id="ptr-env1-6"></td>
-            <td id="ptr-env1-5"></td>
-            <td id="ptr-env1-4"></td>
-            <td id="ptr-env1-3"></td>
-            <td id="ptr-env1-2"></td>
-            <td id="ptr-env1-1"></td>
-            <td id="ptr-env1-0"></td>
-        </tr>
-        <tr>
-            <td>OUTPUT</td>
-            <td id="ptr-output-9"></td>
-            <td id="ptr-output-8"></td>
-            <td id="ptr-output-7"></td>
-            <td id="ptr-output-6"></td>
-            <td id="ptr-output-5"></td>
-            <td id="ptr-output-4"></td>
-            <td id="ptr-output-3"></td>
-            <td id="ptr-output-2"></td>
-            <td id="ptr-output-1"></td>
-            <td id="ptr-output-0"></td>
-        </tr>
-    </table>
+<ol>
+  <li>多个子模型输出
+    <div class="highlighter-rouge"><pre class="highlight"><code>model = Sequential()
+model1 = Sequential()
+model2 = Sequential()
+final_model = keras.models.Model(model.input,[model1.output, model2.output])
+final_model.compile(loss=[model1_loss, model2_loss], metrics=['mse','mae'])
+</code></pre>
     </div>
-
-    <div class="col-md-4">
-        <p style="font-weight:bold">Current Function</p>
-        <div style="margin-top:-20px;margin-bottom:10px; border-bottom:1px solid #aaa; padding-bottom:10px">
-            <div><div id="current_function">ADD</div><div></div></div>
-        </div>
-
-        <input class="btn btn-primary" id="next_program" value="NEXT" type="button" style="width:100%" />
-        <p style="font-weight:bold;margin-bottom:5px">Programs</p>
-        <div id="programs" style="overflow:auto; height:520px; ">
-            <div><div>ADD</div><div></div></div>
-        </div>
+    <p>loss是一一对应的，metrics中所有的方式会对每一个输出模型评估一遍</p>
+  </li>
+  <li>如果数据集不平衡，可以使用class weights，假设0标签有100个，1标签只有10个，需要指定class_weights为10:1
+    <div class="highlighter-rouge"><pre class="highlight"><code>class_weights = {0: 1, 1: 10}
+model.fit(x.,y, class_weight = class_weights)
+</code></pre>
     </div>
-</div>
+    <p>当输出层含有多个标签时，可以指定不同的输出使用不同的weights</p>
+    <div class="highlighter-rouge"><pre class="highlight"><code>class_weights = {'output_a':{0:10, 1:1}, 'output_b':{0:1, 1:10}} # output_a和output_b都是输出层的对应的layer name
+</code></pre>
+    </div>
+  </li>
+</ol>
 
-<script>
-    window.onload=function(){ 
-        step_list = []
-        $("#submit").click(function(){
-            
-            $.ajax({
-                type: "GET",
-                url: "http://api.hackiey.com:8000/api/?input1="+$("#input1").val()+"&input2="+$("#input2").val(),
-                xhrFields:{'Access-Control-Allow-Origin': '*'}}
-            ).done(function(data){
-                data = JSON.parse(data)
-                console.log(data)
-                for(var i = 0; i< data.input1.length; ++i){
-                    $("#ptr-env0-"+[data.input1.length - i - 1]).html(parseInt(data.input1[i]))
-                    $("#ptr-env1-"+[data.input2.length - i - 1]).html(parseInt(data.input2[i]))
-                }
+<h3 id="backend">backend</h3>
 
-                step_list = data.step_list
+<ol>
+  <li>reshape 包含batch_size的tensor时，需要使用tensorflow指定batch：
+    <div class="highlighter-rouge"><pre class="highlight"><code>shape = K.shape(x)
+pool_shape = tf.stack([shape[0], ...])  # Here you can mix integers and symbolic elements of `shape`
+input_reshaped = K.reshape(x, pool_shape)
+</code></pre>
+    </div>
+  </li>
+  <li>K.transpose的axis无法指定，固定为(1,0)，如果想修改多维变量的axis，可以使用K.permute_dismensions
+    <div class="highlighter-rouge"><pre class="highlight"><code>tranposed = K.permute_dimensions(x, (0,2,3,1))
+</code></pre>
+    </div>
+  </li>
+</ol>
 
-            }).fail(function(jqXHR, textStatus){
-                console.log ("fail: " + textStatus)
-            })
+<h3 id="metrics">metrics</h3>
 
+<ol>
+  <li>
+    <p>Keras2.0之后移除了很多比较有用的metrics，例如precision和recall等，旧版本的keras保留了很多metrics，<a href="https://github.com/fchollet/keras/blob/53e541f7bf55de036f4f5641bd2947b96dd8c4c3/keras/metrics.py">在这里</a>。</p>
+  </li>
+  <li>
+    <p>使用自定义metrics后，load_model需要指定metrics</p>
+    <div class="highlighter-rouge"><pre class="highlight"><code>model = keras.models.load_model('xxx.hdf5', custom_objects:{'metric_name':custom_metric})
+</code></pre>
+    </div>
+  </li>
+</ol>
 
-            return false
-        })
+<h3 id="测试">测试</h3>
 
-        var step_i = -1
-        var current = {}
-        $('#next_program').click(function(){
+<ol>
+  <li>如果你想直接打印出某些结果，可以使用下面的代码
+    <div class="highlighter-rouge"><pre class="highlight"><code>sess = tf.Session()
+with sess.as_default():
+ a = K.variable(np.array(...))
+ print(K.eval(a))
+</code></pre>
+    </div>
+  </li>
+</ol>
 
-            $("#env0").html(current.env0)
-            $("#env1").html(current.env1)
-            $("#mem0").html(current.mem0)
-            $("#mem1").html(current.mem1)
-            $("#output").html(current.output)
-            var step = step_list[step_i + 1]
-            
-            if(step){
-                var output = step.current.output
-                for(var j = 0; j < output.length; ++j){
-                    $("#ptr-output-"+[output.length - j - 1]).html(parseInt(output[j]))
-                }
-                $("#programs").prepend("<div style='border-bottom:1px solid #aaa'><div>"+step.next.program+"</div><div>（"+step.next.args+"）</div></div>")
-                step_i += 1
+<h3 id="tips">Tips</h3>
 
-                if(step.next.program == 'PTR')
-                    current['env'+step.next.args[0][1]] = parseInt($("#env"+step.next.args[0][1]).html())+1
-                    
-                else if(step.next.program == 'ADD_OPERATION'){
-                    var sum = parseInt($("#ptr-env0-"+$("#env0").html()).html())+parseInt($("#ptr-env1-"+$("#env1").html()).html())+parseInt($("#mem0").html())
-                    current['mem0'] = Math.floor(sum / 10)
-                    current['mem1'] = sum % 10
-                }
-                if(step_list.length > (step_i+1))
-                    $("#current_function").html(step_list[step_i+1].current.current_function)
+<ol>
+  <li>使用callback保存checkpoint,filepath中的val开头的变量需要在model.fit里指定validation_data时才可以使用
+    <div class="highlighter-rouge"><pre class="highlight"><code>checkpoint = keras.callbacks.ModelCheckpoint(filepath = '...{epoch:02d}-{acc:.5f}-{loss:.5f}-{val_acc:.5f}-{val_loss:.5f}.hdf5')
+model.fit(x,y, validation_data=(x_val, y_val), callbacks=[checkpoint])
+</code></pre>
+    </div>
+  </li>
+  <li>使用tensorflow做后端时，使用callback里的tensorboard，有助于调参
+    <div class="highlighter-rouge"><pre class="highlight"><code>tensorboard = keras.callbacks.TensorBoard(log_dir = folder_path)
+</code></pre>
+    </div>
+    <p>之后在model.fit的callbacks参数中添加上tensorboard</p>
+  </li>
+</ol>
 
-                if(step_list[step_i].next.program == 'OUTPUT')
-                    current.output = parseInt($("#output").html()) + 1
-                    
-            }
-            else{
-                var location = $("#output").html() - 1
-                $("#ptr-output-"+location).html(current.mem1)
-
-
-            }
-            
-        })
-    
-    }
-    
-</script>
-
+<p>翻出去可以用disqus留言……</p>
 
 
                 <hr>
@@ -384,9 +311,7 @@
                             
         				
                             
-                				<a href="/tags/#增强学习" title="增强学习" rel="2">
-                                    增强学习
-                                </a>
+        				
                             
         				
         			</div>
@@ -418,8 +343,8 @@
 <script type="text/javascript">
     /* * * CONFIGURATION VARIABLES * * */
     var disqus_shortname = "hackiey";
-    var disqus_identifier = "/2017/06/01/fictional-programmer";
-    var disqus_url = "http://localhost:4000/2017/06/01/fictional-programmer/";
+    var disqus_identifier = "/2017/08/09/keras-notes";
+    var disqus_url = "http://localhost:4000/2017/08/09/keras-notes/";
 
     (function() {
         var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;

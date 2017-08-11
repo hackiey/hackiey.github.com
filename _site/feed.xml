@@ -5,191 +5,118 @@
     <description>To be a hacker</description>
     <link>http://localhost:4000/</link>
     <atom:link href="http://localhost:4000/feed.xml" rel="self" type="application/rss+xml" />
-    <pubDate>Thu, 15 Jun 2017 03:23:06 +0800</pubDate>
-    <lastBuildDate>Thu, 15 Jun 2017 03:23:06 +0800</lastBuildDate>
+    <pubDate>Fri, 11 Aug 2017 09:50:25 +0800</pubDate>
+    <lastBuildDate>Fri, 11 Aug 2017 09:50:25 +0800</lastBuildDate>
     <generator>Jekyll v3.3.1</generator>
     
       <item>
-        <title>FICTIONAL PROGRAMMER</title>
-        <description>&lt;div class=&quot;row&quot;&gt;
-    &lt;form action=&quot;#&quot;&gt;  
-        &lt;span style=&quot;margin-left:15px&quot;&gt;INPUT1:&lt;/span&gt;
-        &lt;input type=&quot;text&quot; id=&quot;input1&quot; class=&quot;input&quot; /&gt;
-        &lt;span style=&quot;margin-left:20px&quot;&gt;INPUT2:&lt;/span&gt;
-        &lt;input type=&quot;text&quot; id=&quot;input2&quot; class=&quot;input&quot; /&gt;
+        <title>Keras notes</title>
+        <description>&lt;h3 id=&quot;层&quot;&gt;层&lt;/h3&gt;
 
-        &lt;input type=&quot;submit&quot; id=&quot;submit&quot; class=&quot;btn btn-sm btn-primary&quot; style=&quot;margin-left:20px&quot; /&gt;
-    &lt;/form&gt;
-    &lt;div class=&quot;col-md-8&quot;&gt;
-    &lt;p style=&quot;font-weight:bold&quot;&gt;POINTERS&lt;/p&gt;
-    &lt;table style=&quot;width:60%&quot;&gt;
-        &lt;tr&gt;
-            &lt;th&gt;INPUT1&lt;/th&gt;
-            &lt;th&gt;INPUT2&lt;/th&gt;
-            &lt;th&gt;OUTPUT&lt;/th&gt;
-        &lt;/tr&gt;
-        &lt;tr&gt;
-            &lt;td id=&quot;env0&quot;&gt;0&lt;/td&gt;
-            &lt;td id=&quot;env1&quot;&gt;0&lt;/td&gt;
-            &lt;td id=&quot;output&quot;&gt;0&lt;/td&gt;
-        &lt;/tr&gt;
-    &lt;/table&gt;
+&lt;ol&gt;
+  &lt;li&gt;trainable属性可以设置层的weights和bias是否可以被更新&lt;/li&gt;
+  &lt;li&gt;自定义层
+    &lt;ul&gt;
+      &lt;li&gt;编写自己的layer时，一定要注意考虑batch_size&lt;/li&gt;
+    &lt;/ul&gt;
+  &lt;/li&gt;
+  &lt;li&gt;尽量为每个层命名，这样在fine tuning的时候你会很方便的调整每个层&lt;/li&gt;
+  &lt;li&gt;Keras的Conv2D层的filter shape通常会写(width, height)，实际上的shape是(width, height, channels), 因此输出的feature map个数是filter的个数&lt;/li&gt;
+&lt;/ol&gt;
 
-    &lt;p style=&quot;font-weight:bold&quot;&gt;MEMORY&lt;/p&gt;
-    &lt;table style=&quot;width:60%&quot;&gt;
-        &lt;tr&gt;
-            &lt;th&gt;MEM0&lt;/th&gt;
-            &lt;th&gt;MEM1&lt;/th&gt;
-            &lt;th&gt;MEM2&lt;/th&gt;
-        &lt;/tr&gt;
-        &lt;tr&gt;
-            &lt;td id=&quot;mem0&quot;&gt;0&lt;/td&gt;
-            &lt;td id=&quot;mem1&quot;&gt;0&lt;/td&gt;
-            &lt;td id=&quot;mem2&quot;&gt;0&lt;/td&gt;
-        &lt;/tr&gt;
-    &lt;/table&gt;
+&lt;h3 id=&quot;模型&quot;&gt;模型&lt;/h3&gt;
 
-    &lt;p style=&quot;font-weight:bold&quot;&gt;ENVIRONMENT&lt;/p&gt;
-    &lt;table style=&quot;text-align:center;width:100%&quot;&gt;
-        &lt;tr&gt;
-            &lt;th style=&quot;width:40px&quot;&gt;&lt;/th&gt;&lt;th&gt;9&lt;/th&gt;&lt;th&gt;8&lt;/th&gt;&lt;th&gt;7&lt;/th&gt;&lt;th&gt;6&lt;/th&gt;&lt;th&gt;5&lt;/th&gt;&lt;th&gt;4&lt;/th&gt;&lt;th&gt;3&lt;/th&gt;&lt;th&gt;2&lt;/th&gt;&lt;th&gt;1&lt;/th&gt;&lt;th&gt;0&lt;/th&gt;
-        &lt;/tr&gt;
-        &lt;tr&gt;
-            &lt;td&gt;INPUT 1&lt;/td&gt;
-            &lt;td id=&quot;ptr-env0-9&quot;&gt;&lt;/td&gt;
-            &lt;td id=&quot;ptr-env0-8&quot;&gt;&lt;/td&gt;
-            &lt;td id=&quot;ptr-env0-7&quot;&gt;&lt;/td&gt;
-            &lt;td id=&quot;ptr-env0-6&quot;&gt;&lt;/td&gt;
-            &lt;td id=&quot;ptr-env0-5&quot;&gt;&lt;/td&gt;
-            &lt;td id=&quot;ptr-env0-4&quot;&gt;&lt;/td&gt;
-            &lt;td id=&quot;ptr-env0-3&quot;&gt;&lt;/td&gt;
-            &lt;td id=&quot;ptr-env0-2&quot;&gt;&lt;/td&gt;
-            &lt;td id=&quot;ptr-env0-1&quot;&gt;&lt;/td&gt;
-            &lt;td id=&quot;ptr-env0-0&quot;&gt;&lt;/td&gt;
-        &lt;/tr&gt;
-        &lt;tr&gt;
-            &lt;td&gt;INPUT 2&lt;/td&gt;
-            &lt;td id=&quot;ptr-env1-9&quot;&gt;&lt;/td&gt;
-            &lt;td id=&quot;ptr-env1-8&quot;&gt;&lt;/td&gt;
-            &lt;td id=&quot;ptr-env1-7&quot;&gt;&lt;/td&gt;
-            &lt;td id=&quot;ptr-env1-6&quot;&gt;&lt;/td&gt;
-            &lt;td id=&quot;ptr-env1-5&quot;&gt;&lt;/td&gt;
-            &lt;td id=&quot;ptr-env1-4&quot;&gt;&lt;/td&gt;
-            &lt;td id=&quot;ptr-env1-3&quot;&gt;&lt;/td&gt;
-            &lt;td id=&quot;ptr-env1-2&quot;&gt;&lt;/td&gt;
-            &lt;td id=&quot;ptr-env1-1&quot;&gt;&lt;/td&gt;
-            &lt;td id=&quot;ptr-env1-0&quot;&gt;&lt;/td&gt;
-        &lt;/tr&gt;
-        &lt;tr&gt;
-            &lt;td&gt;OUTPUT&lt;/td&gt;
-            &lt;td id=&quot;ptr-output-9&quot;&gt;&lt;/td&gt;
-            &lt;td id=&quot;ptr-output-8&quot;&gt;&lt;/td&gt;
-            &lt;td id=&quot;ptr-output-7&quot;&gt;&lt;/td&gt;
-            &lt;td id=&quot;ptr-output-6&quot;&gt;&lt;/td&gt;
-            &lt;td id=&quot;ptr-output-5&quot;&gt;&lt;/td&gt;
-            &lt;td id=&quot;ptr-output-4&quot;&gt;&lt;/td&gt;
-            &lt;td id=&quot;ptr-output-3&quot;&gt;&lt;/td&gt;
-            &lt;td id=&quot;ptr-output-2&quot;&gt;&lt;/td&gt;
-            &lt;td id=&quot;ptr-output-1&quot;&gt;&lt;/td&gt;
-            &lt;td id=&quot;ptr-output-0&quot;&gt;&lt;/td&gt;
-        &lt;/tr&gt;
-    &lt;/table&gt;
+&lt;ol&gt;
+  &lt;li&gt;多个子模型输出
+    &lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;model = Sequential()
+model1 = Sequential()
+model2 = Sequential()
+final_model = keras.models.Model(model.input,[model1.output, model2.output])
+final_model.compile(loss=[model1_loss, model2_loss], metrics=['mse','mae'])
+&lt;/code&gt;&lt;/pre&gt;
     &lt;/div&gt;
-
-    &lt;div class=&quot;col-md-4&quot;&gt;
-        &lt;p style=&quot;font-weight:bold&quot;&gt;Current Function&lt;/p&gt;
-        &lt;div style=&quot;margin-top:-20px;margin-bottom:10px; border-bottom:1px solid #aaa; padding-bottom:10px&quot;&gt;
-            &lt;div&gt;&lt;div id=&quot;current_function&quot;&gt;ADD&lt;/div&gt;&lt;div&gt;&lt;/div&gt;&lt;/div&gt;
-        &lt;/div&gt;
-
-        &lt;input class=&quot;btn btn-primary&quot; id=&quot;next_program&quot; value=&quot;NEXT&quot; type=&quot;button&quot; style=&quot;width:100%&quot; /&gt;
-        &lt;p style=&quot;font-weight:bold;margin-bottom:5px&quot;&gt;Programs&lt;/p&gt;
-        &lt;div id=&quot;programs&quot; style=&quot;overflow:auto; height:520px; &quot;&gt;
-            &lt;div&gt;&lt;div&gt;ADD&lt;/div&gt;&lt;div&gt;&lt;/div&gt;&lt;/div&gt;
-        &lt;/div&gt;
+    &lt;p&gt;loss是一一对应的，metrics中所有的方式会对每一个输出模型评估一遍&lt;/p&gt;
+  &lt;/li&gt;
+  &lt;li&gt;如果数据集不平衡，可以使用class weights，假设0标签有100个，1标签只有10个，需要指定class_weights为10:1
+    &lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;class_weights = {0: 1, 1: 10}
+model.fit(x.,y, class_weight = class_weights)
+&lt;/code&gt;&lt;/pre&gt;
     &lt;/div&gt;
-&lt;/div&gt;
+    &lt;p&gt;当输出层含有多个标签时，可以指定不同的输出使用不同的weights&lt;/p&gt;
+    &lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;class_weights = {'output_a':{0:10, 1:1}, 'output_b':{0:1, 1:10}} # output_a和output_b都是输出层的对应的layer name
+&lt;/code&gt;&lt;/pre&gt;
+    &lt;/div&gt;
+  &lt;/li&gt;
+&lt;/ol&gt;
 
-&lt;script&gt;
-    window.onload=function(){ 
-        step_list = []
-        $(&quot;#submit&quot;).click(function(){
-            
-            $.ajax({
-                type: &quot;GET&quot;,
-                url: &quot;http://api.hackiey.com:8000/api/?input1=&quot;+$(&quot;#input1&quot;).val()+&quot;&amp;input2=&quot;+$(&quot;#input2&quot;).val(),
-                xhrFields:{'Access-Control-Allow-Origin': '*'}}
-            ).done(function(data){
-                data = JSON.parse(data)
-                console.log(data)
-                for(var i = 0; i&lt; data.input1.length; ++i){
-                    $(&quot;#ptr-env0-&quot;+[data.input1.length - i - 1]).html(parseInt(data.input1[i]))
-                    $(&quot;#ptr-env1-&quot;+[data.input2.length - i - 1]).html(parseInt(data.input2[i]))
-                }
+&lt;h3 id=&quot;backend&quot;&gt;backend&lt;/h3&gt;
 
-                step_list = data.step_list
+&lt;ol&gt;
+  &lt;li&gt;reshape 包含batch_size的tensor时，需要使用tensorflow指定batch：
+    &lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;shape = K.shape(x)
+pool_shape = tf.stack([shape[0], ...])  # Here you can mix integers and symbolic elements of `shape`
+input_reshaped = K.reshape(x, pool_shape)
+&lt;/code&gt;&lt;/pre&gt;
+    &lt;/div&gt;
+  &lt;/li&gt;
+  &lt;li&gt;K.transpose的axis无法指定，固定为(1,0)，如果想修改多维变量的axis，可以使用K.permute_dismensions
+    &lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;tranposed = K.permute_dimensions(x, (0,2,3,1))
+&lt;/code&gt;&lt;/pre&gt;
+    &lt;/div&gt;
+  &lt;/li&gt;
+&lt;/ol&gt;
 
-            }).fail(function(jqXHR, textStatus){
-                console.log (&quot;fail: &quot; + textStatus)
-            })
+&lt;h3 id=&quot;metrics&quot;&gt;metrics&lt;/h3&gt;
 
+&lt;ol&gt;
+  &lt;li&gt;
+    &lt;p&gt;Keras2.0之后移除了很多比较有用的metrics，例如precision和recall等，旧版本的keras保留了很多metrics，&lt;a href=&quot;https://github.com/fchollet/keras/blob/53e541f7bf55de036f4f5641bd2947b96dd8c4c3/keras/metrics.py&quot;&gt;在这里&lt;/a&gt;。&lt;/p&gt;
+  &lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;使用自定义metrics后，load_model需要指定metrics&lt;/p&gt;
+    &lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;model = keras.models.load_model('xxx.hdf5', custom_objects:{'metric_name':custom_metric})
+&lt;/code&gt;&lt;/pre&gt;
+    &lt;/div&gt;
+  &lt;/li&gt;
+&lt;/ol&gt;
 
-            return false
-        })
+&lt;h3 id=&quot;测试&quot;&gt;测试&lt;/h3&gt;
 
-        var step_i = -1
-        var current = {}
-        $('#next_program').click(function(){
+&lt;ol&gt;
+  &lt;li&gt;如果你想直接打印出某些结果，可以使用下面的代码
+    &lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;sess = tf.Session()
+with sess.as_default():
+ a = K.variable(np.array(...))
+ print(K.eval(a))
+&lt;/code&gt;&lt;/pre&gt;
+    &lt;/div&gt;
+  &lt;/li&gt;
+&lt;/ol&gt;
 
-            $(&quot;#env0&quot;).html(current.env0)
-            $(&quot;#env1&quot;).html(current.env1)
-            $(&quot;#mem0&quot;).html(current.mem0)
-            $(&quot;#mem1&quot;).html(current.mem1)
-            $(&quot;#output&quot;).html(current.output)
-            var step = step_list[step_i + 1]
-            
-            if(step){
-                var output = step.current.output
-                for(var j = 0; j &lt; output.length; ++j){
-                    $(&quot;#ptr-output-&quot;+[output.length - j - 1]).html(parseInt(output[j]))
-                }
-                $(&quot;#programs&quot;).prepend(&quot;&lt;div style='border-bottom:1px solid #aaa'&gt;&lt;div&gt;&quot;+step.next.program+&quot;&lt;/div&gt;&lt;div&gt;（&quot;+step.next.args+&quot;）&lt;/div&gt;&lt;/div&gt;&quot;)
-                step_i += 1
+&lt;h3 id=&quot;tips&quot;&gt;Tips&lt;/h3&gt;
 
-                if(step.next.program == 'PTR')
-                    current['env'+step.next.args[0][1]] = parseInt($(&quot;#env&quot;+step.next.args[0][1]).html())+1
-                    
-                else if(step.next.program == 'ADD_OPERATION'){
-                    var sum = parseInt($(&quot;#ptr-env0-&quot;+$(&quot;#env0&quot;).html()).html())+parseInt($(&quot;#ptr-env1-&quot;+$(&quot;#env1&quot;).html()).html())+parseInt($(&quot;#mem0&quot;).html())
-                    current['mem0'] = Math.floor(sum / 10)
-                    current['mem1'] = sum % 10
-                }
-                if(step_list.length &gt; (step_i+1))
-                    $(&quot;#current_function&quot;).html(step_list[step_i+1].current.current_function)
+&lt;ol&gt;
+  &lt;li&gt;使用callback保存checkpoint,filepath中的val开头的变量需要在model.fit里指定validation_data时才可以使用
+    &lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;checkpoint = keras.callbacks.ModelCheckpoint(filepath = '...{epoch:02d}-{acc:.5f}-{loss:.5f}-{val_acc:.5f}-{val_loss:.5f}.hdf5')
+model.fit(x,y, validation_data=(x_val, y_val), callbacks=[checkpoint])
+&lt;/code&gt;&lt;/pre&gt;
+    &lt;/div&gt;
+  &lt;/li&gt;
+  &lt;li&gt;使用tensorflow做后端时，使用callback里的tensorboard，有助于调参
+    &lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;tensorboard = keras.callbacks.TensorBoard(log_dir = folder_path)
+&lt;/code&gt;&lt;/pre&gt;
+    &lt;/div&gt;
+    &lt;p&gt;之后在model.fit的callbacks参数中添加上tensorboard&lt;/p&gt;
+  &lt;/li&gt;
+&lt;/ol&gt;
 
-                if(step_list[step_i].next.program == 'OUTPUT')
-                    current.output = parseInt($(&quot;#output&quot;).html()) + 1
-                    
-            }
-            else{
-                var location = $(&quot;#output&quot;).html() - 1
-                $(&quot;#ptr-output-&quot;+location).html(current.mem1)
-
-
-            }
-            
-        })
-    
-    }
-    
-&lt;/script&gt;
-
+&lt;p&gt;翻出去可以用disqus留言……&lt;/p&gt;
 </description>
-        <pubDate>Thu, 01 Jun 2017 08:00:00 +0800</pubDate>
-        <link>http://localhost:4000/2017/06/01/fictional-programmer/</link>
-        <guid isPermaLink="true">http://localhost:4000/2017/06/01/fictional-programmer/</guid>
+        <pubDate>Wed, 09 Aug 2017 20:00:00 +0800</pubDate>
+        <link>http://localhost:4000/2017/08/09/keras-notes/</link>
+        <guid isPermaLink="true">http://localhost:4000/2017/08/09/keras-notes/</guid>
         
-        <category>增强学习</category>
+        <category>Keras</category>
         
         
       </item>
