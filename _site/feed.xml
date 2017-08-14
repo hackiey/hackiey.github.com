@@ -5,8 +5,8 @@
     <description>To be a hacker</description>
     <link>http://localhost:4000/</link>
     <atom:link href="http://localhost:4000/feed.xml" rel="self" type="application/rss+xml" />
-    <pubDate>Fri, 11 Aug 2017 09:50:25 +0800</pubDate>
-    <lastBuildDate>Fri, 11 Aug 2017 09:50:25 +0800</lastBuildDate>
+    <pubDate>Mon, 14 Aug 2017 11:30:22 +0800</pubDate>
+    <lastBuildDate>Mon, 14 Aug 2017 11:30:22 +0800</lastBuildDate>
     <generator>Jekyll v3.3.1</generator>
     
       <item>
@@ -23,6 +23,10 @@
   &lt;li&gt;尽量为每个层命名，这样在fine tuning的时候你会很方便的调整每个层&lt;/li&gt;
   &lt;li&gt;Keras的Conv2D层的filter shape通常会写(width, height)，实际上的shape是(width, height, channels), 因此输出的feature map个数是filter的个数&lt;/li&gt;
 &lt;/ol&gt;
+
+&lt;h5 id=&quot;rnn&quot;&gt;RNN&lt;/h5&gt;
+
+&lt;p&gt;容易混淆的stateful参数，RNN都是自带state的，如果你有一个很长的序列(例如长度为1000), 你把它分为10个batch，每个batch长度为100，当stateful参数为False时，每个batch开始时，都会重置state，意味着第二个batch跟第一个batch没有任何关联，因此当不同的batch之间有关联时，需要指定stateful为True，同时需要指定batch_size的大小&lt;/p&gt;
 
 &lt;h3 id=&quot;模型&quot;&gt;模型&lt;/h3&gt;
 

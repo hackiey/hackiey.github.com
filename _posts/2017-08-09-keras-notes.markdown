@@ -17,6 +17,10 @@ tags:
 3. 尽量为每个层命名，这样在fine tuning的时候你会很方便的调整每个层
 4. Keras的Conv2D层的filter shape通常会写(width, height)，实际上的shape是(width, height, channels), 因此输出的feature map个数是filter的个数
 
+##### RNN
+
+容易混淆的stateful参数，RNN都是自带state的，如果你有一个很长的序列(例如长度为1000), 你把它分为10个batch，每个batch长度为100，当stateful参数为False时，每个batch开始时，都会重置state，意味着第二个batch跟第一个batch没有任何关联，因此当不同的batch之间有关联时，需要指定stateful为True，同时需要指定batch_size的大小
+
 ### 模型
 
 1. 多个子模型输出
