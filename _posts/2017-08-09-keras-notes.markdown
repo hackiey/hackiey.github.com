@@ -89,4 +89,7 @@ tensorboard = keras.callbacks.TensorBoard(log_dir = folder_path)
 ```
 之后在model.fit的callbacks参数中添加上tensorboard
 
+3. 下载数据
+使用keras的一些示例代码时，通常会有下载数据集或者模型的操作，自动下载非常慢，这个时候可以根据它提供的下载链接下好以后，放在 ~/.keras/的文件夹里，dataset对应 ~/.keras/datasets，model对应~/.keras/models。下载的时候要注意名字，正常情况下都无需修改名字，个别数据集会在自动下载时重命名，只需要自动下载时去对应的文件夹里看一眼正在下载的文件名，改过去即可
+
 翻出去可以用disqus留言……
