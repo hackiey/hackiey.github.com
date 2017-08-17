@@ -284,11 +284,30 @@ model.fit(x,y, validation_data=(x_val, y_val), callbacks=[checkpoint])
     </div>
     <p>之后在model.fit的callbacks参数中添加上tensorboard</p>
   </li>
-  <li>下载数据
-使用keras的一些示例代码时，通常会有下载数据集或者模型的操作，自动下载非常慢，这个时候可以根据它提供的下载链接下好以后，放在 ~/.keras/的文件夹里，dataset对应 ~/.keras/datasets，model对应~/.keras/models。下载的时候要注意名字，正常情况下都无需修改名字，个别数据集会在自动下载时重命名，只需要自动下载时去对应的文件夹里看一眼正在下载的文件名，改过去即可</li>
+  <li>
+    <p>下载数据
+使用keras的一些示例代码时，通常会有下载数据集或者模型的操作，自动下载非常慢，这个时候可以根据它提供的下载链接下好以后，放在 ~/.keras/的文件夹里，dataset对应 ~/.keras/datasets，model对应~/.keras/models。下载的时候要注意名字，正常情况下都无需修改名字，个别数据集会在自动下载时重命名，只需要自动下载时去对应的文件夹里看一眼正在下载的文件名，改过去即可</p>
+  </li>
+  <li>使用model.summary()
+这个函数让你对model的结构一览无余，做最早的调试
+    <div class="highlighter-rouge"><pre class="highlight"><code>model = Sequential()
+model.add(Dense(512, input_dim = 10))
+print(model.summary())
+</code></pre>
+    </div>
+    <div class="highlighter-rouge"><pre class="highlight"><code>Layer (type)                 Output Shape              Param #   
+=================================================================
+dense_6 (Dense)              (None, 512)               5632      
+=================================================================
+Total params: 5,632
+Trainable params: 5,632
+Non-trainable params: 0
+_________________________________________________________________
+None
+</code></pre>
+    </div>
+  </li>
 </ol>
-
-<p>翻出去可以用disqus留言……</p>
 
 
                 <hr>
