@@ -15,11 +15,21 @@ tags:
     - 编写自己的layer时，一定要注意考虑batch_size
 
 3. 尽量为每个层命名，这样在fine tuning的时候你会很方便的调整每个层
-4. Keras的Conv2D层的filter shape通常会写(width, height)，实际上的shape是(width, height, channels), 因此输出的feature map个数是filter的个数
+
+##### CNN
+
+1. Keras的Conv2D层的filter shape通常会写(width, height)，实际上的shape是(width, height, channels), 因此输出的feature map个数是filter的个数
 
 ##### RNN
 
-容易混淆的stateful参数，RNN都是自带state的，如果你有一个很长的序列(例如长度为1000), 你把它分为10个batch，每个batch长度为100，当stateful参数为False时，每个batch开始时，都会重置state，意味着第二个batch跟第一个batch没有任何关联，因此当不同的batch之间有关联时，需要指定stateful为True，同时需要指定batch_size的大小
+1. 容易混淆的stateful参数，RNN都是自带state的，如果你有一个很长的序列(例如长度为1000), 你把它分为10个batch，每个batch长度为100，当stateful参数为False时，每个batch开始时，都会重置state，意味着第二个batch跟第一个batch没有任何关联，因此当不同的batch之间有关联时，需要指定stateful为True，同时需要指定batch_size的大小
+
+2. return_sequences, 通常所理解的rnn是sequence to sequence的，但是可能经常会见到这样的代码：
+```
+model.add(LSTM(10))
+model.add(Dense(1))
+```
+默认情况下，RNN层的return_sequences为False,只会输出序列中的最后一项，如果设为True，则会返回整个sequence
 
 ### 模型
 
@@ -33,7 +43,7 @@ final_model.compile(loss=[model1_loss, model2_loss], metrics=['mse','mae'])
 ```
 loss是一一对应的，metrics中所有的方式会对每一个输出模型评估一遍
 
-2. 如果数据集不平衡，可以使用class weights，假设0标签有100个，1标签只有10个，需要指定class_weights为10:1
+2. 如果数据集不平衡，可以使用class weights，假设0标签有100个，1标签只有10个，需要指定class_weights为10:1(根据实际需求作调整)
 ```
 class_weights = {0: 1, 1: 10}
 model.fit(x.,y, class_weight = class_weights)
