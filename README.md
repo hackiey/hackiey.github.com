@@ -1,5 +1,27 @@
-# Thanks
+# Harry's Notes
 
-这个博客使用了Hux的模板，他的[模板在这里](http://huangxuan.me/huxblog-boilerplate/)，他的[博客在这里](http://huxpro.github.io)
+Rebuilt with Astro and deployed with GitHub Pages.
 
+## Development
 
+```bash
+npm install
+npm run dev
+```
+
+## Build
+
+```bash
+npm run build
+```
+
+## Structure
+
+- `src/content/blog/`: blog posts in Markdown
+- `public/img/`: static images from the old site
+- `public/CNAME`: custom domain for GitHub Pages
+- `.github/workflows/deploy.yml`: GitHub Pages deployment workflow
+
+## Deployment
+
+Push to the `main` branch after the repository is connected to GitHub Pages with `GitHub Actions` as the publishing source.

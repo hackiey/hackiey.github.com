@@ -1,0 +1,30 @@
+---
+import type { CollectionEntry } from 'astro:content';
+
+interface Props {
+  post: CollectionEntry<'blog'>;
+  featured?: boolean;
+}
+
+const { post, featured = false } = Astro.props;
+const formatter = new Intl.DateTimeFormat('zh-CN', {
+  year: 'numeric',
+  month: 'short',
+  day: 'numeric'
+});
+---
+
+<article class:list={['post-card', { 'post-card--featured': featured }]}>
+  <div class="post-card__meta">
+    <span>{formatter.format(post.data.date)}</span>
+    {post.data.tags.length > 0 && <span>{post.data.tags.join(' / ')}</span>}
+  </div>
+
+  <h2>
+    <a href={`/blog/${post.slug}/`}>{post.data.title}</a>
+  </h2>
+
+  {post.data.subtitle && <p class="post-card__subtitle">{post.data.subtitle}</p>}
+
+  {post.data.description && <p class="post-card__description">{post.data.description}</p>}
+</article>

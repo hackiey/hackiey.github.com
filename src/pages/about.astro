@@ -1,0 +1,39 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+---
+
+<BaseLayout
+  title="关于 | Harry's Blog"
+  description="关于这个博客，以及它会写什么。"
+>
+  <section class="page-panel">
+    <p class="eyebrow">关于</p>
+    <h1>一个用来放长期写作的个人博客。</h1>
+    <p class="page-panel__lede">
+      这里主要放技术文章、研究笔记、阅读记录，以及一些值得认真写清楚的长文。
+    </p>
+  </section>
+
+  <section class="about-grid">
+    <article class="info-card">
+      <h2>会写什么</h2>
+      <p>
+        重点会放在代码实现、实验理解、研究过程，以及那些适合慢慢整理的知识性内容上。
+      </p>
+    </article>
+
+    <article class="info-card">
+      <h2>为什么写在这里</h2>
+      <p>
+        有些内容值得比即时笔记更完整一点的表达，所以这里会更偏向可回看、可检索、可长期保存的写作。
+      </p>
+    </article>
+
+    <article class="info-card">
+      <h2>更新方式</h2>
+      <p>
+        新文章发布后会自动出现在首页和归档页；如果你习惯用阅读器，也可以直接订阅 RSS。
+      </p>
+    </article>
+  </section>
+</BaseLayout>

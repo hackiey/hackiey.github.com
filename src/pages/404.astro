@@ -1,0 +1,17 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+---
+
+<BaseLayout title="404 | Harry's Blog" description="Page not found.">
+  <section class="page-panel">
+    <p class="eyebrow">404</p>
+    <h1>没有找到这篇内容。</h1>
+    <p class="page-panel__lede">
+      链接可能有误，或者这篇内容还没有公开发布。
+    </p>
+    <div class="hero-panel__actions">
+      <a href="/" class="button button--solid">回到首页</a>
+      <a href="/archive/" class="button button--ghost">去归档找找</a>
+    </div>
+  </section>
+</BaseLayout>

@@ -1,22 +1,20 @@
 {
-    "name": "hux-blog",
-    "title": "Hux Blog",
-    "version": "1.0.0",
-    "homepage": "http://huxpro.github.io",
-    "author": "Hux",
-    "devDependencies": {
-        "grunt": "~0.4.5",
-        "grunt-contrib-less": "~0.11.4",
-        "grunt-contrib-watch": "~0.6.1",
-        "grunt-banner": "~0.2.3",
-        "grunt-contrib-uglify": "~0.5.1"
-    },
-    "repository": {
-        "type": "git",
-        "url": "https://github.com/Huxpro/huxpro.github.io"
-    },
-    "scripts": {
-        "preview": "cd _site; python -m SimpleHTTPServer 8020",
-        "watch": "grunt watch & npm run preview & jekyll serve -w;"
-    }
+  "name": "harry-notes",
+  "version": "2.0.0",
+  "private": true,
+  "description": "Harry's blog, rebuilt with Astro for GitHub Pages.",
+  "scripts": {
+    "dev": "astro dev",
+    "start": "astro dev",
+    "build": "astro build",
+    "preview": "astro preview"
+  },
+  "dependencies": {
+    "@astrojs/rss": "^4.0.18",
+    "astro": "^5.14.4",
+    "rehype-autolink-headings": "^7.1.0",
+    "rehype-katex": "^7.0.1",
+    "rehype-slug": "^6.0.0",
+    "remark-math": "^6.0.0"
+  }
 }

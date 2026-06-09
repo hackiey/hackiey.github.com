@@ -1,0 +1,62 @@
+---
+import { getCollection } from 'astro:content';
+import BaseLayout from '../layouts/BaseLayout.astro';
+
+const posts = (await getCollection('blog', ({ data }) => !data.draft)).sort(
+  (a, b) => b.data.date.valueOf() - a.data.date.valueOf()
+);
+
+const formatter = new Intl.DateTimeFormat('zh-CN', {
+  month: 'short',
+  day: 'numeric'
+});
+
+const groups = posts.reduce((acc, post) => {
+  const year = post.data.date.getFullYear();
+  acc[year] ??= [];
+  acc[year].push(post);
+  return acc;
+}, {} as Record<number, typeof posts>);
+
+const years = Object.keys(groups)
+  .map(Number)
+  .sort((a, b) => b - a);
+---
+
+<BaseLayout title="归档 | Harry's Blog" description="全部公开文章归档。">
+  <section class="page-panel">
+    <p class="eyebrow">归档</p>
+    <h1>全部文章</h1>
+    <p class="page-panel__lede">按时间整理所有公开内容。</p>
+  </section>
+
+  <section class="archive-list">
+    {years.length > 0 ? (
+      years.map((year) => (
+        <div class="archive-year">
+          <h2>{year}</h2>
+          <div class="archive-year__entries">
+            {groups[year].map((post) => (
+              <a class="archive-entry" href={`/blog/${post.slug}/`}>
+                <span>{formatter.format(post.data.date)}</span>
+                <strong>{post.data.title}</strong>
+                {post.data.tags.length > 0 && <small>{post.data.tags.join(' / ')}</small>}
+              </a>
+            ))}
+          </div>
+        </div>
+      ))
+    ) : (
+      <div class="archive-year">
+        <h2>还没有公开文章</h2>
+        <div class="archive-year__entries">
+          <div class="archive-entry">
+            <span>暂时为空</span>
+            <strong>第一篇文章还没有发布。</strong>
+            <small>等有了公开内容，这里会自动按年份整理出来。</small>
+          </div>
+        </div>
+      </div>
+    )}
+  </section>
+</BaseLayout>

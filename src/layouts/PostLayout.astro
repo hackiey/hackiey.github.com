@@ -1,0 +1,56 @@
+---
+import type { CollectionEntry } from 'astro:content';
+import BaseLayout from './BaseLayout.astro';
+
+interface Props {
+  entry: CollectionEntry<'blog'>;
+  headings: { depth: number; slug: string; text: string }[];
+}
+
+const { entry, headings = [] } = Astro.props;
+
+const formatter = new Intl.DateTimeFormat('zh-CN', {
+  year: 'numeric',
+  month: 'long',
+  day: 'numeric'
+});
+
+const title = `${entry.data.title} | Harry's Blog`;
+const description = entry.data.description ?? entry.data.subtitle ?? 'Long-form notes from Harry.';
+---
+
+<BaseLayout title={title} description={description}>
+  <article class="post-shell">
+    <header class="post-hero">
+      <p class="eyebrow">文章</p>
+      <h1>{entry.data.title}</h1>
+      {entry.data.subtitle && <p class="post-hero__subtitle">{entry.data.subtitle}</p>}
+      <div class="post-hero__meta">
+        <span>{formatter.format(entry.data.date)}</span>
+        <span>{entry.data.author}</span>
+        {entry.data.tags.length > 0 && <span>{entry.data.tags.join(' / ')}</span>}
+      </div>
+    </header>
+
+    <div class="post-grid">
+      {headings.length > 0 && (
+        <aside class="post-toc">
+          <p class="post-toc__title">目录</p>
+          <nav aria-label="Table of contents">
+            {headings
+              .filter((heading) => heading.depth <= 3)
+              .map((heading) => (
+                <a href={`#${heading.slug}`} class={`depth-${heading.depth}`}>
+                  {heading.text.replace(/\s*#$/, '')}
+                </a>
+              ))}
+          </nav>
+        </aside>
+      )}
+
+      <div class="prose prose--post">
+        <slot />
+      </div>
+    </div>
+  </article>
+</BaseLayout>
