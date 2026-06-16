@@ -17,8 +17,10 @@ draft: false
 
 `BabyAI Text` 可以理解成 `BabyAI` 单房间任务的文字版本。模型每一步只能调用6个固定动作工具：转向（左右）、前进、拾取、放下、开门；环境会返回新的文字 observation，模型需要根据任务目标和新 observation 去推测任务完成的条件以及每个工具的作用。其任务特征主要为：
 1. 需要长链推理，任务需要十几步甚至二十几步才能完成
-2. 中间每一步都需要对当前环境进行推理
+2. 模型自身探索成功率低，但action space小，容易总结出规律
 3. 强format约束（这个是我强加的，为了保持模型的tool calls能力）
+
+目的是探索LLM的自适应学习，因此原则上不去做rubrics reward，例如检测N步内是否仍原地打转，或pick up的钥匙是否对应门的颜色等等。
 
 train 和 eval都是用**BabyAI-MixedTrainLocal**设置不同seed生成，未设置unseen任务eval。
 
@@ -139,6 +141,11 @@ So next action: turn left, then go forward once to pick up the red box.
 {"name": "turn_left", "arguments": {}}
 </tool_call>
 ```
+
+## v1.3 Credit Assignment
+
+尝试细粒度的Credit Assignment，无论是[GiGPO](https://arxiv.org/abs/2505.10978)还是[HGPO](https://arxiv.org/abs/2602.22817)，都在将ORM拆解为更细粒度的turn-level reward。我尝试从一个trajectory的中间step开始重新做group采样，使用GRPO训练。然而和前两个实验一样，由于缺少足够的难任务成功率，实验仍然失败。
+
 # 2. turn level + LLM judge
 
 **messages格式**
@@ -150,9 +157,9 @@ So next action: turn left, then go forward once to pick up the red box.
 <assistant_tool_calls>
 ```
 
-使用LLM根据完整的trajectory，对中间某一个step进行打分。
+使用LLM根据完整的trajectory，对中间某一个step进行打分。打分的内容包括thinking、plan以及action的正确性。
 
-由于LLM judge在这个任务上整体可以达到80%的人工打分程度，整体打分方差可控，为了减少glm-5.1的打分量，可以去掉GRPO中的baseline做基础尝试。将group设为1，每个trajectory随机抽取4个turn sample，对单个turn_sample进行训练，整体退化为PPO clip式的REINFORCE。
+由于LLM judge在这个任务上整体可以达到80%的人工打分程度，整体打分方差可控，为了减少glm-5.1的打分量，最终去掉GRPO中的baseline做基础尝试。将group设为1，每个trajectory随机抽取4个turn sample，对单个turn_sample进行训练，整体退化为PPO clip式的REINFORCE方法。
 
 ## v2.1 保留outcome reward
 **reward** = 0.5 x orm + 0.5 x LLM judge reward + format reward
@@ -167,7 +174,9 @@ So next action: turn left, then go forward once to pick up the red box.
 | v2.2.1 | glm-5       | 0.64(1000 step) |
 | v2.2.2 | glm-5.1     | 0.74(820 step)  |
 
-以v2.2.2为例，随着训练的进行，response length从2000左右在400 step降到190左右（图中的step除以10是真实的step），最终稳定在50+。从LLM judge的打分来看，长推理更容易产生错误，从后续的feedback也更容易发现这类错误。因此短输出整体上在LLM judge和format reward上都更稳定，这会导致模型越来越倾向于短输出。同时也从侧面表明这个任务并不需要复杂的推理，当**对任务工具有了准确理解之后**便能获得更高的准确率。
+以v2.2.2为例，尽管在LLM judge中强调了对环境的判断、工具的理解进行打分，但随着训练的进行，response length从2000左右在400 step降到190左右（图中的step除以10是真实的step），最终稳定在50+。统计长度和LLM judge分数相关性为-0.31，最短20%的样本得分0.767，而最长20%的样本得分只有0.18。
+
+通过case可以看出长推理更容易产生局部的错误，LLM从后续的fobservation中也更容易发现这类错误，从而打上低分，另外长输出也容易造成格式的不稳定，format reward也有扣分。这导致短输出整体上在LLM judge和format reward上都更稳定，随着训练进行，模型越来越倾向于短输出。这同时也从侧面表明这个任务并不需要复杂的推理，当**对任务工具有了准确理解之后**便能获得更高的准确率。
 
 <div class="obsidian-image-row"><span class="obsidian-inline-image" style="--obsidian-embed-width: 400px;"><img src="/notes-assets/pasted-image-20260611155354.png" alt="" width="400" loading="lazy"></span></div>
 
@@ -198,7 +207,7 @@ So next action: turn left, then go forward once to pick up the red box.
 
 v2.1和v2.2的ORM都有很强的格式错误惩罚，如果格式错误，就被认为整条轨迹失败，并且叠加format error，最终有-1.5的reward，这导致一旦有格式错误，中间的正确action也会被给予严厉的惩罚。
 
-参考SDAR在ALFWorld的GRPO实现中，对格式错误十分温和，如果模型的输出无法被正确解析，使用last 30 tokens给env执行，同时给这个step -0.1的reward（正确完成任务reward=10）。
+参考[Self-Distilled Agentic Reinforcement Learning](https://arxiv.org/abs/2605.15155)在ALFWorld的GRPO实现中，对格式错误十分温和，如果模型的输出无法被正确解析，使用last 30 tokens给env执行，同时给这个step -0.1的reward（正确完成任务reward=10）。
 
 我用Qwen3.5-4B复现了ALFWorld的结果，在unseen任务上可以达到0.79的sr。将这一设置应用在babyai中，以v2的基础上，去除LLM judge，设置max_turns=30，然而最终best_eval_sr=0.3(20 steps)，后面越来越差。
 
@@ -244,7 +253,7 @@ student rollout log probs随着response length的变长先降低再增长。
 
 <div class="obsidian-image-row"><span class="obsidian-inline-image" style="--obsidian-embed-width: 220px;"><img src="/notes-assets/pasted-image-20260614003348.png" alt="" width="220" loading="lazy"></span><span class="obsidian-inline-image" style="--obsidian-embed-width: 220px;"><img src="/notes-assets/pasted-image-20260611173647.png" alt="" width="220" loading="lazy"></span><span class="obsidian-inline-image" style="--obsidian-embed-width: 220px;"><img src="/notes-assets/pasted-image-20260614000242.png" alt="" width="220" loading="lazy"></span></div>
 
-在[《Rethinking On-Policy Distillation of Large Language Models: Phenomenology, Mechanism, and Recipe》](https://arxiv.org/abs/2604.13016) 中，作者也讨论了随着student prefix变长，teacher在该prefix上续写的答案准确率也逐渐降低，意味着随着上下文增加，teacher的指导信号也变得不可靠。
+在[《Rethinking On-Policy Distillation of Large Language Models: Phenomenology, Mechanism, and Recipe》](https://arxiv.org/abs/2604.13016) 中，作者也讨论了随着student prefix变长，teacher在该prefix上续写的答案准确率也逐渐降低，意味着随着上下文增加，teacher的指导信号也变得不可靠。采用相同的检测方法，取student 前80%prefix，让teacher续写，最终格式成功比例只有0.56，在response_length>4096的sample中，格式成功率甚至跌到了0.08，基本可以证明OPD在长文蒸馏中的缺陷。
 
 从左图可以看出，tail的teacher-student logp gap的的训练程度显著低于head部分，Student的logp(右图)，也可以看出tail部分的自信程度显著低于head部分。
 
@@ -255,7 +264,19 @@ student rollout log probs随着response length的变长先降低再增长。
 
 <div class="obsidian-image-row"><span class="obsidian-inline-image" style="--obsidian-embed-width: 400px;"><img src="/notes-assets/pasted-image-20260611173830.png" alt="" width="400" loading="lazy"></span></div>
 
-## v3.2 简单推理的teacher
+补一个简单的 `teacher continuation vs prefix depth` 诊断。使用脚本 `scripts/opd_v7_3/eval_teacher_continuation_format.py`，在 `v7_3` 的 `run_20260604_011136/logs/rollout_turn_samples.jsonl` 中只取 `memory` turn：
+
+- 随机抽样 `100` 条样本（`seed=0`），取 student 输出前 `80%` token 作为 prefix，拼到原始 `sample.prompt` 后交给 `v7_3 teacher`（`run_20260528_202210/iter_0000554_hf`）继续生成，再用 `v7.3` 的 visible-memory parser 检查**重建后的完整输出**是否格式通过。
+- 结果：格式通过率 `56 / 100 = 0.56`，平均 prefix 长度 `3006.6` tokens，平均完整 student 输出长度 `3758.7` tokens。
+
+如果只看超长 memory 样本（`response_length >= 4096`）：
+
+- 随机抽样 `50` 条样本（`seed=0`），同样取 student 的 `80% prefix` 让 teacher 续写。
+- 结果：格式通过率进一步降到 `4 / 50 = 0.08`，平均 prefix 长度 `6594.5` tokens，平均完整 student 输出长度 `8243.6` tokens。
+
+这个结果至少说明了一点：teacher 在中等长度的 student prefix 上还能部分“接住”，但一旦 student memory prefix 真的很长，teacher continuation 的**格式稳定性**会急剧恶化。这比单纯看 `head/tail logp gap` 更直接地支持了“teacher 在长 student prefix 上 supervision 质量下降”的判断。
+
+## v3.2 短推理的teacher
 
 使用v2.2.2的模型作为teacher，v2.2.2的平均输出长度为50。
 
