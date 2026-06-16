@@ -3,9 +3,8 @@ title: "AlphaGO详解"
 description: "从策略网络、价值网络到 MCTS，这篇长文按训练流程和搜索流程拆开讲 AlphaGO 的核心思路。"
 date: 2017-04-23 00:00:00
 author: "Harry"
-draft: true
 tags:
-  - "增强学习"
+  - "强化学习"
 ---
 
 ### 简介
@@ -28,13 +27,17 @@ AlphaGO通过训练策略网络$$p$$、估值网络$$v$$以及构造蒙特卡洛
 
 同时训练一个快速落子的策略网络$$p_\pi$$（特征列表在附录），简单地基于一些模式通过softmax预测落子，在测试集的预测准确率只有24.2%，但是相比于$$p_\sigma$$的3毫秒，$$p_\pi$$只需要2微秒。
 
-$$\Delta\sigma \propto {\partial \log p_\sigma(a \mid s) \over \partial \sigma} \tag{1}$$
+$$
+\Delta\sigma \propto {\partial \log p_\sigma(a \mid s) \over \partial \sigma} \tag{1}
+$$
 
 #### Reinforcement learning of policy network
 
 第二阶段使用增强学习的policy gradient的通过自我对弈方法训练更强的、全新的策略网络$$p_\rho$$，$$p_\rho$$的结构与$$p_\sigma$$一致。以$$p_\sigma$$为起点，使用当前的$$p_\rho$$和随机之前某一次迭代过程中的$$p_\rho$$（防止对当前策略过拟合）进行对弈，直到分出胜负。$$\rho$$参数的更新公式：
 
-$$\Delta\rho \propto {\partial \log p_\rho(a_t \mid s_t) \over \partial \rho} z_t \tag{2}$$
+$$
+\Delta\rho \propto {\partial \log p_\rho(a_t \mid s_t) \over \partial \rho} z_t \tag{2}
+$$
 
 其中$$z_t=\pm r(s_T)$$，时间步$$t\in \{1, T\}$$，$$T$$为对局结束时经历的步数，$$z_t$$是在第$$t$$步落子时获得的奖励，$$r(s_T)$$在对局结束时所获得的奖励。在围棋中，合理的奖励设置是胜利时为1，失败时为-1，其他任何一步的奖励都替换为最终的奖励，A和B对弈，最终A获胜时，将A的每一步落子奖励+1，失败时将每一步落子奖励-1。这会促使RL policy追求适合当前局面更能获胜的落子。
 
@@ -44,12 +47,16 @@ $$\Delta\rho \propto {\partial \log p_\rho(a_t \mid s_t) \over \partial \rho} z_
 
 最后阶段，训练评估局面的价值函数$$v^p(s)$$根据当前局面输出最终的期望结果。其定义为(3)
 
-$$ v^p(s) = \mathbb{E} [z_t \mid s_t = s, a_{t...T}\sim p] \tag{3}$$
+$$
+v^p(s) = \mathbb{E} [z_t \mid s_t = s, a_{t...T}\sim p] \tag{3}
+$$
 
 理想的情况是穷举所有局面以获得最优的$$v^*(s)$$，实际训练是使用最强的策略网络RL Policy $$p_\rho$$训练价值函数$$v_\theta$$，近似的认为
 $$v^*(s) \approx v^p(s) \approx v^*(s)$$。$$v_\theta$$的网络结构与策略网络一致，只是输出变为一个简单的预测数字。使用梯度下降对$$\theta$$进行更新：
 
-$$\Delta \theta \propto {\partial v_\theta(s) \over \partial \theta }(z - v_\theta(s)) \tag{4}$$
+$$
+\Delta \theta \propto {\partial v_\theta(s) \over \partial \theta }(z - v_\theta(s)) \tag{4}
+$$
 
 幼稚的做法是对于每局比赛的每一个局面都用来作为训练样本，因为相邻的局面耦合程度非常高，这会导致严重的过拟合。论文中采用的做法是从3000万局自我对局中每一局选取一个局面进行训练，使得过拟合达到最小化。
 
@@ -88,9 +95,13 @@ MCTS是几乎所有围棋程序的核心组件，AlphaGO将策略网络和价值
 
 一旦完成模拟，就更新所有的$$Q(s,a)$$和$$N(s,a)$$
 
-$$N(s,a) = \Sigma^n_{i=1} 1(s,a,i) \tag{8}$$
+$$
+N(s,a) = \Sigma^n_{i=1} 1(s,a,i) \tag{8}
+$$
 
-$$Q(s,a) = {1\over N(s,a)} \Sigma^n_{i=1} 1(s,a,i) V(s^i_L) \tag{9}$$
+$$
+Q(s,a) = {1\over N(s,a)} \Sigma^n_{i=1} 1(s,a,i) V(s^i_L) \tag{9}
+$$
 
 (9)的做法是对多次迭代中多次遇到的$$(s,a)$$时，计算Q(s,a)的平均值（蒙特卡洛思想）。$$1(s,a,i)$$表示在第i次迭代时访问过$$(s,a)$$为1，否则为0。
 

@@ -8,6 +8,30 @@ interface Props {
 }
 
 const { entry, headings = [] } = Astro.props;
+const tocHeadings = headings.filter((heading) => heading.depth <= 2);
+const hasToc = tocHeadings.length > 0;
+const baseDepth = tocHeadings.length > 0 ? Math.min(...tocHeadings.map((heading) => heading.depth)) : 0;
+const normalizedToc = tocHeadings.map((heading) => ({
+  ...heading,
+  level: heading.depth - baseDepth + 1
+}));
+
+const tocGroups: {
+  children: typeof normalizedToc;
+  heading: (typeof normalizedToc)[number];
+}[] = [];
+
+for (const heading of normalizedToc) {
+  if (heading.level <= 1 || tocGroups.length === 0) {
+    tocGroups.push({
+      children: [],
+      heading
+    });
+    continue;
+  }
+
+  tocGroups[tocGroups.length - 1].children.push(heading);
+}
 
 const formatter = new Intl.DateTimeFormat('zh-CN', {
   year: 'numeric',
@@ -19,7 +43,7 @@ const title = `${entry.data.title} | Harry's Blog`;
 const description = entry.data.description ?? entry.data.subtitle ?? 'Long-form notes from Harry.';
 ---
 
-<BaseLayout title={title} description={description}>
+<BaseLayout title={title} description={description} pageType="post">
   <article class="post-shell">
     <header class="post-hero">
       <p class="eyebrow">文章</p>
@@ -32,18 +56,47 @@ const description = entry.data.description ?? entry.data.subtitle ?? 'Long-form 
       </div>
     </header>
 
-    <div class="post-grid">
-      {headings.length > 0 && (
+    <div class={`post-grid${hasToc ? ' post-grid--with-toc' : ''}`}>
+      {hasToc && (
         <aside class="post-toc">
-          <p class="post-toc__title">目录</p>
           <nav aria-label="Table of contents">
-            {headings
-              .filter((heading) => heading.depth <= 3)
-              .map((heading) => (
-                <a href={`#${heading.slug}`} class={`depth-${heading.depth}`}>
-                  {heading.text.replace(/\s*#$/, '')}
-                </a>
+            <ul class="post-toc__list">
+              {tocGroups.map((group) => (
+                <li class={`post-toc__item${group.children.length > 0 ? ' has-children' : ''}`}>
+                  {group.children.length > 0 ? (
+                    <>
+                      <button
+                        type="button"
+                        class="post-toc__expander"
+                        aria-expanded="false"
+                        aria-controls={`toc-group-${group.heading.slug}`}
+                        aria-label={`Expand subsections for ${group.heading.text.replace(/\s*#$/, '')}`}
+                      >
+                        <span class="post-toc__expander-icon" aria-hidden="true">
+                          ›
+                        </span>
+                      </button>
+                      <a href={`#${group.heading.slug}`} class={`depth-${group.heading.level}`}>
+                        {group.heading.text.replace(/\s*#$/, '')}
+                      </a>
+                      <ul class="post-toc__sublist" id={`toc-group-${group.heading.slug}`} aria-hidden="true" hidden>
+                        {group.children.map((heading) => (
+                          <li class="post-toc__item post-toc__item--child">
+                            <a href={`#${heading.slug}`} class={`depth-${heading.level}`}>
+                              {heading.text.replace(/\s*#$/, '')}
+                            </a>
+                          </li>
+                        ))}
+                      </ul>
+                    </>
+                  ) : (
+                    <a href={`#${group.heading.slug}`} class={`depth-${group.heading.level}`}>
+                      {group.heading.text.replace(/\s*#$/, '')}
+                    </a>
+                  )}
+                </li>
               ))}
+            </ul>
           </nav>
         </aside>
       )}
@@ -51,6 +104,133 @@ const description = entry.data.description ?? entry.data.subtitle ?? 'Long-form 
       <div class="prose prose--post">
         <slot />
       </div>
+
+      {hasToc && <aside class="post-notes" aria-hidden="true"></aside>}
     </div>
   </article>
+
+  {
+    hasToc && (
+      <script is:inline>
+        (() => {
+          const toc = document.querySelector('.post-toc nav');
+          if (!toc) return;
+
+          const items = Array.from(toc.querySelectorAll('.post-toc__item.has-children'));
+          const directChild = (item, selector) =>
+            Array.from(item.children).find((child) => child.matches(selector)) ?? null;
+
+          const directButton = (item) => directChild(item, '.post-toc__expander');
+          const directLink = (item) => directChild(item, 'a');
+          const directSublist = (item) => directChild(item, '.post-toc__sublist');
+
+          const setExpanded = (item, expanded) => {
+            const button = directButton(item);
+            const sublist = directSublist(item);
+            const link = directLink(item);
+            if (!button || !sublist || !link) return;
+            button.setAttribute('aria-expanded', expanded ? 'true' : 'false');
+            button.setAttribute('aria-label', `${expanded ? 'Collapse' : 'Expand'} subsections for ${link.textContent?.trim() || 'section'}`);
+            item.classList.toggle('is-expanded', expanded);
+            sublist.hidden = !expanded;
+            sublist.setAttribute('aria-hidden', expanded ? 'false' : 'true');
+            sublist.querySelectorAll('a').forEach((anchor) => {
+              if (expanded) anchor.removeAttribute('tabindex');
+              else anchor.setAttribute('tabindex', '-1');
+            });
+          };
+
+          items.forEach((item) => setExpanded(item, false));
+
+          const links = Array.from(toc.querySelectorAll('a[href^="#"]'))
+            .map((link) => {
+              const raw = link.getAttribute('href');
+              if (!raw || raw === '#') return null;
+              const id = decodeURIComponent(raw.slice(1));
+              const target = document.getElementById(id);
+              if (!target) return null;
+              return {
+                item: link.closest('.post-toc__item'),
+                link,
+                target
+              };
+            })
+            .filter(Boolean);
+
+          const clearActive = () => {
+            toc.querySelectorAll('.is-active, .has-active-descendant').forEach((node) => {
+              node.classList.remove('is-active', 'has-active-descendant');
+            });
+            toc.querySelectorAll('a[aria-current="location"]').forEach((node) => node.removeAttribute('aria-current'));
+          };
+
+          const revealHiddenParent = (entry) => {
+            if (!entry?.item) return entry;
+            const hiddenSublist = entry.item.closest('.post-toc__sublist[aria-hidden="true"]');
+            if (!hiddenSublist) return entry;
+            const parentItem = hiddenSublist.parentElement;
+            const parentLink = parentItem ? directLink(parentItem) : null;
+            if (!parentItem || !parentLink) return entry;
+            return { item: parentItem, link: parentLink, target: entry.target };
+          };
+
+          const markAncestors = (item) => {
+            let parent = item?.parentElement?.closest('.post-toc__item');
+            while (parent) {
+              parent.classList.add('has-active-descendant');
+              parent = parent.parentElement?.closest('.post-toc__item');
+            }
+          };
+
+          const activeEntry = () => {
+            if (!links.length) return null;
+            const top = window.scrollY + 120;
+            let current = links[0];
+            links.forEach((entry) => {
+              const targetTop = entry.target.getBoundingClientRect().top + window.scrollY;
+              if (targetTop <= top) current = entry;
+            });
+            return current;
+          };
+
+          const refreshActive = () => {
+            clearActive();
+            const entry = activeEntry();
+            if (!entry) {
+              return;
+            }
+            entry.link.classList.add('is-active');
+            entry.link.setAttribute('aria-current', 'location');
+            entry.item?.classList.add('is-active');
+            markAncestors(entry.item);
+          };
+
+          let raf = null;
+          const scheduleRefresh = () => {
+            if (raf !== null) return;
+            raf = requestAnimationFrame(() => {
+              raf = null;
+              refreshActive();
+            });
+          };
+
+          toc.addEventListener('click', (event) => {
+            const button = event.target.closest('.post-toc__expander');
+            if (!button || !toc.contains(button)) return;
+            event.preventDefault();
+            event.stopPropagation();
+            const item = button.closest('.post-toc__item.has-children');
+            if (!item) return;
+            setExpanded(item, button.getAttribute('aria-expanded') !== 'true');
+            scheduleRefresh();
+          });
+
+          scheduleRefresh();
+          window.addEventListener('scroll', scheduleRefresh, { passive: true });
+          window.addEventListener('resize', scheduleRefresh);
+          toc.addEventListener('scroll', scheduleRefresh, { passive: true });
+        })();
+      </script>
+    )
+  }
 </BaseLayout>

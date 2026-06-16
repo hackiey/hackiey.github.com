@@ -1,26 +1,10 @@
----
-const navItems = [
-  { href: '/', label: '首页' },
-  { href: '/archive/', label: '归档' },
-  { href: '/about/', label: '关于' }
-];
----
-
 <header class="site-header">
   <div class="site-header__inner">
-    <a class="site-brand" href="/">
+    <a class="site-brand" href="/" aria-label="Harry's Blog home">
       <span class="site-brand__text">
         <strong>Harry's Blog</strong>
-        <small>notes on code, research, and reading</small>
+        <small>记点儿笔记</small>
       </span>
     </a>
-
-    <nav class="site-nav" aria-label="Primary">
-      {navItems.map((item) => (
-        <a href={item.href} class:list={{ active: Astro.url.pathname === item.href }}>
-          {item.label}
-        </a>
-      ))}
-    </nav>
   </div>
 </header>

@@ -3,3 +3,4 @@ dist/
 .astro/
 .DS_Store
 .drive_sync/
+.obsidian-sync-manifest.json

@@ -7,6 +7,9 @@ import remarkMath from 'remark-math';
 export default defineConfig({
   site: 'https://words.hackiey.com',
   output: 'static',
+  devToolbar: {
+    enabled: false
+  },
   markdown: {
     remarkPlugins: [remarkMath],
     rehypePlugins: [
